@@ -1,19 +1,24 @@
 {
-  "name": "taytayan",
+  "name": "virgorus",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "email": "email dev --dir src/emails"
   },
   "dependencies": {
     "@nextui-org/react": "^2.1.13",
+    "@prisma/client": "^5.5.2",
+    "@react-email/button": "0.0.11",
+    "@react-email/html": "0.0.6",
     "framer-motion": "^10.16.4",
     "next": "14.0.0",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-email": "1.9.5"
   },
   "devDependencies": {
     "@types/node": "^20",
