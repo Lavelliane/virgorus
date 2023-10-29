@@ -1,7 +1,8 @@
-import { BookingForm } from "@/components/bookingForm/BookingForm";
+import { BookingForm } from "@/components/Guest/Booking/BookingForm";
+import BookingPage from "@/components/Guest/Booking/Page";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  return <BookingForm />;
+  return <BookingPage />;
 };
 
 export default Page;

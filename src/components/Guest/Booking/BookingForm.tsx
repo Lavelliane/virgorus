@@ -34,13 +34,12 @@ export const BookingForm = () => {
         }}
       >
         {(formik) => (
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formik.handleSubmit} className="bg-white">
             <Card>
               <CardHeader className="flex flex-col items-start gap-1 ml-4">
                 <span className="text-3xl font-semibold">Booking Form</span>
-                <span>Please fill up this form to book.</span>
+                <span className="font-medium">Please fill up this form to book.</span>
               </CardHeader>
-              <Divider />
               <CardBody className="gap-3">
                 <Input
                   isRequired
@@ -49,7 +48,7 @@ export const BookingForm = () => {
                   name="fullName"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  label="Full Name"
+                  label="Full name"
                 />
                 {formik.touched.fullName && formik.errors.fullName ? (
                   <div className="text-sm text-red-700 ml-1">
@@ -78,7 +77,7 @@ export const BookingForm = () => {
                   name="contactNumber"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  label="Contact Number (+639xxxxxxxxx)"
+                  label="Contact number (+639xxxxxxxxx)"
                 />
                 {formik.touched.contactNumber && formik.errors.contactNumber ? (
                   <div className="text-sm text-red-700 ml-1">
@@ -94,7 +93,7 @@ export const BookingForm = () => {
                   onChange={formik.handleChange}
                   type="number"
                   min="0"
-                  label="No. of Local Guests"
+                  label="No. of local guests"
                 />
                 {formik.touched.localGuest && formik.errors.localGuest ? (
                   <div className="text-sm text-red-700 ml-1">
@@ -110,7 +109,7 @@ export const BookingForm = () => {
                   onChange={formik.handleChange}
                   type="number"
                   min="0"
-                  label="No. of Foreign Guests"
+                  label="No. of foreign guests"
                 />
                 {formik.touched.foreignGuest && formik.errors.foreignGuest ? (
                   <div className="text-sm text-red-700 ml-1">
@@ -125,7 +124,7 @@ export const BookingForm = () => {
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="date"
-                  label="Tour Date"
+                  label="Tour date"
                   placeholder="mm/dd/yyyy"
                 />
                 {formik.touched.tourDate && formik.errors.tourDate ? (
@@ -139,7 +138,7 @@ export const BookingForm = () => {
                   name="pickupInfo"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  label="Pick Up Information"
+                  label="Pick-up information"
                 />
                 {formik.touched.pickupInfo && formik.errors.pickupInfo ? (
                   <div className="text-sm text-red-700 ml-1">
@@ -152,7 +151,7 @@ export const BookingForm = () => {
                   <Button
                     type="submit"
                     radius="full"
-                    className="bg-green-700 text-white font-semibold"
+                    className="bg-virgorus-green text-white font-semibold w-full mr-4"
                   >
                     Submit
                   </Button>
@@ -160,7 +159,7 @@ export const BookingForm = () => {
                   <Button
                     isLoading
                     radius="full"
-                    className="bg-green-700 text-white font-semibold"
+                    className="bg-virgorus-green text-white font-semibold w-full"
                   >
                     Submit
                   </Button>
