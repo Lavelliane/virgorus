@@ -18,7 +18,6 @@ interface Itinerary {
 export async function POST(req: NextRequest){
     const packageData = await req.json();
 
-    // Create the package and related data in the database
     const createdPackage = await prisma.package.create({
       data: {
         name: packageData.name,
