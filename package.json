@@ -10,6 +10,7 @@
     "email": "email dev --dir src/emails"
   },
   "dependencies": {
+    "@nextui-org/navbar": "^2.0.22",
     "@auth/prisma-adapter": "^1.0.5",
     "@nextui-org/react": "^2.1.13",
     "@prisma/client": "^5.5.2",
@@ -25,6 +26,7 @@
     "next-auth": "^4.24.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^4.11.0",
     "react-email": "1.9.5",
     "react-icons": "^4.11.0",
     "react-photo-album": "^2.3.0",
@@ -37,12 +39,12 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "autoprefixer": "^10",
+    "autoprefixer": "^10.4.16",
     "eslint": "^8",
     "eslint-config-next": "14.0.0",
-    "postcss": "^8",
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5",
     "prisma": "^5.5.2",
-    "tailwindcss": "^3",
     "typescript": "^5"
   }
 }
