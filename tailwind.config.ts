@@ -11,23 +11,45 @@ const config: Config = {
   ], 
   theme: {
     extend: {
+      colors: {
+				chocolate: '#432F2B',
+				nude: '#F3EBE4',
+				coral: '#FF7F5C',
+				olive: '#6C7D47',
+        'virgorus-green' : '#6C7D47',
+        'virgorus-cream' : '#F3EBE4',
+        'virgorus-peach' : '#EE8665',
+        'virgorus-brown' : '#432F2B',
+			},
+      fontFamily: {
+        sans: ['var(--font-inter)'],
+        efco: ['var(--font-efco)'],
+        serif: ['var(--font-jomhuria)', ...fontFamily.serif],
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
-      fontFamily: {
-        serif: ['var(--font-jomhuria)', ...fontFamily.serif],
-      },
-      colors: {
-        'virgorus-green' : '#6C7D47',
-        'virgorus-cream' : '#F3EBE4',
-        'virgorus-peach' : '#EE8665',
-        'virgorus-brown' : '#432F2B',
-      },
     },
-  },
-  darkMode: "class",
-  plugins: [nextui()],
+  }
+},
+
+  plugins: [
+		nextui({
+			themes: {
+				light: {
+					colors: {
+						primary: {
+							DEFAULT: '#432F2B',
+						},
+						default: {
+							DEFAULT: '#F3EBE4',
+						},
+					},
+				},
+			},
+		}),
+	],
 }
 export default config
