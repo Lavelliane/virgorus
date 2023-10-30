@@ -13,12 +13,17 @@ import {
 	Select,
 	SelectItem,
 	Selection,
+	Divider,
+	ScrollShadow,
 } from '@nextui-org/react';
 import { MdLibraryAdd } from 'react-icons/md';
 import IAddPackage from '../types/types';
 import addPackageDefault from '@/utils/defaults';
 import { availabilityData, languagesData } from '@/utils/data';
 import TableRates from './TableRates';
+import TableInclusions from './TableInclusion';
+import TableExclusions from './TableExclusion';
+import TableExpectations from './TableExpectation';
 
 export default function ModalPackage() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -62,7 +67,7 @@ export default function ModalPackage() {
 						<>
 							<ModalHeader className='flex flex-col gap-1'>Add Package</ModalHeader>
 							<ModalBody>
-								<div className='flex flex-col gap-4'>
+								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh]'>
 									<div className='flex gap-4'>
 										<Input
 											value={form.name}
@@ -186,10 +191,18 @@ export default function ModalPackage() {
 											))}
 										</Select>
 									</div>
-									<div className='flex gap-4'>
-										<TableRates />
+									<Divider className='my-0' />
+									<div className='flex flex-col gap-4'>
+										<div className='flex w-full gap-4'>
+											<TableRates onChange={onChange} form={form} />
+											<TableExpectations onChange={onChange} form={form} />
+										</div>
+										<div className='flex w-full gap-4'>
+											<TableInclusions onChange={onChange} form={form} />
+											<TableExclusions onChange={onChange} form={form} />
+										</div>
 									</div>
-								</div>
+								</ScrollShadow>
 							</ModalBody>
 							<ModalFooter>
 								<Button color='danger' variant='light' onPress={onClose}>

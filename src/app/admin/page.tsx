@@ -1,12 +1,13 @@
-"use client"
+'use client';
 
-import { signOut } from "next-auth/react"
+import TablePackage from '../../components/TablePackage';
 
 export default function AdminPage() {
-  return (
-    <>
-        <div>Admin Page</div>
-        <button onClick={() => signOut()}>Sign out</button>
-    </>
-  )
+	return (
+		<main className='flex min-h-screen flex-col items-center justify-between p-10'>
+			<section className='flex max-w-[960px] h-fit'>
+				<TablePackage />
+			</section>
+		</main>
+	);
 }

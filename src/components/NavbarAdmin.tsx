@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { signOut, useSession } from 'next-auth/react';
 import {
 	Navbar,
 	NavbarBrand,
@@ -22,6 +23,7 @@ import { MdSpaceDashboard, MdPostAdd, MdSettings, MdLogout } from 'react-icons/m
 export default function NavbarAdmin() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	const pathname = usePathname();
+	const { data: session, status } = useSession();
 
 	const menuItems = ['Dashboard', 'Packages', 'Settings', 'Log Out'];
 
@@ -94,11 +96,12 @@ export default function NavbarAdmin() {
 					<DropdownMenu aria-label='Profile Actions' variant='flat'>
 						<DropdownItem key='profile' className='h-14 gap-2'>
 							<p className='font-semibold'>Signed in as</p>
-							<p className='font-semibold'>zoey@example.com</p>
+							<p className='font-semibold'>{session?.user.email}</p>
 						</DropdownItem>
-						<DropdownItem key='settings'>My Profile</DropdownItem>
-						<DropdownItem key='logout' color='danger'>
-							Log Out
+						<DropdownItem key='logout' className='hover:bg-transparent bg-transparent' variant='light'>
+							<Button onClick={() => signOut()} variant='shadow'>
+								Sign out
+							</Button>
 						</DropdownItem>
 					</DropdownMenu>
 				</Dropdown>

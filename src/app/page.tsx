@@ -1,12 +1,5 @@
 import Image from 'next/image';
-import TablePackage from '../components/TablePackage';
 
 export default function Home() {
-	return (
-		<main className='flex min-h-screen flex-col items-center justify-between p-10'>
-			<section className='flex max-w-[960px] h-fit'>
-				<TablePackage />
-			</section>
-		</main>
-	);
+	return <main className='flex min-h-screen flex-col items-center justify-between p-10'></main>;
 }
