@@ -10,12 +10,12 @@ const addPackageDefault: IAddPackage = {
 	availability: '',
 	language: '',
 	notice: '',
+	inclusions: [''],
+	exclusions: [''],
 	ratesAndInclusions: [
 		{
 			numberOfPax: '',
 			ratePerPax: '',
-			inclusions: [''],
-			exclusions: [''],
 		},
 	],
 	itinerary: [

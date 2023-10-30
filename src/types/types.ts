@@ -10,6 +10,8 @@ export default interface IAddPackage {
 	notice: string;
 	ratesAndInclusions: [RatesAndInclusions];
 	itinerary: [Itinerary];
+	inclusions: [string];
+	exclusions: [string];
 	expectations: [string];
 	photos: [string];
 }
@@ -17,8 +19,6 @@ export default interface IAddPackage {
 interface RatesAndInclusions {
 	numberOfPax: string;
 	ratePerPax: string;
-	inclusions: [string];
-	exclusions: [string];
 }
 
 interface Itinerary {
