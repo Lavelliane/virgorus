@@ -7,7 +7,7 @@ export default function SitemapFooter() {
   return (
     <Footer bgDark>
       <div className="w-full">
-        <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4 text-virgorus-brown bg-virgorus-cream">
+        <div className="grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4 text-chocolate bg-nude">
           <div>
             <Footer.Title title="Company" />
             <Footer.LinkGroup col>
@@ -74,7 +74,7 @@ export default function SitemapFooter() {
             </Footer.LinkGroup>
           </div>
         </div>
-        <div className="w-full bg-virgorus-green px-4 py-6 sm:flex sm:items-center sm:justify-between">
+        <div className="w-full bg-olive px-4 py-6 sm:flex sm:items-center sm:justify-between">
           <Footer.Copyright
             by="Flowbite™"
             href="#"

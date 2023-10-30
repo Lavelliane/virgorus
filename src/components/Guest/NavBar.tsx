@@ -166,7 +166,7 @@ export default function NavBar() {
 				<Button 
 					variant="shadow" 
 					endContent={<IoMdPerson/>} 
-					className="font-semibold md:text-xs lg:text-lg bg-virgorus-green text-white"
+					className="font-semibold md:text-xs lg:text-lg bg-olive text-white"
 				>
 					About Us
 				</Button>

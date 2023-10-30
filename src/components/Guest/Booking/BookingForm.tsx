@@ -151,7 +151,7 @@ export const BookingForm = () => {
                   <Button
                     type="submit"
                     radius="full"
-                    className="bg-virgorus-green text-white font-semibold w-full mr-4"
+                    className="bg-olive text-white font-semibold w-full mr-4"
                   >
                     Submit
                   </Button>
@@ -159,7 +159,7 @@ export const BookingForm = () => {
                   <Button
                     isLoading
                     radius="full"
-                    className="bg-virgorus-green text-white font-semibold w-full"
+                    className="bg-olive text-white font-semibold w-full"
                   >
                     Submit
                   </Button>

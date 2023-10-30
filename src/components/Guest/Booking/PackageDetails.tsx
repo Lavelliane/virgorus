@@ -17,6 +17,7 @@ import { FaExclamationCircle } from 'react-icons/fa'
 import { MdTimelapse, MdCancel, MdLanguage, MdOutlineGroups } from 'react-icons/md'
 
 export function PackageDetails() {
+    const [note, setNote] = React.useState(true);
     const foo = "foo";
     const loremIpsum =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
@@ -41,24 +42,26 @@ export function PackageDetails() {
                 <div className='w-full text-black py-2 text-sm'>
                     <h1 className=''>starts at <span className='text-2xl font-bold'>₱{foo}</span> per adult (see rates below for group pricing)</h1>
                 </div>
+                {note ? (
                 <div className='py-4'>
                     <Textarea
-                        isReadOnly
-                        label={
-                            <div className='flex items-center justify-center text-black font-bold text-lg'>
-                                <span className='text-virgorus-brown text-2xl'><FaExclamationCircle /> </span> &nbsp;Note:
-                            </div>
-                        }
-                        variant="flat"
-                        labelPlacement="inside"
-                        placeholder={loremIpsum}
-                        defaultValue={loremIpsum}
-                        className="w-full text-black "
-                        classNames={{
-                            inputWrapper: "bg-virgorus-cream"
-                        }}
+                    isReadOnly
+                    label={
+                        <div className='flex items-center justify-center text-black font-bold text-lg'>
+                        <span className='text-chocolate text-2xl'><FaExclamationCircle /> </span> &nbsp;Note:
+                        </div>
+                    }
+                    variant="flat"
+                    labelPlacement="inside"
+                    placeholder={loremIpsum}
+                    defaultValue={loremIpsum}
+                    className="w-full text-black "
+                    classNames={{
+                        inputWrapper: "bg-nude"
+                    }}
                     />                   
                 </div>
+                ) : null}
                 <Divider />
                 <div className='flex flex-col py-4'>
                     <div>
