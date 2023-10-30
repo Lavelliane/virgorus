@@ -1,13 +1,20 @@
 'use client';
 
-import TablePackage from '../../components/TablePackage';
+import Navbar from '../../components/Admin/Navbar';
+import TablePackage from '../../components/Admin/TablePackage';
+import { SessionProvider } from 'next-auth/react';
 
 export default function AdminPage() {
 	return (
-		<main className='flex min-h-screen flex-col items-center justify-between p-10'>
-			<section className='flex max-w-[960px] h-fit'>
-				<TablePackage />
-			</section>
-		</main>
+		<SessionProvider>
+			<main className='flex min-h-screen flex-col items-center justify-between bg-white'>
+				<section className='flex flex-col w-full h-fit items-center'>
+					<Navbar />
+					<div className='flex max-w-5xl py-10'>
+						<TablePackage />
+					</div>
+				</section>
+			</main>
+		</SessionProvider>
 	);
 }
