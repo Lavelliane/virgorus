@@ -4,7 +4,7 @@ const phoneRegEx =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const bookingFormSchema = Yup.object({
-  fullName: Yup.string().required("Full Name is required."),
+  fullName: Yup.string().required("Full name is required."),
   email: Yup.string()
     .email("Invalid email address")
     .required("Email is required."),
