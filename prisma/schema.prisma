@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Package {
+  id              Int      @id @default(autoincrement())
+  name            String
+  description     String
+  type            String
+  location        String
+  duration        String
+  cancellation    String
+  availability    String
+  language        String
+  notice          String
+  ratesAndInclusions RatesAndInclusion[]
+  itinerary        Itinerary[]
+  expectations    String[]
+  photos          String[]
+}
+
+model RatesAndInclusion {
+  id              Int      @id @default(autoincrement())
+  numberOfPax     String
+  ratePerPax      String
+  inclusions      String[]
+  exclusions      String[]
+  packageId       Int
+  package         Package  @relation(fields: [packageId], references: [id])
+}
+
+model Itinerary {
+  id       Int      @id @default(autoincrement())
+  time     String
+  activity String
+  packageId Int
+  package  Package  @relation(fields: [packageId], references: [id])
+}
+
+model Account {
+  id                 String    @id @default(cuid())
+  userId             String
+  providerType       String
+  providerId         String
+  providerAccountId  String
+  refreshToken       String?
+  accessToken        String?
+  accessTokenExpires DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  user               User      @relation(fields: [userId], references: [id])
+
+  @@unique([providerId, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  expires      DateTime
+  sessionToken String   @unique
+  accessToken  String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+}
+
