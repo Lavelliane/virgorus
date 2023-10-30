@@ -18,8 +18,8 @@ const config: Config = {
 				olive: '#6C7D47',
 			},
       fontFamily: {
-        sans: ['var(--font-inter)'],
-        efco: ['var(--font-efco)'],
+        sans: ['var(--font-inter)', ...fontFamily.sans],
+        efco: ['var(--font-efco)', ...fontFamily.serif],
         serif: ['var(--font-jomhuria)', ...fontFamily.serif],
       },
       backgroundImage: {
