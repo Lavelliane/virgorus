@@ -4,7 +4,7 @@ import { RiMessengerFill } from 'react-icons/ri'
 
 export default function Header() {
   return (
-    <div className="bg-virgorus-brown py-2">
+    <div className="bg-chocolate w-full py-2">
         <div className="flex flex-col sm:flex-row justify-center gap-0 sm:gap-4 lg:gap-10 mx-0 lg:mx-96">
             <div className="flex justify-center gap-0 sm:gap-4 lg:gap-10">
                 <div>

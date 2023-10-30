@@ -21,7 +21,6 @@ import Image from 'next/image'
 import { IoMdHome, IoMdPerson } from 'react-icons/io'
 import { RiArrowDownSLine } from 'react-icons/ri'
 import { jomhuria } from '../../utils/fonts'
-import ContactBar from './ContactBar'
 
 
 interface PackageItem {
@@ -82,7 +81,7 @@ export default function NavBar() {
 			width={75}
 			height={75}
 			/>
-			<p className={`${jomhuria.variable} font-serif text-6xl text-black pt-1`}>Virgorus</p>
+			<p className={`${jomhuria.variable} font-serif text-5xl text-black pt-1`}>Virgorus</p>
 		</NavbarBrand>
 		<NavbarContent className="hidden md:flex gap-4" justify="end">
 			<NavbarItem>
@@ -164,7 +163,7 @@ export default function NavBar() {
 			</NavbarItem>
 			<NavbarItem>
 				<Button 
-					variant="shadow" 
+					variant="flat" 
 					endContent={<IoMdPerson/>} 
 					className="font-semibold md:text-xs lg:text-lg bg-olive text-white"
 				>

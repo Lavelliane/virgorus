@@ -9,9 +9,12 @@ const BookingPage = () => {
   return (
     <div className='w-full bg-white'>
       <div className='w-full flex flex-col items-center'>
-        <NavBar />
+        <div className='fixed z-30 w-full'>
+          <NavBar />
+          <ContactBar />
+        </div>
         <div className='flex flex-col max-w-5xl'>
-          <Spacer y={1} />
+          <Spacer y={24} />
           <PackageDetails />
         </div>
         <SitemapFooter />
