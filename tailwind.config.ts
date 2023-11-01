@@ -29,23 +29,26 @@ const config: Config = {
       },
     },
   }
-},
-
-  plugins: [
-		nextui({
-			themes: {
-				light: {
-					colors: {
-						primary: {
-							DEFAULT: '#432F2B',
-						},
-						default: {
-							DEFAULT: '#F3EBE4',
-						},
-					},
-				},
-			},
-		}),
-	],
 }
+
+plugin: [
+  nextui({
+    themes: {
+      light: {
+        colors: {
+          primary: {
+            DEFAULT: '#432F2B',
+          },
+          default: {
+            DEFAULT: '#F3EBE4',
+          },
+          secondary: {
+            DEFAULT: 'rgba(108,125,71, 1)',
+          },
+        },
+      },
+    },
+  })
+]
+
 export default config

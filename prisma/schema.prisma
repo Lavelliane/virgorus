@@ -22,25 +22,33 @@ model Package {
   language        String
   notice          String
   ratesAndInclusions RatesAndInclusion[]
-  itinerary        Itinerary[]
+  itinerary        DaySchedule[]
   expectations    String[]
   photos          String[]
+  inclusions      String[]
+  exclusions      String[]
 }
 
 model RatesAndInclusion {
   id              Int      @id @default(autoincrement())
   numberOfPax     String
   ratePerPax      String
-  inclusions      String[]
-  exclusions      String[]
   packageId       Int
   package         Package  @relation(fields: [packageId], references: [id])
 }
 
 model Itinerary {
   id       Int      @id @default(autoincrement())
-  time     String
-  activity String
+  time     String?
+  activity String?
+  daySchedule DaySchedule @relation(fields: [dayScheduleId], references: [id])
+  dayScheduleId Int
+}
+
+model DaySchedule {
+  id       Int      @id @default(autoincrement())
+  day     String?
+  itineraries Itinerary[]
   packageId Int
   package  Package  @relation(fields: [packageId], references: [id])
 }

@@ -39,6 +39,9 @@ module.exports = {
 						default: {
 							DEFAULT: '#F3EBE4',
 						},
+						secondary: {
+							DEFAULT: 'rgba(108,125,71, 1)',
+						},
 					},
 				},
 			},

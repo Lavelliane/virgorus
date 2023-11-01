@@ -12,6 +12,8 @@ const addPackageDefault: IAddPackage = {
 	notice: '',
 	inclusions: [''],
 	exclusions: [''],
+	expectations: [''],
+	photos: [''],
 	ratesAndInclusions: [
 		{
 			numberOfPax: '',
@@ -20,17 +22,15 @@ const addPackageDefault: IAddPackage = {
 	],
 	itinerary: [
 		{
-			day: '',
-			itinerary: [
+			day: '2',
+			itineraries: [
 				{
-					time: '',
-					activity: '',
+					time: 'peste',
+					activity: 'kaw',
 				},
 			],
 		},
 	],
-	expectations: [''],
-	photos: [''],
 };
 
 export default addPackageDefault;
