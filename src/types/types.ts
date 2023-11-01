@@ -9,7 +9,7 @@ export default interface IAddPackage {
 	language: string;
 	notice: string;
 	ratesAndInclusions: [RatesAndInclusions];
-	itinerary: [Itinerary];
+	itinerary: [DaySchedule];
 	inclusions: [string];
 	exclusions: [string];
 	expectations: [string];
@@ -19,6 +19,11 @@ export default interface IAddPackage {
 interface RatesAndInclusions {
 	numberOfPax: string;
 	ratePerPax: string;
+}
+
+interface DaySchedule {
+	day: string;
+	itinerary: [Itinerary];
 }
 
 interface Itinerary {
