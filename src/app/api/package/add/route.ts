@@ -17,7 +17,6 @@ interface Itinerary {
 
 export async function POST(req: NextRequest){
     const packageData = await req.json();
-
     const createdPackage = await prisma.package.create({
       data: {
         name: packageData.name,
@@ -34,8 +33,10 @@ export async function POST(req: NextRequest){
             return {
               numberOfPax: ratesAndInclusion.numberOfPax,
               ratePerPax: ratesAndInclusion.ratePerPax,
-              inclusions: { set: ratesAndInclusion.inclusions },
-              exclusions: { set: ratesAndInclusion.exclusions },
+              inclusions: { set: [] },
+              exclusions: { set: [] },
+              //inclusions: { set: ratesAndInclusion.inclusions },
+              //exclusions: { set: ratesAndInclusion.exclusions },
             };
           }),
         },

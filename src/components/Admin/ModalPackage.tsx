@@ -17,7 +17,7 @@ import {
 	ScrollShadow,
 } from '@nextui-org/react';
 import { MdLibraryAdd } from 'react-icons/md';
-import IAddPackage from '../types/types';
+import IAddPackage from '../../types/types';
 import addPackageDefault from '@/utils/defaults';
 import { availabilityData, languagesData } from '@/utils/data';
 import TableRates from './TableRates';
@@ -25,11 +25,37 @@ import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
 import TableExpectations from './TableExpectation';
 
+async function createPackage(data: IAddPackage) {
+	try {
+	  const response = await fetch('/api/package/add', {
+		method: 'POST',
+		headers: {
+		  'Content-Type': 'application/json',
+		},
+		body: JSON.stringify(data),
+	  });
+  
+	  if (response.ok) {
+		const createdPackage = await response.json();
+		console.log('Package created:', createdPackage);
+	  } else {
+		console.error('Failed to create package:', response.statusText);
+	  }
+	} catch (error) {
+	  console.error('An error occurred:', error);
+	}
+  }
+
 export default function ModalPackage() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [form, setForm] = React.useState<IAddPackage>(addPackageDefault);
 	const [availability, setAvailability] = React.useState<Selection>(new Set([]));
 	const [language, setLanguage] = React.useState<Selection>(new Set([]));
+
+	const handleActionClick = () => {
+		createPackage(form);
+		onClose(); // Close the modal or perform any other desired action.
+	};
 
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedValues = e.target.value.split(',');
@@ -208,7 +234,7 @@ export default function ModalPackage() {
 								<Button color='danger' variant='light' onPress={onClose}>
 									Close
 								</Button>
-								<Button color='primary' onPress={onClose}>
+								<Button color='primary' onPress={handleActionClick}>
 									Action
 								</Button>
 							</ModalFooter>
