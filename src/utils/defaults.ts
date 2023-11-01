@@ -20,8 +20,13 @@ const addPackageDefault: IAddPackage = {
 	],
 	itinerary: [
 		{
-			time: '',
-			activity: '',
+			day: '',
+			itinerary: [
+				{
+					time: '',
+					activity: '',
+				},
+			],
 		},
 	],
 	expectations: [''],

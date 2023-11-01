@@ -93,7 +93,7 @@ export default function ModalPackage() {
 						<>
 							<ModalHeader className='flex flex-col gap-1'>Add Package</ModalHeader>
 							<ModalBody>
-								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh]'>
+								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] pb-10'>
 									<div className='flex gap-4'>
 										<Input
 											value={form.name}
