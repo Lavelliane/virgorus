@@ -23,7 +23,7 @@ interface RatesAndInclusions {
 
 interface DaySchedule {
 	day: string;
-	itinerary: [Itinerary];
+	itineraries: [Itinerary];
 }
 
 interface Itinerary {
