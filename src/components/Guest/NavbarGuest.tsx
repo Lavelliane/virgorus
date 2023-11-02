@@ -20,7 +20,6 @@ import {
 import Image from 'next/image';
 import { IoMdHome, IoMdPerson } from 'react-icons/io';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import { jomhuria } from '../../utils/fonts';
 
 interface PackageItem {
 	key: string;
@@ -70,7 +69,7 @@ export default function NavbarGuest() {
 	const renderDropdownItems = (packageList: PackageItem[]) => {
 		return packageList.map((item) => (
 			<DropdownItem key={item.key} className='text-black' description={item.sublabel}>
-				<div className='w-96 whitespace-normal'>{item.label}</div>
+				<div className='whitespace-normal'>{item.label}</div>
 			</DropdownItem>
 		));
 	};
@@ -79,18 +78,23 @@ export default function NavbarGuest() {
 		<Navbar className='bg-white' maxWidth='xl'>
 			<NavbarBrand>
 				<Image src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png' alt='virgorus-main-logo' width={75} height={75} />
-				<p className={` font-efco text-5xl text-black pt-1`}>virgorus</p>
+				<span className='font-bold font-efco text-3xl'>virgorus</span>
 			</NavbarBrand>
 			<NavbarContent className='hidden md:flex gap-4' justify='end'>
 				<NavbarItem>
-					<Button variant='light' endContent={<IoMdHome />} radius='sm' className='font-semibold md:text-xs lg:text-lg'>
-						<Link color='foreground' href='/home' className='font-semibold md:text-xs lg:text-lg'>
-							Home
-						</Link>
+					<Button
+						as={Link}
+						href='/home'
+						variant='light'
+						endContent={<IoMdHome />}
+						radius='sm'
+						className='font-semibold md:text-xs lg:text-lg'
+					>
+						Home
 					</Button>
 				</NavbarItem>
 				<NavbarItem>
-					<Dropdown className=''>
+					<Dropdown>
 						<DropdownTrigger>
 							<Button
 								variant='light'
@@ -101,7 +105,14 @@ export default function NavbarGuest() {
 								Tour Packages
 							</Button>
 						</DropdownTrigger>
-						<DropdownMenu items={packageSections as object[]} className='p-4'>
+						<DropdownMenu
+							items={packageSections as object[]}
+							aria-label='Tour Packages'
+							className='w-[380px]'
+							itemClasses={{
+								base: 'gap-4',
+							}}
+						>
 							{(item: object) => {
 								const section: PackageSection = item as PackageSection;
 								let packageList: PackageSection[] = [];

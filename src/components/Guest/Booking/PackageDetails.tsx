@@ -19,7 +19,7 @@ import Recommendations from './Recommendations';
 import { FaExclamationCircle } from 'react-icons/fa';
 import { MdTimelapse, MdCancel, MdLanguage, MdOutlineGroups } from 'react-icons/md';
 
-export function PackageDetails() {
+export default function PackageDetails() {
 	const [note, setNote] = React.useState(true);
 	const foo = 'foo';
 	const loremIpsum =
@@ -178,8 +178,7 @@ export function PackageDetails() {
 					<BookingForm />
 				</div>
 			</div>
-			<Divider />
-			<Spacer y={10} />
+			<Spacer y={4} />
 			<div>
 				<h1 className='text-2xl text-black font-semibold py-4'>Find more tours in {foo}</h1>
 				<div className='flex flex-row'>

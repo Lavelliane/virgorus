@@ -211,7 +211,7 @@ export default function ModalPackage() {
 											onChange={languageSelectionChange}
 										>
 											{languagesData.map((language) => (
-												<SelectItem key={language.code} value={language.name}>
+												<SelectItem key={language.name} value={language.name}>
 													{language.name}
 												</SelectItem>
 											))}
