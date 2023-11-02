@@ -22,11 +22,11 @@ const addPackageDefault: IAddPackage = {
 	],
 	itinerary: [
 		{
-			day: '2',
+			day: '',
 			itineraries: [
 				{
-					time: 'peste',
-					activity: 'kaw',
+					time: '',
+					activity: '',
 				},
 			],
 		},
