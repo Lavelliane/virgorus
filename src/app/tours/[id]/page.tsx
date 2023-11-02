@@ -7,26 +7,28 @@ import Package from '../../../types/package';
 
 const prisma = new PrismaClient();
 
-let packageDataMap = new Map<number, Promise<Package>>();
+let packageCache: { [key: number]: Package | null } = {};
 
-async function getPackage(id: number): Promise<Package | null> {
-  const packageData = await prisma.package.findUnique({
-    where: {
-      id: id
-    },
-  });
-  return packageData;
+async function getPackage(id: number) {
+	if (packageCache[id]) {
+	  	console.log('ALREADY EXISTS')
+	  	return packageCache[id];
+	}
+	else {
+		const packageData = await prisma.package.findUnique({
+			where: {
+				id: id
+			}
+		})
+		packageCache[id] = packageData
+		//console.log('CACHE: ', packageCache)
+		return packageData;	
+	}
 }
 
 async function Page({ params }: { params: { id: number } }) {
 	const id = params.id;
-
-	/* TEMP FIX TO PREVENT LOOPED QUERY */
-	if (!packageDataMap.has(id)) {
-		packageDataMap.set(id, getPackage(id) as Promise<Package>);
-	}
-
-	const packageData = await packageDataMap.get(id);
+	const packageData = await getPackage(Number(id));
 	if (!packageData) {
 		return <div>Package not found</div>;
 	}

@@ -96,7 +96,7 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 									<span className='text-lg flex items-center'>
 										<MdCancel />
 									</span>
-									<span className='text-md flex items-center'>Cancellation: {packageData.cancellation}</span>
+									<span className='text-md flex items-center'>{packageData.cancellation} cancellation</span>
 								</Button>
 							</Tooltip>
 						</div>
