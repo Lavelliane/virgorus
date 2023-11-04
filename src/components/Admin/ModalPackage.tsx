@@ -27,24 +27,24 @@ import TableExpectations from './TableExpectation';
 
 async function createPackage(data: IAddPackage) {
 	try {
-	  const response = await fetch('/api/package/add', {
-		method: 'POST',
-		headers: {
-		  'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(data),
-	  });
-  
-	  if (response.ok) {
-		const createdPackage = await response.json();
-		console.log('Package created:', createdPackage);
-	  } else {
-		console.error('Failed to create package:', response.statusText);
-	  }
+		const response = await fetch('/api/package/add', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
+
+		if (response.ok) {
+			const createdPackage = await response.json();
+			console.log('Package created:', createdPackage);
+		} else {
+			console.error('Failed to create package:', response.statusText);
+		}
 	} catch (error) {
-	  console.error('An error occurred:', error);
+		console.error('An error occurred:', error);
 	}
-  }
+}
 
 export default function ModalPackage() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
@@ -81,7 +81,7 @@ export default function ModalPackage() {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	console.log(form);
+	//console.log(form);
 	return (
 		<>
 			<Button onPress={onOpen} color='primary' endContent={<MdLibraryAdd />}>

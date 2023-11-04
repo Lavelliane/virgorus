@@ -4,43 +4,31 @@ import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } f
 import { PiNotePencilLight } from 'react-icons/pi';
 import IAddPackage from '@/types/types';
 
-interface Expectations {
-	expectations: string;
-	isEditing: boolean;
-	originalExpectations: string;
-}
-
 interface TableExpectationsProps {
-	onChange: (e: any) => void;
-	form: IAddPackage;
+	readonly onChange: (e: any) => void;
+	readonly form: IAddPackage;
 }
 
 export default function TableExpectations({ onChange, form }: TableExpectationsProps) {
-	const [expectations, setExpectations] = React.useState<Expectations[]>([]);
+	const [expectations, setExpectations] = React.useState<string[]>([]);
 	const [newExpectations, setNewExpectations] = React.useState('');
+	const [isEditingStates, setIsEditingStates] = React.useState<boolean[]>([]);
+	const [originalExpectationsStates, setOriginalExpectationsStates] = React.useState<string[]>([]);
 
 	useEffect(() => {
 		if (form.expectations) {
-			const expectations = form.expectations
-				.filter((expectation: string) => expectation)
-				.map((expectation: string) => ({
-					expectations: expectation,
-					isEditing: false,
-					originalExpectations: expectation,
-				}));
-			setExpectations(expectations);
+			setExpectations(form.expectations.filter((expectation: string) => expectation));
+			setIsEditingStates(Array(form.expectations.length).fill(false));
+			setOriginalExpectationsStates(form.expectations.filter((expectation: string) => expectation));
 		}
 	}, [form.expectations]);
 
 	const addExpectations = () => {
-		if (newExpectations) {
-			const newEntry: Expectations = {
-				expectations: newExpectations,
-				isEditing: false,
-				originalExpectations: newExpectations,
-			};
-			setExpectations([...expectations, newEntry]);
-			onChange({ target: { name: 'expectations', value: [...expectations, newEntry.expectations] } });
+		if (newExpectations && !expectations.includes(newExpectations)) {
+			setExpectations([...expectations, newExpectations]);
+			setIsEditingStates([...isEditingStates, false]);
+			setOriginalExpectationsStates([...originalExpectationsStates, newExpectations]);
+			onChange({ target: { name: 'expectations', value: [...expectations, newExpectations] } });
 			setNewExpectations('');
 		}
 	};
@@ -49,24 +37,50 @@ export default function TableExpectations({ onChange, form }: TableExpectationsP
 		const updatedExpectations = [...expectations];
 		updatedExpectations.splice(index, 1);
 		setExpectations(updatedExpectations);
+
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates.splice(index, 1);
+		setIsEditingStates(updatedIsEditingStates);
+
+		const updatedOriginalExpectationsStates = [...originalExpectationsStates];
+		updatedOriginalExpectationsStates.splice(index, 1);
+		setOriginalExpectationsStates(updatedOriginalExpectationsStates);
+
 		onChange({ target: { name: 'expectations', value: updatedExpectations } });
 	};
 
 	const toggleEdit = (index: number) => {
-		const updatedExpectations = [...expectations];
-		updatedExpectations[index].isEditing = !updatedExpectations[index].isEditing;
-		setExpectations(updatedExpectations);
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates[index] = !isEditingStates[index];
+		setIsEditingStates(updatedIsEditingStates);
 	};
 
 	const handleEdit = (index: number) => {
 		const updatedExpectations = [...expectations];
-		const newEditedExpectations = newExpectations || updatedExpectations[index].originalExpectations;
-		updatedExpectations[index].expectations = newEditedExpectations;
-		updatedExpectations[index].isEditing = false;
-		updatedExpectations[index].originalExpectations = newEditedExpectations;
-		setExpectations(updatedExpectations);
-		setNewExpectations('');
-		onChange({ target: { name: 'expectations', value: updatedExpectations } });
+		const newEditedExpectations = newExpectations || updatedExpectations[index];
+
+		// Check if the edited expectation already exists in the list
+		if (updatedExpectations[index] !== newEditedExpectations) {
+			updatedExpectations[index] = newEditedExpectations;
+			setExpectations(updatedExpectations);
+
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setIsEditingStates(updatedIsEditingStates);
+
+			const updatedOriginalExpectationsStates = [...originalExpectationsStates];
+			updatedOriginalExpectationsStates[index] = newEditedExpectations;
+			setOriginalExpectationsStates(updatedOriginalExpectationsStates);
+
+			setNewExpectations('');
+			onChange({ target: { name: 'expectations', value: updatedExpectations } });
+		} else {
+			// Content is the same as the original, exit the edit mode
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setNewExpectations('');
+			setIsEditingStates(updatedIsEditingStates);
+		}
 	};
 
 	return (
@@ -81,30 +95,30 @@ export default function TableExpectations({ onChange, form }: TableExpectationsP
 					</TableColumn>
 				</TableHeader>
 				<TableBody>
-					{expectations.map((expectations, index) => (
-						<TableRow key={`${expectations.expectations}`}>
+					{expectations.map((expectation, index) => (
+						<TableRow key={`${expectation}`}>
 							<TableCell className='font-medium'>
-								{expectations.isEditing ? (
+								{isEditingStates[index] ? (
 									<Input
 										type='text'
 										size='sm'
 										value={newExpectations}
 										onChange={(e) => setNewExpectations(e.target.value)}
-										placeholder={expectations.originalExpectations}
-										className=' sm:text-sm text-xs mx-0'
+										placeholder={originalExpectationsStates[index]}
+										className='sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									expectations.expectations
+									' ' + expectation
 								)}
 							</TableCell>
 							<TableCell className='justify-end flex items-center'>
-								{expectations.isEditing ? (
+								{isEditingStates[index] ? (
 									<div className='flex'>
 										<Button
 											onClick={() => handleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
+											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover-bg-transparent'
 										>
 											<IoCheckmarkCircleOutline />
 										</Button>
@@ -112,7 +126,7 @@ export default function TableExpectations({ onChange, form }: TableExpectationsP
 											onClick={() => removeExpectations(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
 										>
 											<IoRemoveCircleOutline />
 										</Button>
@@ -120,10 +134,11 @@ export default function TableExpectations({ onChange, form }: TableExpectationsP
 								) : (
 									<div>
 										<Button
+											disabled={isEditingStates.some((isEditing) => isEditing)}
 											onClick={() => toggleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover-bg-transparent'
 										>
 											<PiNotePencilLight />
 										</Button>
@@ -138,18 +153,18 @@ export default function TableExpectations({ onChange, form }: TableExpectationsP
 				<Input
 					type='text'
 					size='sm'
-					value={expectations.some((expectations) => expectations.isEditing) ? '' : newExpectations}
+					value={isEditingStates.some((isEditing) => isEditing) ? '' : newExpectations}
 					onChange={(e) => setNewExpectations(e.target.value)}
 					placeholder='Add Expectation'
-					disabled={expectations.some((expectations) => expectations.isEditing)}
-					className=' sm:text-sm text-xs mx-0'
+					disabled={isEditingStates.some((isEditing) => isEditing)}
+					className='sm:text-sm text-xs mx-0'
 				/>
 				<Button
 					onClick={addExpectations}
 					size='sm'
 					isIconOnly
-					className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
-					disabled={expectations.some((expectations) => expectations.isEditing)}
+					className='text-chocolate hover-text-opacity-60 text-xl bg-transparent transition-all'
+					disabled={isEditingStates.some((isEditing) => isEditing)}
 				>
 					<IoAddCircleOutline />
 				</Button>
