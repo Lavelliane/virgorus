@@ -10,6 +10,7 @@ import {
 	useDisclosure,
 	Input,
 	Textarea,
+	Tooltip,
 	Select,
 	SelectItem,
 	Selection,
@@ -59,21 +60,23 @@ export default function ModalPackage() {
 
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedValues = e.target.value.split(',');
-
-		// Map selected values to the corresponding labels
 		const sortedSelectedAvailability = availabilityData
 			.filter((item) => selectedValues.includes(item.value))
 			.map((item) => item.value);
 
 		setAvailability(new Set(sortedSelectedAvailability));
-
 		const availability = sortedSelectedAvailability.toString();
 		setForm({ ...form, ['availability']: availability });
 	};
 
 	const languageSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setLanguage(new Set(e.target.value.split(', ')));
-		const language = e.target.value.toString();
+		const selectedValues = e.target.value.split(',');
+		const sortedSelectedLanguages = languagesData
+			.filter((item) => selectedValues.includes(item.name))
+			.map((item) => item.name);
+
+		setLanguage(new Set(sortedSelectedLanguages));
+		const language = sortedSelectedLanguages.join(', ');
 		setForm({ ...form, ['language']: language });
 	};
 
@@ -81,10 +84,10 @@ export default function ModalPackage() {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	//console.log(form);
+	console.log(form);
 	return (
 		<>
-			<Button onPress={onOpen} color='primary' endContent={<MdLibraryAdd />}>
+			<Button onPress={onOpen} color='secondary' endContent={<MdLibraryAdd />}>
 				Add New
 			</Button>
 			<Modal backdrop={'blur'} isOpen={isOpen} onClose={onClose} size='2xl'>
@@ -132,9 +135,9 @@ export default function ModalPackage() {
 											isRequired
 										/>
 									</div>
-									<div className='flex gap-4'>
+									<div className='flex flex-col gap-4'>
 										<Textarea
-											className='w-[50%]'
+											className='w-[100%]'
 											name='description'
 											value={form.description}
 											onChange={onChange}
@@ -144,9 +147,10 @@ export default function ModalPackage() {
 											label='Description'
 											placeholder='Enter package description'
 											isRequired
+											minRows={10}
 										/>
 										<Textarea
-											className='w-[50%]'
+											className='w-[100%]'
 											name='notice'
 											value={form.notice}
 											onChange={onChange}
@@ -155,6 +159,7 @@ export default function ModalPackage() {
 											labelPlacement='outside'
 											label='Notice'
 											placeholder='Enter notice'
+											minRows={4}
 										/>
 									</div>
 									<div className='flex gap-4'>
@@ -163,25 +168,33 @@ export default function ModalPackage() {
 											className='w-[50%]'
 											name='duration'
 											onChange={onChange}
-											type='text'
+											type='number'
 											size='sm'
+											min='1'
 											labelPlacement='outside'
 											label='Package Duration'
-											placeholder='i.e. 12 Hours'
+											placeholder='i.e. 12 hour/s'
 											isRequired
 										/>
-										<Input
-											value={form.cancellation}
-											className='w-[50%]'
-											name='cancellation'
-											onChange={onChange}
-											type='text'
-											size='sm'
-											labelPlacement='outside'
-											label='Cancellation Policy'
-											placeholder='i.e. 48-Hour Cancellation'
-											isRequired
-										/>
+										<Tooltip
+											placement='top'
+											delay={500}
+											closeDelay={100}
+											content="Leave empty for 'No cancellation' policies."
+										>
+											<Input
+												value={form.cancellation}
+												className='w-[50%]'
+												name='cancellation'
+												onChange={onChange}
+												type='number'
+												size='sm'
+												labelPlacement='outside'
+												label='Cancellation Policy'
+												placeholder='i.e. 48-hour cancellation'
+												isRequired
+											/>
+										</Tooltip>
 									</div>
 									<div className='flex gap-4'>
 										<Select
@@ -218,12 +231,11 @@ export default function ModalPackage() {
 										</Select>
 									</div>
 									<Divider className='my-0' />
-									<div className='flex flex-col gap-4'>
+									<div className='flex flex-row gap-4 max-h-[880px]'>
 										<div className='flex w-full gap-4'>
 											<TableRates onChange={onChange} form={form} />
-											<TableExpectations onChange={onChange} form={form} />
 										</div>
-										<div className='flex w-full gap-4'>
+										<div className='flex flex-col w-full gap-4'>
 											<TableInclusions onChange={onChange} form={form} />
 											<TableExclusions onChange={onChange} form={form} />
 										</div>
@@ -234,7 +246,7 @@ export default function ModalPackage() {
 								<Button color='danger' variant='light' onPress={onClose}>
 									Close
 								</Button>
-								<Button color='primary' onPress={handleActionClick}>
+								<Button color='secondary' onPress={handleActionClick}>
 									Action
 								</Button>
 							</ModalFooter>

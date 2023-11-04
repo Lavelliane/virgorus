@@ -239,7 +239,7 @@ export default function TablePackage() {
 					isCompact
 					showControls
 					showShadow
-					color='primary'
+					color='secondary'
 					variant='flat'
 					page={page}
 					total={pages}
