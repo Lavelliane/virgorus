@@ -72,7 +72,7 @@ export default function ModalPackage() {
 	};
 
 	const languageSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setLanguage(new Set(e.target.value.split(',')));
+		setLanguage(new Set(e.target.value.split(', ')));
 		const language = e.target.value.toString();
 		setForm({ ...form, ['language']: language });
 	};

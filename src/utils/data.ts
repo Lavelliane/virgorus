@@ -36,6 +36,8 @@ const availabilityData = [
 ];
 
 const languagesData = [
+	{ code: 'tl', name: 'Filipino' },
+	{ code: 'ceb', name: 'Cebuano' },
 	{ code: 'en', name: 'English' },
 	{ code: 'es', name: 'Spanish' },
 	{ code: 'fr', name: 'French' },
@@ -62,9 +64,7 @@ const languagesData = [
 	{ code: 'he', name: 'Hebrew' },
 	{ code: 'id', name: 'Indonesian' },
 	{ code: 'ms', name: 'Malay' },
-	{ code: 'vi', name: 'Vietnamese' },
-	{ code: 'tl', name: 'Filipino' },
-	{ code: 'ceb', name: 'Cebuano (Bisaya)' },
+	{ code: 'vi', name: 'Vietnamese' }
 ];
 
 export { durationData, availabilityData, languagesData };
