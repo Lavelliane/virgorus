@@ -4,43 +4,31 @@ import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } f
 import { PiNotePencilLight } from 'react-icons/pi';
 import IAddPackage from '@/types/types';
 
-interface Inclusions {
-	inclusions: string;
-	isEditing: boolean;
-	originalInclusions: string;
-}
-
 interface TableInclusionsProps {
-	onChange: (e: any) => void;
-	form: IAddPackage;
+	readonly onChange: (e: any) => void;
+	readonly form: IAddPackage;
 }
 
 export default function TableInclusions({ onChange, form }: TableInclusionsProps) {
-	const [inclusions, setInclusions] = React.useState<Inclusions[]>([]);
+	const [inclusions, setInclusions] = React.useState<string[]>([]);
 	const [newInclusions, setNewInclusions] = React.useState('');
+	const [isEditingStates, setIsEditingStates] = React.useState<boolean[]>([]);
+	const [originalInclusionsStates, setOriginalInclusionsStates] = React.useState<string[]>([]);
 
 	useEffect(() => {
 		if (form.inclusions) {
-			const inclusions = form.inclusions
-				.filter((inclusion: string) => inclusion)
-				.map((inclusion: string) => ({
-					inclusions: inclusion,
-					isEditing: false,
-					originalInclusions: inclusion,
-				}));
-			setInclusions(inclusions);
+			setInclusions(form.inclusions.filter((inclusion: string) => inclusion));
+			setIsEditingStates(Array(form.inclusions.length).fill(false));
+			setOriginalInclusionsStates(form.inclusions.filter((inclusion: string) => inclusion));
 		}
 	}, [form.inclusions]);
 
 	const addInclusions = () => {
-		if (newInclusions) {
-			const newEntry: Inclusions = {
-				inclusions: newInclusions,
-				isEditing: false,
-				originalInclusions: newInclusions,
-			};
-			setInclusions([...inclusions, newEntry]);
-			onChange({ target: { name: 'inclusions', value: [...inclusions, newEntry.inclusions] } });
+		if (newInclusions && !inclusions.includes(newInclusions)) {
+			setInclusions([...inclusions, newInclusions]);
+			setIsEditingStates([...isEditingStates, false]);
+			setOriginalInclusionsStates([...originalInclusionsStates, newInclusions]);
+			onChange({ target: { name: 'inclusions', value: [...inclusions, newInclusions] } });
 			setNewInclusions('');
 		}
 	};
@@ -49,24 +37,50 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 		const updatedInclusions = [...inclusions];
 		updatedInclusions.splice(index, 1);
 		setInclusions(updatedInclusions);
+
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates.splice(index, 1);
+		setIsEditingStates(updatedIsEditingStates);
+
+		const updatedOriginalInclusionsStates = [...originalInclusionsStates];
+		updatedOriginalInclusionsStates.splice(index, 1);
+		setOriginalInclusionsStates(updatedOriginalInclusionsStates);
+
 		onChange({ target: { name: 'inclusions', value: updatedInclusions } });
 	};
 
 	const toggleEdit = (index: number) => {
-		const updatedInclusions = [...inclusions];
-		updatedInclusions[index].isEditing = !updatedInclusions[index].isEditing;
-		setInclusions(updatedInclusions);
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates[index] = !isEditingStates[index];
+		setIsEditingStates(updatedIsEditingStates);
 	};
 
 	const handleEdit = (index: number) => {
 		const updatedInclusions = [...inclusions];
-		const newEditedInclusions = newInclusions || updatedInclusions[index].originalInclusions;
-		updatedInclusions[index].inclusions = newEditedInclusions;
-		updatedInclusions[index].isEditing = false;
-		updatedInclusions[index].originalInclusions = newEditedInclusions;
-		setInclusions(updatedInclusions);
-		setNewInclusions('');
-		onChange({ target: { name: 'inclusions', value: updatedInclusions } });
+		const newEditedInclusions = newInclusions || updatedInclusions[index];
+
+		// Check if the edited inclusion already exists in the list
+		if (updatedInclusions[index] !== newEditedInclusions) {
+			updatedInclusions[index] = newEditedInclusions;
+			setInclusions(updatedInclusions);
+
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setIsEditingStates(updatedIsEditingStates);
+
+			const updatedOriginalInclusionsStates = [...originalInclusionsStates];
+			updatedOriginalInclusionsStates[index] = newEditedInclusions;
+			setOriginalInclusionsStates(updatedOriginalInclusionsStates);
+
+			setNewInclusions('');
+			onChange({ target: { name: 'inclusions', value: updatedInclusions } });
+		} else {
+			// Content is the same as the original, exit the edit mode
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setNewInclusions('');
+			setIsEditingStates(updatedIsEditingStates);
+		}
 	};
 
 	return (
@@ -81,30 +95,30 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 					</TableColumn>
 				</TableHeader>
 				<TableBody>
-					{inclusions.map((inclusions, index) => (
-						<TableRow key={`${inclusions.inclusions}`}>
+					{inclusions.map((inclusion, index) => (
+						<TableRow key={`${inclusion}`}>
 							<TableCell className='font-medium'>
-								{inclusions.isEditing ? (
+								{isEditingStates[index] ? (
 									<Input
 										type='text'
 										size='sm'
 										value={newInclusions}
 										onChange={(e) => setNewInclusions(e.target.value)}
-										placeholder={inclusions.originalInclusions}
-										className=' sm:text-sm text-xs mx-0'
+										placeholder={originalInclusionsStates[index]}
+										className='sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									inclusions.inclusions
+									' ' + inclusion
 								)}
 							</TableCell>
 							<TableCell className='justify-end flex items-center'>
-								{inclusions.isEditing ? (
+								{isEditingStates[index] ? (
 									<div className='flex'>
 										<Button
 											onClick={() => handleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
+											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover-bg-transparent'
 										>
 											<IoCheckmarkCircleOutline />
 										</Button>
@@ -112,7 +126,7 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 											onClick={() => removeInclusions(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
 										>
 											<IoRemoveCircleOutline />
 										</Button>
@@ -120,10 +134,11 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 								) : (
 									<div>
 										<Button
+											disabled={isEditingStates.some((isEditing) => isEditing)}
 											onClick={() => toggleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover-bg-transparent'
 										>
 											<PiNotePencilLight />
 										</Button>
@@ -138,18 +153,18 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 				<Input
 					type='text'
 					size='sm'
-					value={inclusions.some((inclusions) => inclusions.isEditing) ? '' : newInclusions}
+					value={isEditingStates.some((isEditing) => isEditing) ? '' : newInclusions}
 					onChange={(e) => setNewInclusions(e.target.value)}
 					placeholder='Add Inclusion'
-					disabled={inclusions.some((inclusions) => inclusions.isEditing)}
-					className=' sm:text-sm text-xs mx-0'
+					disabled={isEditingStates.some((isEditing) => isEditing)}
+					className='sm:text-sm text-xs mx-0'
 				/>
 				<Button
 					onClick={addInclusions}
 					size='sm'
 					isIconOnly
-					className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
-					disabled={inclusions.some((inclusions) => inclusions.isEditing)}
+					className='text-chocolate hover-text-opacity-60 text-xl bg-transparent transition-all'
+					disabled={isEditingStates.some((isEditing) => isEditing)}
 				>
 					<IoAddCircleOutline />
 				</Button>

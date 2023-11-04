@@ -13,14 +13,15 @@ interface Pax {
 }
 
 interface TableRatesProps {
-	onChange: (e: any) => void;
-	form: IAddPackage;
+	readonly onChange: (e: any) => void;
+	readonly form: IAddPackage;
 }
 
 export default function TableRates({ onChange, form }: TableRatesProps) {
-	const [numberOfPax, setPax] = React.useState<Pax[]>([]);
+	const [numberOfPax, setNumberOfPax] = React.useState<Pax[]>([]);
 	const [newPax, setNewPax] = React.useState('');
 	const [newRate, setNewRate] = React.useState('');
+	const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
 
 	useEffect(() => {
 		if (form.ratesAndInclusions) {
@@ -33,7 +34,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					originalPax: item.numberOfPax,
 					originalRate: item.ratePerPax,
 				}));
-			setPax(numberOfPax);
+			setNumberOfPax(numberOfPax);
 		}
 	}, [form.ratesAndInclusions]);
 
@@ -46,7 +47,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 				originalPax: newPax,
 				originalRate: newRate,
 			};
-			setPax([...numberOfPax, newEntry]);
+			setNumberOfPax([...numberOfPax, newEntry]);
 			onChange({ target: { name: 'ratesAndInclusions', value: [...numberOfPax, newEntry] } });
 			setNewPax('');
 			setNewRate('');
@@ -56,14 +57,17 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 	const removePax = (index: number) => {
 		const updatedPax = [...numberOfPax];
 		updatedPax.splice(index, 1);
-		setPax(updatedPax);
+		setNumberOfPax(updatedPax);
 		onChange({ target: { name: 'ratesAndInclusions', value: updatedPax } });
 	};
 
 	const toggleEdit = (index: number) => {
-		const updatedPax = [...numberOfPax];
-		updatedPax[index].isEditing = !updatedPax[index].isEditing;
-		setPax(updatedPax);
+		if (!isAnyRowEditing) {
+			const updatedPax = [...numberOfPax];
+			updatedPax[index].isEditing = !updatedPax[index].isEditing;
+			setNumberOfPax(updatedPax);
+			setIsAnyRowEditing(true);
+		}
 	};
 
 	const handleEdit = (index: number) => {
@@ -75,10 +79,11 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 		updatedPax[index].isEditing = false;
 		updatedPax[index].originalPax = newEditedPax;
 		updatedPax[index].originalRate = newEditedRate;
-		setPax(updatedPax);
+		setNumberOfPax(updatedPax);
 		setNewPax('');
 		setNewRate('');
 		onChange({ target: { name: 'ratesAndInclusions', value: updatedPax } });
+		setIsAnyRowEditing(false);
 	};
 
 	return (
@@ -109,7 +114,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 										className=' sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									numberOfPax.numberOfPax
+									' ' + numberOfPax.numberOfPax
 								)}
 							</TableCell>
 							<TableCell>
@@ -123,7 +128,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 										className=' sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									numberOfPax.ratePerPax
+									' ' + numberOfPax.ratePerPax
 								)}
 							</TableCell>
 							<TableCell className='justify-end flex items-center'>
@@ -141,7 +146,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 											onClick={() => removePax(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
 										>
 											<IoRemoveCircleOutline />
 										</Button>
@@ -149,10 +154,11 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 								) : (
 									<div>
 										<Button
+											disabled={numberOfPax.isEditing}
 											onClick={() => toggleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover-bg-transparent'
 										>
 											<PiNotePencilLight />
 										</Button>

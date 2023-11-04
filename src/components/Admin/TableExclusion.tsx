@@ -4,43 +4,31 @@ import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } f
 import { PiNotePencilLight } from 'react-icons/pi';
 import IAddPackage from '@/types/types';
 
-interface Exclusions {
-	exclusions: string;
-	isEditing: boolean;
-	originalExclusions: string;
-}
-
 interface TableExclusionsProps {
-	onChange: (e: any) => void;
-	form: IAddPackage;
+	readonly onChange: (e: any) => void;
+	readonly form: IAddPackage;
 }
 
 export default function TableExclusions({ onChange, form }: TableExclusionsProps) {
-	const [exclusions, setExclusions] = React.useState<Exclusions[]>([]);
+	const [exclusions, setExclusions] = React.useState<string[]>([]);
 	const [newExclusions, setNewExclusions] = React.useState('');
+	const [isEditingStates, setIsEditingStates] = React.useState<boolean[]>([]);
+	const [originalExclusionsStates, setOriginalExclusionsStates] = React.useState<string[]>([]);
 
 	useEffect(() => {
 		if (form.exclusions) {
-			const exclusions = form.exclusions
-				.filter((exclusion: string) => exclusion)
-				.map((exclusion: string) => ({
-					exclusions: exclusion,
-					isEditing: false,
-					originalExclusions: exclusion,
-				}));
-			setExclusions(exclusions);
+			setExclusions(form.exclusions.filter((exclusion: string) => exclusion));
+			setIsEditingStates(Array(form.exclusions.length).fill(false));
+			setOriginalExclusionsStates(form.exclusions.filter((exclusion: string) => exclusion));
 		}
 	}, [form.exclusions]);
 
 	const addExclusions = () => {
-		if (newExclusions) {
-			const newEntry: Exclusions = {
-				exclusions: newExclusions,
-				isEditing: false,
-				originalExclusions: newExclusions,
-			};
-			setExclusions([...exclusions, newEntry]);
-			onChange({ target: { name: 'exclusions', value: [...exclusions, newEntry.exclusions] } });
+		if (newExclusions && !exclusions.includes(newExclusions)) {
+			setExclusions([...exclusions, newExclusions]);
+			setIsEditingStates([...isEditingStates, false]);
+			setOriginalExclusionsStates([...originalExclusionsStates, newExclusions]);
+			onChange({ target: { name: 'exclusions', value: [...exclusions, newExclusions] } });
 			setNewExclusions('');
 		}
 	};
@@ -49,24 +37,50 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 		const updatedExclusions = [...exclusions];
 		updatedExclusions.splice(index, 1);
 		setExclusions(updatedExclusions);
+
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates.splice(index, 1);
+		setIsEditingStates(updatedIsEditingStates);
+
+		const updatedOriginalExclusionsStates = [...originalExclusionsStates];
+		updatedOriginalExclusionsStates.splice(index, 1);
+		setOriginalExclusionsStates(updatedOriginalExclusionsStates);
+
 		onChange({ target: { name: 'exclusions', value: updatedExclusions } });
 	};
 
 	const toggleEdit = (index: number) => {
-		const updatedExclusions = [...exclusions];
-		updatedExclusions[index].isEditing = !updatedExclusions[index].isEditing;
-		setExclusions(updatedExclusions);
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates[index] = !isEditingStates[index];
+		setIsEditingStates(updatedIsEditingStates);
 	};
 
 	const handleEdit = (index: number) => {
 		const updatedExclusions = [...exclusions];
-		const newEditedExclusions = newExclusions || updatedExclusions[index].originalExclusions;
-		updatedExclusions[index].exclusions = newEditedExclusions;
-		updatedExclusions[index].isEditing = false;
-		updatedExclusions[index].originalExclusions = newEditedExclusions;
-		setExclusions(updatedExclusions);
-		setNewExclusions('');
-		onChange({ target: { name: 'exclusions', value: updatedExclusions } });
+		const newEditedExclusions = newExclusions || updatedExclusions[index];
+
+		// Check if the edited exclusion already exists in the list
+		if (updatedExclusions[index] !== newEditedExclusions) {
+			updatedExclusions[index] = newEditedExclusions;
+			setExclusions(updatedExclusions);
+
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setIsEditingStates(updatedIsEditingStates);
+
+			const updatedOriginalExclusionsStates = [...originalExclusionsStates];
+			updatedOriginalExclusionsStates[index] = newEditedExclusions;
+			setOriginalExclusionsStates(updatedOriginalExclusionsStates);
+
+			setNewExclusions('');
+			onChange({ target: { name: 'exclusions', value: updatedExclusions } });
+		} else {
+			// Content is the same as the original, exit the edit mode
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setNewExclusions('');
+			setIsEditingStates(updatedIsEditingStates);
+		}
 	};
 
 	return (
@@ -81,30 +95,30 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 					</TableColumn>
 				</TableHeader>
 				<TableBody>
-					{exclusions.map((exclusions, index) => (
-						<TableRow key={`${exclusions.exclusions}`}>
+					{exclusions.map((exclusion, index) => (
+						<TableRow key={`${exclusion}`}>
 							<TableCell className='font-medium'>
-								{exclusions.isEditing ? (
+								{isEditingStates[index] ? (
 									<Input
 										type='text'
 										size='sm'
 										value={newExclusions}
 										onChange={(e) => setNewExclusions(e.target.value)}
-										placeholder={exclusions.originalExclusions}
-										className=' sm:text-sm text-xs mx-0'
+										placeholder={originalExclusionsStates[index]}
+										className='sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									exclusions.exclusions
+									' ' + exclusion
 								)}
 							</TableCell>
 							<TableCell className='justify-end flex items-center'>
-								{exclusions.isEditing ? (
+								{isEditingStates[index] ? (
 									<div className='flex'>
 										<Button
 											onClick={() => handleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
+											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover-bg-transparent'
 										>
 											<IoCheckmarkCircleOutline />
 										</Button>
@@ -112,7 +126,7 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 											onClick={() => removeExclusions(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
 										>
 											<IoRemoveCircleOutline />
 										</Button>
@@ -120,10 +134,11 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 								) : (
 									<div>
 										<Button
+											disabled={isEditingStates.some((isEditing) => isEditing)}
 											onClick={() => toggleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover:bg-transparent'
+											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover-bg-transparent'
 										>
 											<PiNotePencilLight />
 										</Button>
@@ -138,18 +153,18 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 				<Input
 					type='text'
 					size='sm'
-					value={exclusions.some((exclusions) => exclusions.isEditing) ? '' : newExclusions}
+					value={isEditingStates.some((isEditing) => isEditing) ? '' : newExclusions}
 					onChange={(e) => setNewExclusions(e.target.value)}
 					placeholder='Add Exclusion'
-					disabled={exclusions.some((exclusions) => exclusions.isEditing)}
-					className=' sm:text-sm text-xs mx-0'
+					disabled={isEditingStates.some((isEditing) => isEditing)}
+					className='sm:text-sm text-xs mx-0'
 				/>
 				<Button
 					onClick={addExclusions}
 					size='sm'
 					isIconOnly
-					className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
-					disabled={exclusions.some((exclusions) => exclusions.isEditing)}
+					className='text-chocolate hover-text-opacity-60 text-xl bg-transparent transition-all'
+					disabled={isEditingStates.some((isEditing) => isEditing)}
 				>
 					<IoAddCircleOutline />
 				</Button>
