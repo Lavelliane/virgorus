@@ -10,24 +10,29 @@ const prisma = new PrismaClient();
 
 let packageCache: { [key: number]: Package | null } = {};
 
-async function getPackage(id: number) {
-	if (packageCache[id]) {
-	  	console.log('ALREADY EXISTS')
-	  	return packageCache[id];
-	}
-	else {
-		console.log('PRISMA QUERY')
-		const packageData = await prisma.package.findUnique({
-			where: {
-				id: id
-			}
-		})
-		prisma.$disconnect()
-		console.log('QUERY DISCONNECTED')
-		packageCache[id] = packageData
-		console.log('ADDED TO CACHE')
-		return packageData;	
-	}
+async function getPackage(id: number): Promise<Package | null> {
+  if (packageCache[id]) {
+    console.log('ALREADY EXISTS');
+    return packageCache[id];
+  } else {
+    console.log('PRISMA QUERY');
+    const packageData = await prisma.package.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        ratesAndInclusions: true,
+      },
+    });
+    
+    prisma.$disconnect(); 
+    console.log('QUERY DISCONNECTED');
+
+    packageCache[id] = packageData; 
+    console.log('ADDED TO CACHE');
+
+    return packageData;
+  }
 }
 
 async function Page({ params }: { params: { id: number } }) {
