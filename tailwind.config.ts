@@ -36,14 +36,20 @@ plugin: [
     themes: {
       light: {
         colors: {
-          primary: {
-            DEFAULT: '#432F2B',
-          },
           default: {
+            DEFAULT: '#FFFFFF',
+          },
+          primary: {
             DEFAULT: '#F3EBE4',
           },
           secondary: {
-            DEFAULT: 'rgba(108,125,71, 1)',
+            DEFAULT: '#432F2B',
+          },
+          success: {
+            DEFAULT: '#6C7D47',
+          },
+          warning: {
+            DEFAULT: '#FF7F5C',
           },
         },
       },

@@ -1,8 +1,6 @@
 'use client';
 
-import React from 'react';
-import { useEffect , useState } from 'react'
-import { useMount } from 'react-use'
+import React, { useState }  from 'react';
 import {
 	Accordion,
 	AccordionItem,
@@ -27,35 +25,48 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 	const foo = 'foo';
 	const loremIpsum =
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
-	console.log(packageData)
+		
+
+	const [showDescription, setShowDescription] = useState(false);
+		
+
 	return (
-		<div className='flex flex-col'>
-			<div className='flex flex-col'>
+		<div className='flex flex-col w-full mx-2 sm:mx-10'>
+			<div aria-label='Package Header' className='flex flex-col w-full'>
 				<Spacer y={10} />
 				<p className='font-bold text-black text-2xl'>{packageData.name}</p>
-				<Spacer y={10} />
+				<Spacer y={6} />
 				<div>
 					<Gallery />
 				</div>
 			</div>
-			<Spacer y={5} />
-			<div className='flex md:flex-row flex-col my-0 '>
-				<div className='w-full'>
+			<Spacer y={10} />
+			<div aria-label='Package Body' className='flex lg:flex-row flex-col my-0 '>
+				<div aria-label='Package Info' className='lg:w-3/5'>
 					<div className='w-full text-black text-sm'>
-						<h1 className='font-semibold pb-2 text-lg'>About</h1>
-						{packageData.description}
+						<h1 className='font-semibold pb-4 text-lg'>About</h1>
+						<div className={`${showDescription ? '' : 'gradient-mask'}`}>
+							<p className={`text-justify whitespace-pre-wrap h-fit ${showDescription ? '' : 'max-h-28 overflow-hidden'}`}>{packageData.description}</p>
+						</div>
+						<Button
+							disableAnimation
+							variant='light'
+							color='default'
+							onClick={() => setShowDescription(!showDescription)}
+							className='font-semibold text-sm underline underline-offset-2 p-0 my-4 h-fit justify-start rounded-none hover:bg-white'
+							>
+							{showDescription ? 'Read Less' : 'Read More...'}
+						</Button>
 					</div>
 					<div className='w-full text-black py-2 text-sm'>
 						<h1 className=''>
 							starts at <span className='text-2xl font-bold'>₱{foo}</span> per adult (see rates below for group pricing)
 						</h1>
 					</div>
-					<Card className='bg-nude py-2 my-4' hidden={!packageData.notice}>
-						<CardHeader className='font-semibold'>
-							<FaExclamationCircle /> &nbsp;Note:
-						</CardHeader>
-						<CardBody className='text-sm'>{packageData.notice}</CardBody>
-					</Card>
+					<div className={`w-full p-3 my-6 bg-nude hover:bg-nuder hover:transition-colors rounded-xl text-chocolate ${packageData.notice === '' ? 'hidden' : ''}`}>
+						<h1 className='flex items-center text-xs font-semibold pb-2'><FaExclamationCircle />&nbsp;&nbsp;Note :</h1>
+						<p className='text-sm'>{packageData.notice}</p>
+					</div>
 					<Divider />
 					<div className='flex flex-col py-4'>
 						<div>
@@ -71,12 +82,10 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdTimelapse />
-									</span>
-									<span className='text-md flex items-center'>Duration: {packageData.duration}</span>
-								</Button>
+								<div className='flex w-fit px-4 h-8 items-center'>
+									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdTimelapse /></span>&nbsp; 
+									Duration: {packageData.duration}</p>
+								</div>
 							</Tooltip>
 						</div>
 						<div>
@@ -92,12 +101,11 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdCancel />
-									</span>
-									<span className='text-md flex items-center'>{packageData.cancellation} cancellation</span>
-								</Button>
+								<div className='flex w-fit px-4 h-8 items-center'>
+									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdCancel /></span>&nbsp;&nbsp;
+									{packageData.cancellation ? packageData.cancellation : 'No'} cancellation
+									</p>
+								</div>
 							</Tooltip>
 						</div>
 						<div>
@@ -113,15 +121,13 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdOutlineGroups />
-									</span>
-									<span className='text-md flex items-center'>Ages {foo}</span>
-								</Button>
+								<div className='flex w-fit px-4 h-8 items-center'>
+									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdOutlineGroups /></span>&nbsp;
+									Ages: {foo}</p>
+								</div>
 							</Tooltip>
 						</div>
-						<div>
+						<div className='w-full'>
 							<Tooltip
 								placement='right'
 								closeDelay={100}
@@ -134,12 +140,10 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdLanguage />
-									</span>
-									<span className='text-md flex items-center'>Live guide: {packageData.language}</span>
-								</Button>
+								<div className='flex w-fit px-4 h-8 items-center'>
+									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdLanguage /></span>&nbsp;
+									Live guide: {packageData.language}</p>
+								</div>
 							</Tooltip>
 						</div>
 					</div>
@@ -154,28 +158,29 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 							}}
 						>
 							<AccordionItem title='Rates and inclusions' className='text-black'>
-								{packageData.inclusions}
+								<p className='pb-4 text-justify'>{packageData.inclusions}</p>
 							</AccordionItem>
 							<AccordionItem title='Sample itinerary' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 							<AccordionItem title='What to expect' className='text-black'>
-								{packageData.expectations}
+								<p className='pb-4 text-justify'>{packageData.expectations}</p>
 							</AccordionItem>
 							<AccordionItem title='Accessibility' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 							<AccordionItem title='Additional information' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 							<AccordionItem title='Help' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 						</Accordion>
 					</div>
+					<Divider />
 				</div>
 				<Spacer x={10} />
-				<div className='w-full'>
+				<div aria-label='Booking Form' className='lg:w-2/5'>
 					<BookingForm />
 				</div>
 			</div>
