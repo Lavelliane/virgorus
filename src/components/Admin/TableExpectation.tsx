@@ -85,7 +85,7 @@ export default function TableExpectations({ onChange, form }: TableExpectationsP
 
 	return (
 		<div className='flex flex-col gap-4 w-full'>
-			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-40 overflow-auto'>
+			<Table aria-label='Expectations table' removeWrapper isHeaderSticky className='max-h-40 overflow-auto'>
 				<TableHeader>
 					<TableColumn key='expectations' className='table-cell w-full items-center'>
 						Expectations

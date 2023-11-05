@@ -85,7 +85,7 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 
 	return (
 		<div className='flex flex-col gap-4 w-full'>
-			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-40 overflow-auto'>
+			<Table aria-label='Inclusions table' removeWrapper isHeaderSticky className='max-h-40 overflow-auto'>
 				<TableHeader>
 					<TableColumn key='inclusions' className='table-cell w-full items-center'>
 						Inclusions

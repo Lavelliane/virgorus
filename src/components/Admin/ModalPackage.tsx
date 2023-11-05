@@ -24,6 +24,7 @@ import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
 import TableExpectations from './TableExpectation';
+import TableItinerary from './TableItinerary';
 
 async function createPackage(data: IAddPackage) {
 	try {
@@ -227,6 +228,7 @@ export default function ModalPackage() {
 											<TableInclusions onChange={onChange} form={form} />
 											<TableExclusions onChange={onChange} form={form} />
 										</div>
+										<TableItinerary onChange={onChange} form={form} />
 									</div>
 								</ScrollShadow>
 							</ModalBody>
