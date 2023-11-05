@@ -168,12 +168,12 @@ export default function ModalPackage() {
 											className='w-[50%]'
 											name='duration'
 											onChange={onChange}
-											type='number'
+											type='text'
 											size='sm'
 											min='1'
 											labelPlacement='outside'
-											label='Package Duration'
-											placeholder='i.e. 12 hour/s'
+											label='Package Duration (in hours)'
+											placeholder='i.e. 12, 8-10'
 											isRequired
 										/>
 										<Tooltip
@@ -187,11 +187,11 @@ export default function ModalPackage() {
 												className='w-[50%]'
 												name='cancellation'
 												onChange={onChange}
-												type='number'
+												type='text'
 												size='sm'
 												labelPlacement='outside'
-												label='Cancellation Policy'
-												placeholder='i.e. 48-hour cancellation'
+												label='Cancellation Policy (in hours)'
+												placeholder='i.e. 24, 48'
 												isRequired
 											/>
 										</Tooltip>

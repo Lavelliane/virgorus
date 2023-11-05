@@ -3,7 +3,7 @@
 import React from 'react';
 import { Card, Skeleton } from '@nextui-org/react';
 
-export default function Recommendations() {
+export function Recommendations() {
 	return (
 		<section className='w-full flex lg:flex-row flex-col justify-evenly gap-6'>
 			<Card className='w-full space-y-5 p-4' radius='lg'>
