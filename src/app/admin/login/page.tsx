@@ -2,8 +2,10 @@
 
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import Package from '@/types/package';
 
-export default function AdminLoginPage() {
+
+export default function AdminLoginPage({ packages }: { packages: Package[] }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   

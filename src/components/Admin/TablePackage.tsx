@@ -22,10 +22,9 @@ import {
 import { FaSearch, FaChevronDown } from 'react-icons/fa';
 import { HiDotsVertical } from 'react-icons/hi';
 import ModalPackage from './ModalPackage';
+import Package from '@/types/package';
 
 const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
-
-type Package = typeof packages[0];
 
 const columns = [
 	{ name: 'ID', uid: 'id', sortable: true },
@@ -35,32 +34,8 @@ const columns = [
 	{ name: 'ACTIONS', uid: 'actions' },
 ];
 
-const packages = [
-	{
-		id: 1,
-		name: 'Oslob - Badian',
-		description: 'Oslob Whale Shark + Tumalog Falls + Badian Canyoneering in Kawasan Falls Tour Package',
-		type: 'Private',
-		location: 'South Cebu',
-	},
-	{
-		id: 2,
-		name: 'Simala Shrine',
-		description: 'Miraculous Mama Mary Church or “Birhen sa Simala',
-		type: 'Private',
-		location: 'Sibonga Cebu',
-	},
-	{
-		id: 3,
-		name: 'Alegria Full Course Canyoneering Adventure',
-		description:
-			'This adventure are for those adventurous people who really want to jump, trek, water slide in the cold water source of the Kawasan falls which is currently under renovation since the typhoon Odette which damaged some of the building structures there',
-		type: 'Private',
-		location: 'Alegria',
-	},
-];
 
-export default function TablePackage() {
+export default function TablePackage({ packages }: { packages: Package[] }) {
 	const [filterValue, setFilterValue] = React.useState('');
 	const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
 	const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -85,12 +60,12 @@ export default function TablePackage() {
 
 		if (hasSearchFilter) {
 			filteredPackages = filteredPackages.filter((Package) =>
-				Package.name.toLowerCase().includes(filterValue.toLowerCase())
+				Package.name?.toLowerCase().includes(filterValue.toLowerCase())
 			);
 		}
 
 		return filteredPackages;
-	}, [hasSearchFilter, filterValue]);
+	}, [packages, hasSearchFilter, filterValue]);
 
 	const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -229,7 +204,7 @@ export default function TablePackage() {
 				</div>
 			</div>
 		);
-	}, [filterValue, onSearchChange, onRowsPerPageChange, onClear]);
+	}, [packages, filterValue, onSearchChange, onRowsPerPageChange, onClear]);
 
 	const bottomContent = React.useMemo(() => {
 		return (
@@ -273,6 +248,7 @@ export default function TablePackage() {
 			topContentPlacement='outside'
 			onSelectionChange={setSelectedKeys}
 			onSortChange={setSortDescriptor}
+			isStriped
 		>
 			<TableHeader columns={headerColumns} aria-sort='none'>
 				{(column) => (

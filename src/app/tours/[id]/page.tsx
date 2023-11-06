@@ -1,10 +1,9 @@
-import NavbarGuest from '../../../components/Guest/NavbarGuest';
-import ContactBar from '../../../components/Guest/ContactBar';
-import SitemapFooter from '../../../components/Guest/Footer';
-import PackageDetails from '../../../components/Guest/Booking/PackageDetails';
+import NavbarGuest from '@/components/Guest/NavbarGuest';
+import ContactBar from '@/components/Guest/ContactBar';
+import SitemapFooter from '@/components/Guest/Footer';
+import PackageDetails from '@/components/Guest/Booking/PackageDetails';
 import { PrismaClient } from '@prisma/client';
-import Package from '../../../types/package';
-import { Spacer } from '@nextui-org/react'
+import Package from '@/types/package';
 
 const prisma = new PrismaClient();
 

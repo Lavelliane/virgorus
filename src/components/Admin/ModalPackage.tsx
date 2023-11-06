@@ -21,31 +21,11 @@ import { MdLibraryAdd } from 'react-icons/md';
 import IAddPackage from '../../types/types';
 import addPackageDefault from '@/utils/defaults';
 import { availabilityData, languagesData } from '@/utils/data';
+import { createPackage } from '@/utils/package_utils';
 import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
 import TableExpectations from './TableExpectation';
-
-async function createPackage(data: IAddPackage) {
-	try {
-		const response = await fetch('/api/package/add', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		});
-
-		if (response.ok) {
-			const createdPackage = await response.json();
-			console.log('Package created:', createdPackage);
-		} else {
-			console.error('Failed to create package:', response.statusText);
-		}
-	} catch (error) {
-		console.error('An error occurred:', error);
-	}
-}
 
 export default function ModalPackage() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
