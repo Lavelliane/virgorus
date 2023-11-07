@@ -1,6 +1,6 @@
 import { Button } from '@nextui-org/react';
 import { MdPhoneIphone, MdPhoneEnabled, MdEmail } from 'react-icons/md';
-import { RiMessengerFill } from 'react-icons/ri';
+import { FaFacebook } from 'react-icons/fa';
 import { contactsData } from '@/utils/data';
 
 
@@ -16,7 +16,7 @@ export function ContactBar() {
               <Button
                 variant="flat"
                 endContent={getContactIcon(contact.key)}
-                className="font-medium text-xs lg:text-base h-4 sm:h-8"
+                className="text-xs lg:text-sm h-4 sm:h-6"
               >
                 {contact.value}
               </Button>
@@ -30,14 +30,14 @@ export function ContactBar() {
 
 export function getContactIcon(key: string) {
   switch (key) {
-    case 'telephone':
-      return <MdPhoneIphone />;
     case 'mobile':
+      return <MdPhoneIphone />;
+    case 'telephone':
       return <MdPhoneEnabled />;
     case 'email':
       return <MdEmail />;
-	case 'messenger':
-	  return <RiMessengerFill />
+	  case 'facebook':
+	    return <FaFacebook />
     default:
       return null;
   }

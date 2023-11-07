@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import {
 	Navbar,
 	NavbarBrand,
@@ -20,6 +21,14 @@ import {
 import Image from 'next/image';
 import { IoMdHome, IoMdPerson } from 'react-icons/io';
 import { RiArrowDownSLine } from 'react-icons/ri';
+import { fetchPackages } from '@/queries/fetchPackages';
+
+type Package = {
+	id: number;
+	name: string;
+	type: string;
+	location: string;
+};
 
 interface PackageItem {
 	key: string;
@@ -32,7 +41,56 @@ interface PackageSection {
 	label: string;
 }
 
+
+function getPackageSections(packages: Package[]): PackageSection[] {
+	const packageSections: PackageSection[] = [];
+  
+	packages.forEach((ipackage) => {
+	  const { location } = ipackage;
+  
+	  const existingPackageSection = packageSections.find((section) => section.label === location);
+	  if (!existingPackageSection) {
+		packageSections.push({ key: location, label: location });
+	  }
+	});
+  
+	return packageSections;
+}
+
 export default function NavbarGuest() {
+
+	// ################### FETCH ALL PACKAGES
+
+	const [packages, setPackages] = useState<Package[]>([]);
+	const { data: packagesData, isLoading: packagesLoading } = useQuery({
+		queryKey: ['packages'],
+		queryFn: fetchPackages,
+	});
+
+	useEffect(() => {
+		if (!packagesLoading) {
+			setPackages(
+				packagesData.map((pd: any) => ({
+					id: pd.id,
+					name: pd.name,
+					type: pd.type,
+					location: pd.location,
+				}))
+			);
+		}
+	}, [packagesLoading, packagesData]);
+	
+	const packageSections = getPackageSections(packages);
+	const renderDropdownItems = (packages: Package[]) => {
+		return packages.map((ipackage) => (
+		  <DropdownItem key={ipackage.id} className='text-black' description={ipackage.type}>
+			<div className='whitespace-normal'>{ipackage.name}</div>
+		  </DropdownItem>
+		));
+	};
+
+	// ###################
+
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	const menuItems = [
 		{ text: 'Home', icon: <IoMdHome /> },
@@ -41,38 +99,6 @@ export default function NavbarGuest() {
 		{ text: 'Contact Us', icon: <IoMdPerson /> },
 	];
 
-	// ################### TEMPS
-
-	const northCebuPackages: PackageItem[] = [
-		{ key: '1', label: 'Private Cebu Safari and Adventure Park Tour Package', sublabel: 'Private' },
-		{ key: '2', label: 'Kalanggaman Island Day Tour Package from Cebu City via Malapascua', sublabel: 'Private' },
-		{ key: '3', label: 'Malapascua Island Day Tour Package from Cebu City', sublabel: 'Shared' },
-		{ key: '4', label: 'Bantayan Island Day Tour with Virgin Island Hopping', sublabel: 'Shared' },
-	];
-	const southCebuPackages: PackageItem[] = [
-		{ key: '1', label: 'Oslob Whale Shark + Sumilon Sandbar + Kawasan Falls Tour Package', sublabel: 'Private' },
-		{ key: '2', label: 'Cebu Mountain Tour and Adventure', sublabel: 'Shared' },
-		{ key: '3', label: 'Osmeña Peak and Badian Canyoneering Tour Package', sublabel: 'Shared' },
-		{
-			key: '4',
-			label: 'Pescador Island Hopping with Sardines & Turtle + Badian Canyoneering with Kawasan Falls Tour',
-			sublabel: 'Shared',
-		},
-	];
-	const packageSections: PackageSection[] = [
-		{ key: '1', label: 'North Cebu Tours' },
-		{ key: '2', label: 'South Cebu Tours' },
-	];
-
-	// ###################
-
-	const renderDropdownItems = (packageList: PackageItem[]) => {
-		return packageList.map((item) => (
-			<DropdownItem key={item.key} className='text-black' description={item.sublabel}>
-				<div className='whitespace-normal'>{item.label}</div>
-			</DropdownItem>
-		));
-	};
 
 	return (
 		<Navbar className='backdrop-blur-md' maxWidth='xl'>
@@ -94,85 +120,45 @@ export default function NavbarGuest() {
 					</Button>
 				</NavbarItem>
 				<NavbarItem>
-					<Dropdown>
-						<DropdownTrigger>
-							<Button
-								variant='light'
-								endContent={<RiArrowDownSLine />}
-								className='font-semibold md:text-xs lg:text-lg'
-								radius='sm'
-							>
-								Tour Packages
-							</Button>
-						</DropdownTrigger>
-						<DropdownMenu
-							items={packageSections as object[]}
-							aria-label='Tour Packages'
-							className='w-[380px]'
-							itemClasses={{
-								base: 'gap-4',
-							}}
-						>
-							{(item: object) => {
-								const section: PackageSection = item as PackageSection;
-								let packageList: PackageSection[] = [];
-								switch (section.key) {
-									case '1':
-										packageList = northCebuPackages;
-										break;
-									case '2':
-										packageList = southCebuPackages;
-										break;
-									default:
-										packageList = [];
-								}
+				<Dropdown>
+					<DropdownTrigger>
+					<Button
+						variant='light'
+						endContent={<RiArrowDownSLine />}
+						className='font-semibold md:text-xs lg:text-lg'
+						radius='sm'
+					>
+						Tour Packages
+					</Button>
+					</DropdownTrigger>
+					<DropdownMenu
+					items={packageSections.map((section) => ({
+						key: section.key,
+						label: section.label,
+					}))}
+					aria-label='Tour Packages'
+					className='w-[380px]'
+					itemClasses={{
+						base: 'gap-4',
+					}}
+					>
+					{(item: object) => {
+						const section: PackageSection = item as PackageSection;
+						const packageItems: Package[] = packages.map((ipackage) => ({
+							id: ipackage.id,
+							name: ipackage.name,
+							type: ipackage.type,
+							location: ipackage.location,
+						}));
 
-								return (
-									<DropdownSection title={section.label} showDivider>
-										{renderDropdownItems(packageList)}
-									</DropdownSection>
-								);
-							}}
-						</DropdownMenu>
-					</Dropdown>
-				</NavbarItem>
-				<NavbarItem>
-					<Dropdown>
-						<DropdownTrigger>
-							<Button
-								variant='light'
-								endContent={<RiArrowDownSLine />}
-								className='font-semibold md:text-xs lg:text-lg'
-								radius='sm'
-								disableRipple
-								isDisabled
-							>
-								Rentals
-							</Button>
-						</DropdownTrigger>
-						<DropdownMenu items={packageSections as object[]}>
-							{(item: object) => {
-								const section: PackageSection = item as PackageSection;
-								let packageList: PackageSection[] = [];
-								switch (section.key) {
-									case '1':
-										packageList = northCebuPackages;
-										break;
-									case '2':
-										packageList = southCebuPackages;
-										break;
-									default:
-										packageList = [];
-								}
-
-								return (
-									<DropdownSection title={section.label} showDivider>
-										{renderDropdownItems(packageList)}
-									</DropdownSection>
-								);
-							}}
-						</DropdownMenu>
-					</Dropdown>
+						return (
+						<DropdownSection title={section.label} showDivider>
+							{renderDropdownItems(packageItems.filter((packageItem) => packageItem.location === section.key))}
+						</DropdownSection>
+						);
+					}}
+					</DropdownMenu>
+				</Dropdown>
 				</NavbarItem>
 				<NavbarItem>
 					<Button

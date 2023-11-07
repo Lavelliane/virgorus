@@ -66,7 +66,7 @@ export default function ModalPackage() {
 			.map((item) => item.value);
 
 		setAvailability(new Set(sortedSelectedAvailability));
-		const availability = sortedSelectedAvailability.toString();
+		const availability = sortedSelectedAvailability.join(', ');
 		setForm({ ...form, ['availability']: availability });
 	};
 

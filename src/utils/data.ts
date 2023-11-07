@@ -122,8 +122,9 @@ const timeData = [
 const contactsData = [
 	{ key: 'telephone', value: '(032) 231-6288' },
 	{ key: 'mobile', value: '+63 (976) 474 8602' },
+	{ key: 'mobile', value: '+63 (906) 189 4243' },
 	{ key: 'email', value: 'virgorus.travelservices@gmail.com'},
-	{ key: 'messenger', value:'Messenger' }
+	{ key: 'facebook', value:'VTSCebuPH' }
 ]
 
 export { durationData, availabilityData, languagesData, contactsData };
