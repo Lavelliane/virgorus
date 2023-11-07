@@ -28,7 +28,7 @@ import TableExpectations from './TableExpectation';
 
 async function createPackage(data: IAddPackage) {
 	try {
-		const response = await fetch('/api/package/add', {
+		const response = await fetch('/api/package', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

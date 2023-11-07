@@ -17,23 +17,35 @@ export async function GET(req: NextRequest, context: any) {
         },
       },
     });
-    return NextResponse.json(tourPackage, { status: 200 })
+    return NextResponse.json(tourPackage, { status: 200 });
   } catch (error) {
-    console.error(error)
-    return NextResponse.json(error, { status: 500 })
+    console.error(error);
+    return NextResponse.json(error, { status: 500 });
   }
 }
 
 export async function PATCH(req: NextRequest, context: any) {
-    const { id } = context.params;
-    const newData = await req.json()
-    try {
-        const updatedPackage = await prisma.package.update({
-            where: {id: +id},
-            data: newData
-        })
-        return NextResponse.json(updatedPackage, { status: 200 })
-    } catch (error) {
-        return NextResponse.json(error, { status: 500 })
-    }
+  const { id } = context.params;
+  const newData = await req.json();
+  try {
+    const updatedPackage = await prisma.package.update({
+      where: { id: +id },
+      data: newData,
+    });
+    return NextResponse.json(updatedPackage, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest, context: any) {
+  const { id } = context.params;
+  try {
+    await prisma.package.delete({
+      where: { id: +id },
+    });
+    return NextResponse.json({ status: 200 })
+  } catch (error) {
+    return NextResponse.json(error, { status: 500 });
+  }
 }
