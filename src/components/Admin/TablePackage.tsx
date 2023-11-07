@@ -231,7 +231,7 @@ export default function TablePackage() {
 				</div>
 			</div>
 		);
-	}, [filterValue, onSearchChange, onRowsPerPageChange, onClear]);
+	}, [filterValue, onSearchChange, packages.length, onRowsPerPageChange, onClear]);
 
 	const bottomContent = React.useMemo(() => {
 		return (
