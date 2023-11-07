@@ -29,7 +29,7 @@ import TableItinerary from './TableItinerary';
 
 async function createPackage(data: IAddPackage) {
 	try {
-		const response = await fetch('/api/package/add', {
+		const response = await fetch('/api/package', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -173,8 +173,8 @@ export default function ModalPackage() {
 											size='sm'
 											min='1'
 											labelPlacement='outside'
-											label='Package Duration'
-											placeholder='i.e. 12 hour/s'
+											label='Package Duration (in hours)'
+											placeholder='i.e. 12, 8-10'
 											isRequired
 										/>
 										<Tooltip
@@ -191,8 +191,8 @@ export default function ModalPackage() {
 												type='text'
 												size='sm'
 												labelPlacement='outside'
-												label='Cancellation Policy'
-												placeholder='i.e. 48-hour cancellation'
+												label='Cancellation Policy (in hours)'
+												placeholder='i.e. 24, 48'
 												isRequired
 											/>
 										</Tooltip>

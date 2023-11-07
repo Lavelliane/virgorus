@@ -1,5 +1,5 @@
 import NavbarGuest from '../../../components/Guest/NavbarGuest';
-import ContactBar from '../../../components/Guest/ContactBar';
+import { ContactBar } from '../../../components/Guest/ContactBar';
 import SitemapFooter from '../../../components/Guest/Footer';
 import PackageDetails from '../../../components/Guest/Booking/PackageDetails';
 import { PrismaClient } from '@prisma/client';

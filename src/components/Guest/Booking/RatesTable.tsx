@@ -4,7 +4,7 @@ import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKey
 const columns = [
   {
     key: "numberOfPax",
-    label: "No. of pax",
+    label: "No.",
   },
   {
     key: "ratePerPax",
@@ -30,8 +30,11 @@ export function RatesTable(data: RatesTableProps) {
         isStriped
         isCompact
         shadow="sm"
+        bottomContent={`Contact us for group sizes of ${data.rates?.length !== undefined ? data.rates?.length + 1 : ''} or more people.`}
+        className='text-xs font-semibold'
         classNames={{
-            base: 'text-xl'
+            base: 'text-xl',
+            tfoot: 'text-sm'
         }}
     >
       <TableHeader columns={columns}>
@@ -43,7 +46,7 @@ export function RatesTable(data: RatesTableProps) {
             {(columnKey) => (
               <TableCell>
                 {columnKey === "ratePerPax" ? (
-                  `₱ ${Number(getKeyValue(item, columnKey)).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
+                  `₱${Number(getKeyValue(item, columnKey)).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
                 ) : (
                   getKeyValue(item, columnKey)
                 )}

@@ -1,4 +1,3 @@
-import { SHA256 as sha256 } from "crypto-js";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from 'bcrypt'

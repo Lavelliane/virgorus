@@ -119,4 +119,11 @@ const timeData = [
 	{ label: '11:30 PM', value: '23:30' },
 ];
 
-export { durationData, availabilityData, languagesData };
+const contactsData = [
+	{ key: 'telephone', value: '(032) 231-6288' },
+	{ key: 'mobile', value: '+63 (976) 474 8602' },
+	{ key: 'email', value: 'virgorus.travelservices@gmail.com'},
+	{ key: 'messenger', value:'Messenger' }
+]
+
+export { durationData, availabilityData, languagesData, contactsData };

@@ -34,14 +34,14 @@ model RatesAndInclusion {
   numberOfPax     String
   ratePerPax      String
   packageId       Int
-  package         Package  @relation(fields: [packageId], references: [id])
+  package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
 model Itinerary {
   id       Int      @id @default(autoincrement())
   time     String?
   activity String?
-  daySchedule DaySchedule @relation(fields: [dayScheduleId], references: [id])
+  daySchedule DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
   dayScheduleId Int
 }
 
@@ -50,7 +50,7 @@ model DaySchedule {
   day     String?
   itineraries Itinerary[]
   packageId Int
-  package  Package  @relation(fields: [packageId], references: [id])
+  package  Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
 model Account {

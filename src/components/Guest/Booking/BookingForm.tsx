@@ -6,7 +6,7 @@ import { bookingFormSchema } from '@/utils/bookingSchema';
 
 export const BookingForm = () => {
 	return (
-		<div className='sticky top-52'>
+		<div className='sticky top-36'>
 			<Formik
 				initialValues={{
 					fullName: '',
