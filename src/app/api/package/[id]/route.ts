@@ -23,3 +23,17 @@ export async function GET(req: NextRequest, context: any) {
     return NextResponse.json(error, { status: 500 })
   }
 }
+
+export async function PATCH(req: NextRequest, context: any) {
+    const { id } = context.params;
+    const newData = await req.json()
+    try {
+        const updatedPackage = await prisma.package.update({
+            where: {id: +id},
+            data: newData
+        })
+        return NextResponse.json(updatedPackage, { status: 200 })
+    } catch (error) {
+        return NextResponse.json(error, { status: 500 })
+    }
+}
