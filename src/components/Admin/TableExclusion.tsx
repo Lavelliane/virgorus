@@ -85,7 +85,7 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 
 	return (
 		<div className='flex flex-col gap-4 w-full'>
-			<Table aria-label='Exclusions table' removeWrapper isHeaderSticky className='max-h-40 overflow-auto'>
+			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-96 overflow-auto'>
 				<TableHeader>
 					<TableColumn key='exclusions' className='table-cell w-full items-center'>
 						Exclusions

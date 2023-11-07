@@ -75,7 +75,7 @@ export default function NavbarGuest() {
 	};
 
 	return (
-		<Navbar className='bg-white' maxWidth='xl'>
+		<Navbar className='backdrop-blur-md' maxWidth='xl'>
 			<NavbarBrand>
 				<Image src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png' alt='virgorus-main-logo' width={75} height={75} />
 				<span className='font-bold font-efco text-3xl'>virgorus</span>
@@ -177,7 +177,7 @@ export default function NavbarGuest() {
 				<NavbarItem>
 					<Button
 						variant='flat'
-						color='secondary'
+						color='success'
 						endContent={<IoMdPerson />}
 						className='font-semibold md:text-xs lg:text-lg'
 					>

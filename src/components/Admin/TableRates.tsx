@@ -88,7 +88,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 
 	return (
 		<div className='flex flex-col w-full gap-4'>
-			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-40 overflow-auto'>
+			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-[48rem] overflow-auto'>
 				<TableHeader>
 					<TableColumn key='numberOfPax' className='table-cell w-1/2 items-center'>
 						Pax
@@ -128,7 +128,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 										className=' sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									' ' + numberOfPax.ratePerPax
+									`₱ ${Number(numberOfPax.ratePerPax).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
 								)}
 							</TableCell>
 							<TableCell className='justify-end flex items-center'>

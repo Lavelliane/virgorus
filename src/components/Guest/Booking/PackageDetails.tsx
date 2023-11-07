@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState }  from 'react';
 import {
 	Accordion,
 	AccordionItem,
@@ -14,47 +14,81 @@ import {
 	CardHeader,
 } from '@nextui-org/react';
 import { Gallery } from './Gallery';
+import { RatesTable } from './RatesTable';
 import { BookingForm } from './BookingForm';
 import Recommendations from './Recommendations';
 import { FaExclamationCircle } from 'react-icons/fa';
 import { MdTimelapse, MdCancel, MdLanguage, MdOutlineGroups } from 'react-icons/md';
+import Package from '../../../types/package';
+import { RatesAndInclusion } from '@prisma/client';
 
-export default function PackageDetails() {
-	const [note, setNote] = React.useState(true);
+
+export default function PackageDetails({ packageData }: { packageData: Package }) {
+	/* ====================         TEMPS (to-be-removed)         ====================*/
+
 	const foo = 'foo';
 	const loremIpsum =
 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.';
+		
+	/* ====================         STATES         ====================*/
+
+	const [showDescription, setShowDescription] = useState(false);
+
+	/* ====================         VARIABLE DECLARATIONS         ====================*/
+
+	const inclusions = packageData.inclusions?.map((inclusion) => {
+		return (
+		  <li key={inclusion}>
+			{inclusion}
+		  </li>
+		);
+	});
+
+	const exclusions = packageData.exclusions?.map((exclusion) => {
+		return (
+		  <li key={exclusion}>
+			{exclusion}
+		  </li>
+		);
+	});
 
 	return (
-		<div className='flex flex-col'>
-			<div className='flex flex-col'>
+		<div className='flex flex-col w-full mx-2 sm:mx-10'>
+			<div aria-label='Package Header' className='flex flex-col w-full'>
 				<Spacer y={10} />
-				<p className='font-bold text-black text-2xl'>{loremIpsum}</p>
-				<Spacer y={10} />
+				<p className='font-bold text-black text-2xl'>{packageData.name}</p>
+				<Spacer y={6} />
 				<div>
 					<Gallery />
 				</div>
 			</div>
-			<Spacer y={5} />
-			<div className='flex md:flex-row flex-col my-0 '>
-				<div className='w-full'>
+			<Spacer y={10} />
+			<div aria-label='Package Body' className='flex lg:flex-row flex-col my-0 '>
+				<div aria-label='Package Info' className='lg:w-4/6'>
 					<div className='w-full text-black text-sm'>
-						<h1 className='font-semibold pb-2 text-lg'>About</h1>
-						{loremIpsum}
+						<h1 className='font-semibold pb-4 text-lg'>About</h1>
+						<div className={`${showDescription ? '' : 'gradient-mask'}`}>
+							<p className={`text-justify whitespace-pre-wrap h-fit ${showDescription ? '' : 'max-h-28 overflow-hidden'}`}>{packageData.description}</p>
+						</div>
+						<Button
+							disableAnimation
+							variant='light'
+							color='default'
+							onClick={() => setShowDescription(!showDescription)}
+							className='font-semibold text-sm underline underline-offset-2 p-0 my-4 h-fit justify-start rounded-none hover:bg-white'
+							>
+							{showDescription ? 'Read Less' : 'Read More...'}
+						</Button>
 					</div>
 					<div className='w-full text-black py-2 text-sm'>
 						<h1 className=''>
 							starts at <span className='text-2xl font-bold'>₱{foo}</span> per adult (see rates below for group pricing)
 						</h1>
 					</div>
-					{note ? (
-						<Card className='bg-nude py-2 my-4'>
-							<CardHeader className='font-semibold'>
-								<FaExclamationCircle /> &nbsp;Note:
-							</CardHeader>
-							<CardBody className='text-sm'>{loremIpsum}</CardBody>
-						</Card>
-					) : null}
+					<div className={`w-full p-3 my-6 bg-nude hover:bg-nuder hover:transition-colors rounded-xl text-chocolate ${packageData.notice === '' ? 'hidden' : ''}`}>
+						<h1 className='flex items-center text-xs font-semibold pb-2'><FaExclamationCircle />&nbsp;&nbsp;Note :</h1>
+						<p className='text-sm'>{packageData.notice}</p>
+					</div>
 					<Divider />
 					<div className='flex flex-col py-4'>
 						<div>
@@ -70,12 +104,10 @@ export default function PackageDetails() {
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdTimelapse />
-									</span>
-									<span className='text-md flex items-center'>Duration: {foo}</span>
-								</Button>
+								<div className='flex w-fit px-4 h-8 items-center'>
+									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdTimelapse /></span>&nbsp; 
+									Duration: {packageData.duration}</p>
+								</div>
 							</Tooltip>
 						</div>
 						<div>
@@ -86,17 +118,16 @@ export default function PackageDetails() {
 									<div className='px-1 py-2'>
 										<div className='text-small font-bold text-black'>Cancellation</div>
 										<div className='text-tiny text-black w-48 text-justify'>
-											For a full refund, cancel at least 48 hours in advance of the start date of the experience.
+											For a full refund, cancel at least {packageData.cancellation} hours prior to the start date of the experience.
 										</div>
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdCancel />
-									</span>
-									<span className='text-md flex items-center'>48-hour cancellation</span>
-								</Button>
+								<div className='flex w-fit px-4 h-8 items-center'>
+									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdCancel /></span>&nbsp;&nbsp;
+									{packageData.cancellation ? packageData.cancellation : 'No'}-hour cancellation
+									</p>
+								</div>
 							</Tooltip>
 						</div>
 						<div>
@@ -112,15 +143,13 @@ export default function PackageDetails() {
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdOutlineGroups />
-									</span>
-									<span className='text-md flex items-center'>Ages {foo}</span>
-								</Button>
+								<div className='flex w-fit px-4 h-8 items-center'>
+									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdOutlineGroups /></span>&nbsp;
+									Ages: {foo}</p>
+								</div>
 							</Tooltip>
 						</div>
-						<div>
+						<div className='w-full'>
 							<Tooltip
 								placement='right'
 								closeDelay={100}
@@ -133,12 +162,10 @@ export default function PackageDetails() {
 									</div>
 								}
 							>
-								<Button variant='light' className='h-8' disableAnimation>
-									<span className='text-lg flex items-center'>
-										<MdLanguage />
-									</span>
-									<span className='text-md flex items-center'>Live guide: {foo}</span>
-								</Button>
+								<div className='flex w-1/2 px-4 h-8 items-center truncate'>
+									<p className='text-sm flex h-4'><span className='text-lg'><MdLanguage /></span>&nbsp;
+									Live guide: {packageData.language}</p>
+								</div>
 							</Tooltip>
 						</div>
 					</div>
@@ -153,28 +180,47 @@ export default function PackageDetails() {
 							}}
 						>
 							<AccordionItem title='Rates and inclusions' className='text-black'>
-								{loremIpsum}
+								<div className='flex flex-col sm:flex-row justify-center pb-4'>
+									<div className='mx-2 max-w-[1/2]'>
+										<RatesTable rates={packageData.ratesAndInclusions} />
+									</div>
+									<div className='m-2'>
+										<div className={`mb-4 ${packageData.inclusions?.[0] ? '' : 'hidden'}`}>
+											<h1 className={`text-md font-semibold underline underline-offset-2 ${packageData.inclusions?.[0] ? '' : 'hidden'}`}>Inclusions</h1>
+											<p className={`text-sm m-2 ${packageData.inclusions?.[0] ? '' : 'hidden'}`}>{inclusions}</p>			
+										</div>
+										<div className={`mb-4 ${packageData.exclusions?.[0] ? '' : 'hidden'}`}>
+											<Divider />
+											<Spacer y={2}/>
+											<h1 className={`text-md font-semibold ${packageData.exclusions?.[0] ? '' : 'hidden'}`}>Exclusions</h1>
+											<p className={`text-md ml-2 text-justify ${packageData.exclusions?.[0] ? '' : 'hidden'}`}>{exclusions}</p>			
+										</div>
+									</div>
+								</div>
+							</AccordionItem>
+							<AccordionItem title='Inclusions' className='text-black'>
 							</AccordionItem>
 							<AccordionItem title='Sample itinerary' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 							<AccordionItem title='What to expect' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{packageData.expectations}</p>
 							</AccordionItem>
 							<AccordionItem title='Accessibility' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 							<AccordionItem title='Additional information' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 							<AccordionItem title='Help' className='text-black'>
-								{loremIpsum}
+								<p className='pb-4 text-justify'>{loremIpsum}</p>
 							</AccordionItem>
 						</Accordion>
 					</div>
+					<Divider />
 				</div>
 				<Spacer x={10} />
-				<div className='w-full'>
+				<div aria-label='Booking Form' className='lg:w-2/6'>
 					<BookingForm />
 				</div>
 			</div>

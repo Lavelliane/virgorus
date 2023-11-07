@@ -6,7 +6,7 @@ import { bookingFormSchema } from '@/utils/bookingSchema';
 
 export const BookingForm = () => {
 	return (
-		<>
+		<div className='sticky top-52'>
 			<Formik
 				initialValues={{
 					fullName: '',
@@ -73,36 +73,38 @@ export const BookingForm = () => {
 								{formik.touched.contactNumber && formik.errors.contactNumber ? (
 									<div className='text-sm text-red-700 ml-1'>{formik.errors.contactNumber}</div>
 								) : null}
-								<Input
-									size='sm'
-									isRequired
-									disabled={formik.isSubmitting}
-									id='localGuest'
-									name='localGuest'
-									onBlur={formik.handleBlur}
-									onChange={formik.handleChange}
-									type='number'
-									min='0'
-									label='No. of local guests'
-								/>
-								{formik.touched.localGuest && formik.errors.localGuest ? (
-									<div className='text-sm text-red-700 ml-1'>{formik.errors.localGuest}</div>
-								) : null}
-								<Input
-									size='sm'
-									isRequired
-									disabled={formik.isSubmitting}
-									id='foreignGuest'
-									name='foreignGuest'
-									onBlur={formik.handleBlur}
-									onChange={formik.handleChange}
-									type='number'
-									min='0'
-									label='No. of foreign guests'
-								/>
-								{formik.touched.foreignGuest && formik.errors.foreignGuest ? (
-									<div className='text-sm text-red-700 ml-1'>{formik.errors.foreignGuest}</div>
-								) : null}
+								<div className='flex flex-row gap-4'>
+									<Input
+										size='sm'
+										isRequired
+										disabled={formik.isSubmitting}
+										id='localGuest'
+										name='localGuest'
+										onBlur={formik.handleBlur}
+										onChange={formik.handleChange}
+										type='number'
+										min='0'
+										label='No. of local guests'
+									/>
+									{formik.touched.localGuest && formik.errors.localGuest ? (
+										<div className='text-sm text-red-700 ml-1'>{formik.errors.localGuest}</div>
+									) : null}
+									<Input
+										size='sm'
+										isRequired
+										disabled={formik.isSubmitting}
+										id='foreignGuest'
+										name='foreignGuest'
+										onBlur={formik.handleBlur}
+										onChange={formik.handleChange}
+										type='number'
+										min='0'
+										label='No. of foreign guests'
+									/>
+									{formik.touched.foreignGuest && formik.errors.foreignGuest ? (
+										<div className='text-sm text-red-700 ml-1'>{formik.errors.foreignGuest}</div>
+									) : null}
+								</div>
 								<Input
 									size='sm'
 									isRequired
@@ -131,13 +133,13 @@ export const BookingForm = () => {
 									<div className='text-sm text-red-700 ml-1'>{formik.errors.pickupInfo}</div>
 								) : null}
 							</CardBody>
-							<CardFooter className='ml-2'>
+							<CardFooter className='ml-2 mb-2 justify-center'>
 								{!formik.isSubmitting ? (
-									<Button type='submit' radius='full' className='bg-olive text-white font-semibold w-full mr-4'>
+									<Button type='submit' variant='ghost' color='success' radius='full' className='font-semibold w-1/2 mr-4'>
 										Submit
 									</Button>
 								) : (
-									<Button isLoading radius='full' className='bg-olive text-white font-semibold w-full'>
+									<Button isLoading variant='solid' color='success' radius='full' className='font-semibold w-1/2 mr-4'>
 										Submit
 									</Button>
 								)}
@@ -146,6 +148,6 @@ export const BookingForm = () => {
 					</form>
 				)}
 			</Formik>
-		</>
+		</div>
 	);
 };
