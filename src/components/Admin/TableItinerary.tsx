@@ -35,60 +35,10 @@ interface TableItineraryProps {
 
 export default function TableItinerary({ onChange, form }: TableItineraryProps) {
 	const [day, setDay] = React.useState<DaySchedule[]>([]);
-	const [time, setTime] = React.useState<Itinerary[]>([]);
 	const [newDay, setNewDay] = React.useState('Day 1');
 	const [newTime, setNewTime] = React.useState('');
 	const [newActivity, setNewActivity] = React.useState('');
 	const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
-
-	// useEffect(() => {
-	// 	// Sample data
-	// 	const daySchedules: DaySchedule[] = [
-	// 		{
-	// 			day: 'Day 1',
-	// 			itineraries: [
-	// 				{
-	// 					time: '10:00 AM',
-	// 					activity: 'Breakfast',
-	// 					isEditing: false,
-	// 					originalTime: '',
-	// 					originalActivity: '',
-	// 				},
-	// 				{
-	// 					time: '02:00 PM',
-	// 					activity: 'Sightseeing',
-	// 					isEditing: false,
-	// 					originalTime: '',
-	// 					originalActivity: '',
-	// 				},
-	// 				// Add more itineraries as needed
-	// 			],
-	// 		},
-	// 		{
-	// 			day: 'Day 2',
-	// 			itineraries: [
-	// 				{
-	// 					time: '09:30 AM',
-	// 					activity: 'Hiking',
-	// 					isEditing: false,
-	// 					originalTime: '',
-	// 					originalActivity: '',
-	// 				},
-	// 				{
-	// 					time: '01:00 PM',
-	// 					activity: 'Lunch',
-	// 					isEditing: false,
-	// 					originalTime: '',
-	// 					originalActivity: '',
-	// 				},
-	// 				// Add more itineraries as needed
-	// 			],
-	// 		},
-	// 		// Add more day schedules as needed
-	// 	];
-
-	// 	setDay(daySchedules);
-	// }, []);
 
 	const addDay = () => {
 		if (newDay) {
@@ -102,7 +52,8 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 			setNewDay(dayString);
 		}
 	};
-	const addTime = (dayIndex: string) => {
+
+	const addItinerary = (dayIndex: string) => {
 		if (newTime && newActivity) {
 			const newEntry: Itinerary = {
 				time: newTime,
@@ -129,13 +80,6 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 		}
 	};
 
-	const removeTime = (dayIndex: number, timeIndex: number) => {
-		const updatedTime = [...time];
-		updatedTime.splice(timeIndex, 1);
-		setTime(updatedTime);
-		//onChange({ target: { name: 'itinerary.DaySchedule.itineraries', value: updatedItinerary } });
-	};
-
 	const removeDay = (dayIndex: number) => {
 		const updatedDay = [...day];
 		updatedDay.splice(dayIndex, 1);
@@ -143,30 +87,42 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 		setDay(updatedDay);
 	};
 
-	const toggleEdit = (dayIndex: number, timeIndex: number) => {
-		if (!isAnyRowEditing) {
-			const updatedItinerary = [...day];
-			updatedItinerary[dayIndex].itineraries[timeIndex].isEditing = !updatedItinerary[dayIndex].itineraries[timeIndex]
-				.isEditing;
-			setDay(updatedItinerary);
-			setIsAnyRowEditing(true);
-		}
+	const toggleEditItinerary = (dayIndex: number, timeIndex: number) => {
+		const updatedDay = [...day];
+		const itinerary = updatedDay[dayIndex].itineraries[timeIndex];
+
+		// Save original values before entering edit mode
+		itinerary.originalTime = itinerary.time;
+		itinerary.originalActivity = itinerary.activity;
+
+		// Enter edit mode
+		itinerary.isEditing = true;
+
+		setDay(updatedDay);
 	};
 
-	const handleEdit = (dayIndex: number, timeIndex: number) => {
-		const updatedItinerary = [...time];
-		const newEditedItinerary = newDay || updatedItinerary[timeIndex].originalTime;
-		const newEditedRate = newActivity || updatedItinerary[timeIndex].originalActivity;
-		updatedItinerary[timeIndex].time = newEditedItinerary;
-		updatedItinerary[timeIndex].activity = newEditedRate;
-		updatedItinerary[timeIndex].isEditing = false;
-		updatedItinerary[timeIndex].originalTime = newEditedItinerary;
-		updatedItinerary[timeIndex].originalActivity = newEditedRate;
-		setTime(updatedItinerary);
+	const handleEditItinerary = (dayIndex: number, timeIndex: number) => {
+		const updatedDay = [...day];
+		const itinerary = updatedDay[dayIndex].itineraries[timeIndex];
+
+		// Update the values with edited ones
+		itinerary.time = newTime || itinerary.time;
+		itinerary.activity = newActivity || itinerary.activity;
+
+		// Exit edit mode
+		itinerary.isEditing = false;
+
+		setDay(updatedDay);
+
+		// Reset the input fields
 		setNewTime('');
 		setNewActivity('');
-		//onChange({ target: { name: 'itinerary.DaySchedule.itineraries', value: updatedItinerary } });
-		setIsAnyRowEditing(false);
+	};
+
+	const removeItinerary = (dayIndex: number, timeIndex: number) => {
+		const updatedDay = [...day];
+		updatedDay[dayIndex].itineraries.splice(timeIndex, 1);
+		setDay(updatedDay);
 	};
 	console.log(day);
 	return (
@@ -239,7 +195,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 												{itinerary.isEditing ? (
 													<div className='flex'>
 														<Button
-															onClick={() => toggleEdit(dayIndex, timeIndex)}
+															onClick={() => handleEditItinerary(dayIndex, timeIndex)}
 															isIconOnly
 															size='sm'
 															className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
@@ -247,7 +203,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 															<IoCheckmarkCircleOutline />
 														</Button>
 														<Button
-															onClick={() => toggleEdit(dayIndex, timeIndex)}
+															onClick={() => removeItinerary(dayIndex, timeIndex)}
 															isIconOnly
 															size='sm'
 															className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
@@ -259,7 +215,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 													<div>
 														<Button
 															disabled={itinerary.isEditing}
-															onClick={() => toggleEdit(dayIndex, timeIndex)}
+															onClick={() => toggleEditItinerary(dayIndex, timeIndex)}
 															isIconOnly
 															size='sm'
 															className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover-bg-transparent'
@@ -277,27 +233,27 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 								<Input
 									type='text'
 									size='sm'
-									value={time.some((time) => time.isEditing) ? '' : newTime}
+									value={day[dayIndex].itineraries.some((time) => time.isEditing) ? '' : newTime}
 									onChange={(e) => setNewTime(e.target.value)}
 									placeholder='Time'
-									disabled={time.some((time) => time.isEditing)}
+									disabled={day[dayIndex].itineraries.some((time) => time.isEditing)}
 									className=' sm:text-sm text-xs mx-0'
 								/>
 								<Input
 									type='text'
 									size='sm'
-									value={time.some((time) => time.isEditing) ? '' : newActivity}
+									value={day[dayIndex].itineraries.some((time) => time.isEditing) ? '' : newActivity}
 									onChange={(e) => setNewActivity(e.target.value)}
 									placeholder='Activity'
-									disabled={time.some((time) => time.isEditing)}
+									disabled={day[dayIndex].itineraries.some((time) => time.isEditing)}
 									className=' sm:text-sm text-xs mx-0'
 								/>
 								<Button
-									onClick={() => addTime(daySchedule.day)}
+									onClick={() => addItinerary(daySchedule.day)}
 									size='sm'
 									isIconOnly
 									className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
-									disabled={time.some((time) => time.isEditing)}
+									disabled={day[dayIndex].itineraries.some((time) => time.isEditing)}
 								>
 									<IoAddCircleOutline />
 								</Button>
