@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Table,
 	TableHeader,
@@ -22,10 +22,18 @@ import {
 import { FaSearch, FaChevronDown } from 'react-icons/fa';
 import { HiDotsVertical } from 'react-icons/hi';
 import ModalPackage from './ModalPackage';
+import { useQuery } from '@tanstack/react-query';
+import { fetchPackages } from '@/queries/fetchPackages';
 
 const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
 
-type Package = typeof packages[0];
+type Package = {
+	id: number;
+	name: string;
+	description: string;
+	type: string;
+	location: string;
+};
 
 const columns = [
 	{ name: 'ID', uid: 'id', sortable: true },
@@ -33,31 +41,6 @@ const columns = [
 	{ name: 'TYPE', uid: 'type', sortable: true },
 	{ name: 'LOCATION', uid: 'location', sortable: true },
 	{ name: 'ACTIONS', uid: 'actions' },
-];
-
-const packages = [
-	{
-		id: 1,
-		name: 'Oslob - Badian',
-		description: 'Oslob Whale Shark + Tumalog Falls + Badian Canyoneering in Kawasan Falls Tour Package',
-		type: 'Private',
-		location: 'South Cebu',
-	},
-	{
-		id: 2,
-		name: 'Simala Shrine',
-		description: 'Miraculous Mama Mary Church or “Birhen sa Simala',
-		type: 'Private',
-		location: 'Sibonga Cebu',
-	},
-	{
-		id: 3,
-		name: 'Alegria Full Course Canyoneering Adventure',
-		description:
-			'This adventure are for those adventurous people who really want to jump, trek, water slide in the cold water source of the Kawasan falls which is currently under renovation since the typhoon Odette which damaged some of the building structures there',
-		type: 'Private',
-		location: 'Alegria',
-	},
 ];
 
 export default function TablePackage() {
@@ -69,6 +52,25 @@ export default function TablePackage() {
 		column: 'name',
 		direction: 'ascending',
 	});
+	const [packages, setPackages] = useState<Package[]>([]);
+	const { data: packagesData, isLoading: packagesLoading } = useQuery({
+		queryKey: ['packages'],
+		queryFn: fetchPackages,
+	});
+
+	useEffect(() => {
+		if (!packagesLoading) {
+			setPackages(
+				packagesData.map((pd: any) => ({
+					id: pd.id,
+					name: pd.name,
+					description: pd.description,
+					type: pd.type,
+					location: pd.location,
+				}))
+			);
+		}
+	}, [packagesLoading, packagesData]);
 
 	const [page, setPage] = React.useState(1);
 
@@ -90,7 +92,7 @@ export default function TablePackage() {
 		}
 
 		return filteredPackages;
-	}, [hasSearchFilter, filterValue]);
+	}, [packages, hasSearchFilter, filterValue]);
 
 	const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
@@ -256,6 +258,14 @@ export default function TablePackage() {
 			</div>
 		);
 	}, [page, pages, onPreviousPage, onNextPage]);
+
+	if (packagesLoading) {
+		return <div>Loading...</div>;
+	}
+
+	if (!packagesData) {
+		return <div>Data not available</div>;
+	}
 
 	return (
 		<Table

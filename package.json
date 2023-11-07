@@ -16,6 +16,7 @@
     "@prisma/client": "^5.5.2",
     "@react-email/button": "0.0.11",
     "@react-email/html": "0.0.6",
+    "@tanstack/react-query": "^5.7.2",
     "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
     "crypto-js": "^4.2.0",
