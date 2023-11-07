@@ -25,6 +25,7 @@ import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
 import TableExpectations from './TableExpectation';
+import TableItinerary from './TableItinerary';
 
 async function createPackage(data: IAddPackage) {
 	try {
@@ -96,7 +97,7 @@ export default function ModalPackage() {
 						<>
 							<ModalHeader className='flex flex-col gap-1'>Add Package</ModalHeader>
 							<ModalBody>
-								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] pb-10'>
+								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] p-1 pb-10 '>
 									<div className='flex gap-4'>
 										<Input
 											value={form.name}
@@ -231,7 +232,7 @@ export default function ModalPackage() {
 										</Select>
 									</div>
 									<Divider className='my-0' />
-									<div className='flex flex-row gap-4 max-h-[880px]'>
+									<div className='flex flex-row gap-4'>
 										<div className='flex w-full gap-4'>
 											<TableRates onChange={onChange} form={form} />
 										</div>
@@ -240,6 +241,8 @@ export default function ModalPackage() {
 											<TableExclusions onChange={onChange} form={form} />
 										</div>
 									</div>
+									<Divider className='my-0' />
+									<TableItinerary onChange={onChange} form={form} />
 								</ScrollShadow>
 							</ModalBody>
 							<ModalFooter>

@@ -38,7 +38,6 @@ export default function NavbarAdmin() {
 					<h1 className='font-bold font-efco text-xl'>virgorus</h1>
 				</NavbarBrand>
 			</NavbarContent>
-
 			<NavbarContent className='hidden sm:flex gap-4' justify='center'>
 				<NavbarBrand>
 					<h1 className='font-bold font-efco text-3xl'>virgorus</h1>

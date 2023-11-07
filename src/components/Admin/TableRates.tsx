@@ -88,7 +88,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 
 	return (
 		<div className='flex flex-col w-full gap-4'>
-			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='overflow-auto'>
+			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-[48rem] overflow-auto'>
 				<TableHeader>
 					<TableColumn key='numberOfPax' className='table-cell w-1/2 items-center'>
 						Pax
