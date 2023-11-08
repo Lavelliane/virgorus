@@ -16,12 +16,12 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 	const [originalInclusionsStates, setOriginalInclusionsStates] = React.useState<string[]>([]);
 
 	useEffect(() => {
-		if (form.inclusions) {
+		if (form?.inclusions) {
 			setInclusions(form.inclusions.filter((inclusion: string) => inclusion));
 			setIsEditingStates(Array(form.inclusions.length).fill(false));
 			setOriginalInclusionsStates(form.inclusions.filter((inclusion: string) => inclusion));
 		}
-	}, [form.inclusions]);
+	}, [form?.inclusions]);
 
 	const addInclusions = () => {
 		if (newInclusions && !inclusions.includes(newInclusions)) {

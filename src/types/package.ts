@@ -9,7 +9,6 @@ export default interface Package {
 	availability?: string;
 	language?: string;
 	notice?: string;
-	expectations?: string[];
 	photos?: string[];
 	inclusions?: string[];
 	exclusions?: string[];

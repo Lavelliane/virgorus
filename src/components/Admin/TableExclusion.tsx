@@ -16,12 +16,12 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 	const [originalExclusionsStates, setOriginalExclusionsStates] = React.useState<string[]>([]);
 
 	useEffect(() => {
-		if (form.exclusions) {
+		if (form?.exclusions) {
 			setExclusions(form.exclusions.filter((exclusion: string) => exclusion));
 			setIsEditingStates(Array(form.exclusions.length).fill(false));
 			setOriginalExclusionsStates(form.exclusions.filter((exclusion: string) => exclusion));
 		}
-	}, [form.exclusions]);
+	}, [form?.exclusions]);
 
 	const addExclusions = () => {
 		if (newExclusions && !exclusions.includes(newExclusions)) {

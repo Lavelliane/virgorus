@@ -24,7 +24,6 @@ import { availabilityData, languagesData } from '@/utils/data';
 import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
-import TableExpectations from './TableExpectation';
 import TableItinerary from './TableItinerary';
 
 async function createPackage(data: IAddPackage) {
@@ -57,6 +56,7 @@ export default function ModalPackage() {
 	const handleActionClick = () => {
 		createPackage(form);
 		onClose(); // Close the modal or perform any other desired action.
+		window.location.reload();
 	};
 
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -250,7 +250,7 @@ export default function ModalPackage() {
 									Close
 								</Button>
 								<Button color='secondary' onPress={handleActionClick}>
-									Action
+									Add
 								</Button>
 							</ModalFooter>
 						</>

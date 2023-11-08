@@ -12,7 +12,6 @@ export default interface IAddPackage {
 	itinerary: [DaySchedule];
 	inclusions: [string];
 	exclusions: [string];
-	expectations: [string];
 	photos: [string];
 }
 

@@ -32,7 +32,6 @@ export default function NavbarAdmin() {
 			<NavbarContent className='sm:hidden' justify='start'>
 				<NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} />
 			</NavbarContent>
-
 			<NavbarContent className='sm:hidden pr-3' justify='center'>
 				<NavbarBrand>
 					<h1 className='font-bold font-efco text-xl'>virgorus</h1>
@@ -43,10 +42,12 @@ export default function NavbarAdmin() {
 					<h1 className='font-bold font-efco text-3xl'>virgorus</h1>
 				</NavbarBrand>
 				<NavbarItem isActive={pathname?.includes('packages') || pathname?.includes('settings') ? false : true}>
-					<Link color='foreground' href='/' aria-current='page'>
+					<Link color='foreground' href='/admin' aria-current='page'>
 						<span
-							className={`flex px-4 py-2 rounded-xl items-center gap-1 ${
-								pathname?.includes('packages') || pathname?.includes('settings') ? 'bg-transparent' : 'navbar-shadow'
+							className={`flex px-4 py-2 rounded-xl items-center gap-1 font-semibold ${
+								pathname?.includes('packages') || pathname?.includes('settings')
+									? 'bg-transparent '
+									: 'bg-chocolate text-nude'
 							}`}
 						>
 							<MdSpaceDashboard />
@@ -55,10 +56,10 @@ export default function NavbarAdmin() {
 					</Link>
 				</NavbarItem>
 				<NavbarItem isActive={pathname?.includes('packages') ? true : false}>
-					<Link color='foreground' href='/packages' aria-current='page'>
+					<Link color='foreground' href='/admin/packages' aria-current='page'>
 						<span
-							className={`flex px-4 py-2 rounded-xl items-center gap-1 ${
-								pathname?.includes('/packages') ? 'navbar-shadow' : ' font-semibold'
+							className={`flex px-4 py-2 rounded-xl items-center gap-1 font-semibold ${
+								pathname?.includes('packages') ? 'bg-chocolate text-nude ' : ''
 							}`}
 						>
 							<MdPostAdd />
@@ -69,8 +70,8 @@ export default function NavbarAdmin() {
 				<NavbarItem isActive={pathname?.includes('settings') ? true : false}>
 					<Link color='foreground' href='/settings' aria-current='page'>
 						<span
-							className={`flex px-4 py-2 rounded-xl items-center gap-1 ${
-								pathname?.includes('/settings') ? 'navbar-shadow' : ' font-semibold'
+							className={`flex px-4 py-2 rounded-xl items-center gap-1 font-semibold ${
+								pathname?.includes('settings') ? 'bg-chocolate text-nude ' : ''
 							}`}
 						>
 							<MdSettings />

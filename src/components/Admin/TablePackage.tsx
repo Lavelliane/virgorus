@@ -13,16 +13,15 @@ import {
 	Dropdown,
 	DropdownMenu,
 	DropdownItem,
-	Chip,
 	Pagination,
 	Selection,
-	ChipProps,
 	SortDescriptor,
 } from '@nextui-org/react';
-import { FaSearch, FaChevronDown } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { HiDotsVertical } from 'react-icons/hi';
 import ModalPackage from './ModalPackage';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { fetchPackages } from '@/queries/fetchPackages';
 
 const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
@@ -59,7 +58,7 @@ export default function TablePackage() {
 	});
 
 	useEffect(() => {
-		if (!packagesLoading) {
+		if (!packagesLoading && packagesData) {
 			setPackages(
 				packagesData.map((pd: any) => ({
 					id: pd.id,
@@ -150,16 +149,18 @@ export default function TablePackage() {
 			case 'actions':
 				return (
 					<div className='relative flex justify-end items-center gap-2'>
-						<Dropdown>
-							<DropdownTrigger>
-								<Button isIconOnly size='sm' variant='light'>
+						<Dropdown aria-label='actions'>
+							<DropdownTrigger aria-label='action-trigger'>
+								<Button isIconOnly size='sm' variant='light' aria-label='action-button'>
 									<HiDotsVertical />
 								</Button>
 							</DropdownTrigger>
-							<DropdownMenu>
-								<DropdownItem>View</DropdownItem>
-								<DropdownItem>Edit</DropdownItem>
-								<DropdownItem>Delete</DropdownItem>
+							<DropdownMenu aria-label='action-menu'>
+								<DropdownItem aria-label='action-view'>View</DropdownItem>
+								<DropdownItem aria-label='action-edit'>
+									<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
+								</DropdownItem>
+								<DropdownItem aria-label='action-delete'>Delete</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>
 					</div>
@@ -205,6 +206,7 @@ export default function TablePackage() {
 			<div className='flex flex-col gap-4'>
 				<div className='flex justify-between gap-3 items-end'>
 					<Input
+						aria-label='searchbox'
 						isClearable
 						className=' w-full sm:max-w-[44%]'
 						placeholder='Search by name...'
@@ -214,15 +216,17 @@ export default function TablePackage() {
 						onClear={() => onClear()}
 						onValueChange={onSearchChange}
 					/>
-					<div className='flex gap-3'>
-						<ModalPackage />
-					</div>
+					<ModalPackage />
 				</div>
 				<div className='flex justify-between items-center'>
 					<span className='text-default-400 text-small'>Total {packages.length} Packages</span>
 					<label className='flex items-center text-default-400 text-small'>
 						Rows per page:
-						<select className='bg-transparent outline-none text-default-400 text-small' onChange={onRowsPerPageChange}>
+						<select
+							className='bg-transparent outline-none text-default-400 text-small'
+							onChange={onRowsPerPageChange}
+							aria-label='pagination'
+						>
 							<option value='5'>5</option>
 							<option value='10'>10</option>
 							<option value='15'>15</option>
@@ -231,7 +235,7 @@ export default function TablePackage() {
 				</div>
 			</div>
 		);
-	}, [filterValue, onSearchChange, onRowsPerPageChange, onClear]);
+	}, [filterValue, onSearchChange, packages.length, onRowsPerPageChange, onClear]);
 
 	const bottomContent = React.useMemo(() => {
 		return (
@@ -284,9 +288,10 @@ export default function TablePackage() {
 			onSelectionChange={setSelectedKeys}
 			onSortChange={setSortDescriptor}
 		>
-			<TableHeader columns={headerColumns} aria-sort='none'>
+			<TableHeader columns={headerColumns} aria-sort='none' aria-label='table-header'>
 				{(column) => (
 					<TableColumn
+						aria-label={column.name}
 						aria-sort='none'
 						key={column.uid}
 						align={column.uid === 'actions' ? 'center' : 'start'}
@@ -296,7 +301,7 @@ export default function TablePackage() {
 					</TableColumn>
 				)}
 			</TableHeader>
-			<TableBody emptyContent={'No package found'} items={sortedItems} aria-sort='none'>
+			<TableBody emptyContent={'No package found'} items={sortedItems} aria-sort='none' aria-label='package-table-body'>
 				{(item) => (
 					<TableRow key={item.id}>{(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>
 				)}

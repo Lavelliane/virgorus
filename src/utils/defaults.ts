@@ -12,7 +12,6 @@ const addPackageDefault: IAddPackage = {
 	notice: '',
 	inclusions: [''],
 	exclusions: [''],
-	expectations: [''],
 	photos: [''],
 	ratesAndInclusions: [
 		{

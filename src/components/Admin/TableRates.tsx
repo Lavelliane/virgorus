@@ -24,7 +24,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 	const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
 
 	useEffect(() => {
-		if (form.ratesAndInclusions) {
+		if (form?.ratesAndInclusions) {
 			const numberOfPax = form.ratesAndInclusions
 				.filter((item: { numberOfPax: string; ratePerPax: string }) => item.numberOfPax && item.ratePerPax)
 				.map((item: { numberOfPax: string; ratePerPax: string }) => ({
@@ -36,7 +36,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 				}));
 			setNumberOfPax(numberOfPax);
 		}
-	}, [form.ratesAndInclusions]);
+	}, [form?.ratesAndInclusions]);
 
 	const addPax = () => {
 		if (newPax && newRate) {
@@ -101,7 +101,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					</TableColumn>
 				</TableHeader>
 				<TableBody>
-					{numberOfPax.map((numberOfPax, index) => (
+					{numberOfPax?.map((numberOfPax, index) => (
 						<TableRow key={`${numberOfPax.numberOfPax}-${numberOfPax.ratePerPax}`}>
 							<TableCell className='font-medium'>
 								{numberOfPax.isEditing ? (
