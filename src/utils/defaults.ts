@@ -30,6 +30,7 @@ const addPackageDefault: IAddPackage = {
 			],
 		},
 	],
+	id: undefined,
 };
 
 export default addPackageDefault;

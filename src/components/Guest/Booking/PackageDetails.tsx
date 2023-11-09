@@ -148,10 +148,33 @@ export default function PackageDetails({ packageData }: { packageData: Package }
 									</div>
 								}
 							>
-								<div className='flex w-fit px-4 h-8 items-center'>
-									<p className='text-sm flex h-4 whitespace-pre-wrap'><span className='text-lg'><MdOutlineGroups /></span>&nbsp;
-									Ages: {foo}</p>
-								</div>
+							<div className='flex w-fit px-4 h-8 items-center'>
+								<p className='text-sm flex h-4 whitespace-pre-wrap'>
+									<span className='text-lg'><MdOutlineGroups /></span>&nbsp;
+									Available {
+									(
+										packageData.availability === 'Saturday, Sunday' ||
+										packageData.availability === 'Monday, Tuesday, Wednesday, Thursday, Friday' ||
+										packageData.availability === 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday'
+									) 
+									? 
+									(
+										packageData.availability === 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday' 
+										? 
+										'daily' 
+										: 
+										(
+											packageData.availability === 'Saturday, Sunday'
+											?
+											'on weekends'
+											:
+											'on weekdays'
+										)	
+									) 
+									: packageData.availability}
+								</p>
+							</div>
+
 							</Tooltip>
 						</div>
 						<div className='w-full'>
