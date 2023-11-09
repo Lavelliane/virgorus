@@ -1,4 +1,5 @@
 export default interface IAddPackage {
+	id: any;
 	name: string;
 	description: string;
 	type: string;

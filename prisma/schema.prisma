@@ -23,7 +23,6 @@ model Package {
   notice          String
   ratesAndInclusions RatesAndInclusion[]
   itinerary        DaySchedule[]
-  expectations    String[]
   photos          String[]
   inclusions      String[]
   exclusions      String[]
