@@ -24,8 +24,8 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 	const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
 
 	useEffect(() => {
-		if (form?.ratesAndInclusions) {
-			const numberOfPax = form.ratesAndInclusions
+		if (form?.rates) {
+			const numberOfPax = form.rates
 				.filter((item: { numberOfPax: string; ratePerPax: string }) => item.numberOfPax && item.ratePerPax)
 				.map((item: { numberOfPax: string; ratePerPax: string }) => ({
 					numberOfPax: item.numberOfPax,
@@ -36,21 +36,28 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 				}));
 			setNumberOfPax(numberOfPax);
 		}
-	}, [form?.ratesAndInclusions]);
+	}, [form?.rates]);
 
 	const addPax = () => {
 		if (newPax && newRate) {
-			const newEntry: Pax = {
-				numberOfPax: newPax,
-				ratePerPax: newRate,
-				isEditing: false,
-				originalPax: newPax,
-				originalRate: newRate,
-			};
-			setNumberOfPax([...numberOfPax, newEntry]);
-			onChange({ target: { name: 'ratesAndInclusions', value: [...numberOfPax, newEntry] } });
-			setNewPax('');
-			setNewRate('');
+			const existingEntry = numberOfPax.find((pax) => pax.numberOfPax === newPax);
+
+			if (existingEntry) {
+				// Handle the case where the entry already exists (e.g., show an error message)
+				console.log('Entry already exists');
+			} else {
+				const newEntry: Pax = {
+					numberOfPax: newPax,
+					ratePerPax: newRate,
+					isEditing: false,
+					originalPax: newPax,
+					originalRate: newRate,
+				};
+				setNumberOfPax([...numberOfPax, newEntry]);
+				onChange({ target: { name: 'rates', value: [...numberOfPax, newEntry] } });
+				setNewPax('');
+				setNewRate('');
+			}
 		}
 	};
 
@@ -58,7 +65,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 		const updatedPax = [...numberOfPax];
 		updatedPax.splice(index, 1);
 		setNumberOfPax(updatedPax);
-		onChange({ target: { name: 'ratesAndInclusions', value: updatedPax } });
+		onChange({ target: { name: 'rates', value: updatedPax } });
 	};
 
 	const toggleEdit = (index: number) => {
@@ -82,7 +89,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 		setNumberOfPax(updatedPax);
 		setNewPax('');
 		setNewRate('');
-		onChange({ target: { name: 'ratesAndInclusions', value: updatedPax } });
+		onChange({ target: { name: 'rates', value: updatedPax } });
 		setIsAnyRowEditing(false);
 	};
 

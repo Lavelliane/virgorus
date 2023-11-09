@@ -21,14 +21,14 @@ model Package {
   availability    String
   language        String
   notice          String
-  ratesAndInclusions RatesAndInclusion[]
-  itinerary        DaySchedule[]
+  rates           Rates[]
+  itinerary       DaySchedule[]
   photos          String[]
   inclusions      String[]
   exclusions      String[]
 }
 
-model RatesAndInclusion {
+model Rates {
   id              Int      @id @default(autoincrement())
   numberOfPax     String
   ratePerPax      String
@@ -37,19 +37,19 @@ model RatesAndInclusion {
 }
 
 model Itinerary {
-  id       Int      @id @default(autoincrement())
-  time     String?
-  activity String?
-  daySchedule DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
-  dayScheduleId Int
+  id              Int      @id @default(autoincrement())
+  time            String?
+  activity        String?
+  daySchedule     DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
+  dayScheduleId   Int
 }
 
 model DaySchedule {
-  id       Int      @id @default(autoincrement())
-  day     String?
-  itineraries Itinerary[]
-  packageId Int
-  package  Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  id              Int      @id @default(autoincrement())
+  day             String?
+  itineraries     Itinerary[]
+  packageId       Int
+  package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
 model Account {

@@ -24,26 +24,12 @@ import TableExclusions from './TableExclusion';
 import TableItinerary from './TableItinerary';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
+import axios from 'axios';
 
 async function editPackage(data: IAddPackage, id: any) {
-	console.log(data);
 	try {
-		const response = await fetch(`/api/package/${id}`, {
-			method: 'PATCH',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		});
-
-		if (response.ok) {
-			const updatedPackage = await response.json();
-			return updatedPackage;
-		} else {
-			const errorData = await response.json();
-			console.error('Failed to update package:', errorData);
-			throw new Error(`Failed to update package: ${response.statusText}`);
-		}
+		const response = await axios.patch(`/api/package/${id}`, data);
+		console.log(response.data);
 	} catch (error) {
 		console.error('An error occurred while updating package:', error);
 		throw error;
@@ -77,7 +63,7 @@ export default function EditPackage({ id }: Props) {
 				notice: packageData.notice,
 				availability: packageData.availability,
 				language: packageData.language,
-				ratesAndInclusions: packageData.ratesAndInclusions,
+				rates: packageData.rates,
 				inclusions: packageData.inclusions,
 				exclusions: packageData.exclusions,
 				itinerary: packageData.itinerary,
@@ -90,10 +76,11 @@ export default function EditPackage({ id }: Props) {
 
 	const handleSaveClick = () => {
 		editPackage(form, packageData.id);
+		window.location.href = '/admin/packages';
 	};
 
 	const handleReturn = () => {
-		window.location.reload();
+		window.location.href = '/admin/packages';
 	};
 
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -141,7 +128,7 @@ export default function EditPackage({ id }: Props) {
 							isRequired
 						/>
 						<Input
-							value={form?.type}
+							value={form?.type || ''}
 							className='w-[25%]'
 							name='type'
 							onChange={onChange}
@@ -155,7 +142,7 @@ export default function EditPackage({ id }: Props) {
 						<Input
 							name='location'
 							className='w-[25%]'
-							value={form?.location}
+							value={form?.location || ''}
 							onChange={onChange}
 							type='text'
 							size='sm'
@@ -169,7 +156,7 @@ export default function EditPackage({ id }: Props) {
 						<Textarea
 							className='w-[100%]'
 							name='description'
-							value={form?.description}
+							value={form?.description || ''}
 							onChange={onChange}
 							type='text'
 							size='sm'
@@ -182,7 +169,7 @@ export default function EditPackage({ id }: Props) {
 						<Textarea
 							className='w-[100%]'
 							name='notice'
-							value={form?.notice}
+							value={form?.notice || ''}
 							onChange={onChange}
 							type='text'
 							size='sm'
@@ -194,7 +181,7 @@ export default function EditPackage({ id }: Props) {
 					</div>
 					<div className='flex gap-4'>
 						<Input
-							value={form?.duration}
+							value={form?.duration || ''}
 							className='w-[50%]'
 							name='duration'
 							onChange={onChange}
@@ -208,7 +195,7 @@ export default function EditPackage({ id }: Props) {
 						/>
 						<Tooltip placement='top' delay={500} closeDelay={100} content="Leave empty for 'No cancellation' policies.">
 							<Input
-								value={form?.cancellation}
+								value={form?.cancellation || ''}
 								className='w-[50%]'
 								name='cancellation'
 								onChange={onChange}
@@ -273,7 +260,7 @@ export default function EditPackage({ id }: Props) {
 				<Button color='danger' variant='light' onPress={handleReturn}>
 					Return
 				</Button>
-				<Button color='secondary' onPress={handleSaveClick}>
+				<Button color='secondary' type='submit' onClick={handleSaveClick}>
 					Save
 				</Button>
 			</CardFooter>

@@ -12,10 +12,10 @@ export default interface Package {
 	photos?: string[];
 	inclusions?: string[];
 	exclusions?: string[];
-	ratesAndInclusions?: RatesAndInclusions[];
+	rates?: Rates[];
 }
 
-interface RatesAndInclusions {
+interface Rates {
 	id?: number;
 	numberOfPax?: string;
 	ratePerPax?: string;

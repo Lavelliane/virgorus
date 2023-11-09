@@ -16,6 +16,7 @@ import {
 	Pagination,
 	Selection,
 	SortDescriptor,
+	Divider,
 } from '@nextui-org/react';
 import { FaSearch } from 'react-icons/fa';
 import { HiDotsVertical } from 'react-icons/hi';
@@ -23,6 +24,8 @@ import ModalPackage from './ModalPackage';
 import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { fetchPackages } from '@/queries/fetchPackages';
+import axios from 'axios';
+import { set } from 'lodash';
 
 const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
 
@@ -42,10 +45,22 @@ const columns = [
 	{ name: 'ACTIONS', uid: 'actions' },
 ];
 
+async function deletePackage(id: any) {
+	try {
+		const response = await axios.delete(`/api/package/${id}`);
+		console.log(response.data);
+	} catch (error) {
+		console.error('An error occurred while deleting package:', error);
+		throw error;
+	}
+}
+
 export default function TablePackage() {
 	const [filterValue, setFilterValue] = React.useState('');
 	const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
-	const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
+	const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
+		typeof window !== 'undefined' && window.innerWidth < 768 ? new Set(['package']) : new Set(INITIAL_VISIBLE_COLUMNS)
+	);
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 	const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
 		column: 'name',
@@ -71,13 +86,16 @@ export default function TablePackage() {
 		}
 	}, [packagesLoading, packagesData]);
 
+	const handleDelete = (id: any) => {
+		deletePackage(id);
+		window.location.reload();
+	};
+
 	const [page, setPage] = React.useState(1);
 
 	const hasSearchFilter = Boolean(filterValue);
 
 	const headerColumns = React.useMemo(() => {
-		if (visibleColumns === 'all') return columns;
-
 		return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
 	}, [visibleColumns]);
 
@@ -118,37 +136,68 @@ export default function TablePackage() {
 		switch (columnKey) {
 			case 'package':
 				return (
-					<div className='flex flex-col'>
-						<p className='font-bold capitalize'>{Package.name}</p>
-						<p
-							className='text-tiny text-default-400 max-w-[400px] overflow-hidden'
-							style={{
-								display: '-webkit-box',
-								WebkitLineClamp: 2, // Number of lines before truncating
-								WebkitBoxOrient: 'vertical',
-								lineHeight: '1rem', // Adjust to control line height
-								maxHeight: '2rem', // Maximum height before truncating
-							}}
-						>
-							{Package.description}
-						</p>
+					<div className='flex justify-between'>
+						<div className='flex flex-col'>
+							<p className='font-bold capitalize'>
+								{Package.name}
+								<span className='text-default-400 rounded px-2 py-1 font-normal'>- {Package.type}</span>
+							</p>
+							<div className='max-w-[400px] flex gap-2'>
+								<span className='bg-chocolate rounded'>{Package.location}</span>
+							</div>
+							<Divider className='my-1' />
+							<p
+								className='text-tiny text-default-400 max-w-[400px] overflow-hidden'
+								style={{
+									display: '-webkit-box',
+									WebkitLineClamp: 2, // Number of lines before truncating
+									WebkitBoxOrient: 'vertical',
+									lineHeight: '1rem', // Adjust to control line height
+									maxHeight: '2rem', // Maximum height before truncating
+									backgroundColor: 'rbg(0,0,0)',
+								}}
+							>
+								{Package.description}
+							</p>
+						</div>
+						<Dropdown aria-label='actions'>
+							<DropdownTrigger aria-label='action-trigger'>
+								<button
+									aria-label='action-button'
+									className='w-4 text-2xl outline-none box-shadow-none tap-highlight-transparent'
+								>
+									<HiDotsVertical />
+								</button>
+							</DropdownTrigger>
+							<DropdownMenu aria-label='action-menu'>
+								<DropdownItem aria-label='action-view'>
+									<Link href={`/tours/${Package.id}`}>View</Link>
+								</DropdownItem>
+								<DropdownItem aria-label='action-edit'>
+									<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
+								</DropdownItem>
+								<DropdownItem aria-label='action-delete' onClick={() => handleDelete(Package.id)}>
+									Delete
+								</DropdownItem>
+							</DropdownMenu>
+						</Dropdown>
 					</div>
 				);
 			case 'type':
 				return (
-					<div className='flex flex-col'>
+					<div className='md:flex flex-col hidden'>
 						<p className='text-small capitalize'>{cellValue}</p>
 					</div>
 				);
 			case 'location':
 				return (
-					<div className='flex flex-col'>
+					<div className='md:flex flex-col hidden'>
 						<p className='text-small capitalize'>{cellValue}</p>
 					</div>
 				);
 			case 'actions':
 				return (
-					<div className='relative flex justify-end items-center gap-2'>
+					<div className='relative md:flex hidden justify-end items-center gap-2'>
 						<Dropdown aria-label='actions'>
 							<DropdownTrigger aria-label='action-trigger'>
 								<Button isIconOnly size='sm' variant='light' aria-label='action-button'>
@@ -156,11 +205,15 @@ export default function TablePackage() {
 								</Button>
 							</DropdownTrigger>
 							<DropdownMenu aria-label='action-menu'>
-								<DropdownItem aria-label='action-view'>View</DropdownItem>
+								<DropdownItem aria-label='action-view'>
+									<Link href={`/tours/${Package.id}`}>View</Link>
+								</DropdownItem>
 								<DropdownItem aria-label='action-edit'>
 									<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
 								</DropdownItem>
-								<DropdownItem aria-label='action-delete'>Delete</DropdownItem>
+								<DropdownItem aria-label='action-delete' onClick={() => handleDelete(Package.id)}>
+									Delete
+								</DropdownItem>
 							</DropdownMenu>
 						</Dropdown>
 					</div>
@@ -278,6 +331,7 @@ export default function TablePackage() {
 			isHeaderSticky
 			bottomContent={bottomContent}
 			bottomContentPlacement='outside'
+			className='sm:w-[600px] w-full'
 			classNames={{
 				wrapper: 'max-h-[384px]',
 			}}
@@ -301,6 +355,7 @@ export default function TablePackage() {
 					</TableColumn>
 				)}
 			</TableHeader>
+
 			<TableBody emptyContent={'No package found'} items={sortedItems} aria-sort='none' aria-label='package-table-body'>
 				{(item) => (
 					<TableRow key={item.id}>{(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>

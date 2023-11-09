@@ -40,6 +40,28 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 	const [newActivity, setNewActivity] = React.useState('');
 	const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
 
+	useEffect(() => {
+		if (form?.itinerary) {
+			const updatedItinerary = form.itinerary
+				.filter((item) => item.day && item.itineraries)
+				.map((item) => ({
+					day: item.day,
+					itineraries: item.itineraries
+						.filter((innerItem) => innerItem.time && innerItem.activity)
+						.map((innerItem) => ({
+							time: innerItem.time,
+							activity: innerItem.activity,
+							isEditing: false,
+							originalTime: innerItem.time,
+							originalActivity: innerItem.activity,
+						})),
+				}));
+
+			// Assuming you're using some kind of state to store the form
+			setDay(updatedItinerary);
+		}
+	}, [form.itinerary]);
+
 	const addDay = () => {
 		if (newDay) {
 			const newDaySchedule: DaySchedule = {
@@ -124,7 +146,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 		updatedDay[dayIndex].itineraries.splice(timeIndex, 1);
 		setDay(updatedDay);
 	};
-	console.log(day);
+
 	return (
 		<div className='flex flex-col w-full gap-4'>
 			<Accordion isCompact variant='bordered' defaultExpandedKeys={['0']}>

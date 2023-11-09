@@ -9,14 +9,14 @@ export default interface IAddPackage {
 	availability: string;
 	language: string;
 	notice: string;
-	ratesAndInclusions: [RatesAndInclusions];
+	rates: [Rates];
 	itinerary: [DaySchedule];
 	inclusions: [string];
 	exclusions: [string];
 	photos: [string];
 }
 
-interface RatesAndInclusions {
+interface Rates {
 	numberOfPax: string;
 	ratePerPax: string;
 }

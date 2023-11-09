@@ -3,14 +3,19 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-interface RatesAndInclusions {
+interface Rates {
 	numberOfPax: string;
 	ratePerPax: string;
 }
 
+interface DaySchedule {
+	day: string;
+	itineraries: [Itinerary];
+}
+
 interface Itinerary {
-	time?: string;
-	activity?: string;
+	time: string;
+	activity: string;
 }
 
 export async function POST(req: NextRequest) {
@@ -28,23 +33,32 @@ export async function POST(req: NextRequest) {
 			inclusions: { set: packageData.inclusions },
 			exclusions: { set: packageData.exclusions },
 			notice: packageData.notice,
-			ratesAndInclusions: {
-				create: packageData.ratesAndInclusions.map((ratesAndInclusion: RatesAndInclusions) => {
-					return {
-						numberOfPax: ratesAndInclusion.numberOfPax,
-						ratePerPax: ratesAndInclusion.ratePerPax,
-					};
-				}),
+			rates: {
+				create: packageData.rates.map((rates: Rates) => ({
+					numberOfPax: rates.numberOfPax,
+					ratePerPax: rates.ratePerPax,
+				})),
 			},
 			itinerary: {
-				create: packageData.itinerary.map((itinerary: Itinerary) => {
-					return {
-						time: itinerary.time,
-						activity: itinerary.activity,
-					};
-				}),
+				create: packageData.itinerary.map((daySchedule: DaySchedule) => ({
+					day: daySchedule.day,
+					itineraries: {
+						create: daySchedule.itineraries.map((itinerary: Itinerary) => ({
+							time: itinerary.time,
+							activity: itinerary.activity,
+						})),
+					},
+				})),
 			},
 			photos: { set: packageData.photos },
+		},
+		include: {
+			rates: true,
+			itinerary: {
+				include: {
+					itineraries: true,
+				},
+			},
 		},
 	});
 	return NextResponse.json(createdPackage, { status: 200 });
@@ -54,7 +68,7 @@ export async function GET(req: NextRequest) {
 	try {
 		const packages = await prisma.package.findMany({
 			include: {
-				ratesAndInclusions: true,
+				rates: true,
 				itinerary: {
 					include: {
 						itineraries: true,

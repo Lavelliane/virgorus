@@ -85,7 +85,6 @@ export default function ModalPackage() {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	console.log(form);
 	return (
 		<>
 			<Button onPress={onOpen} color='secondary' endContent={<MdLibraryAdd />}>
@@ -97,11 +96,10 @@ export default function ModalPackage() {
 						<>
 							<ModalHeader className='flex flex-col gap-1'>Add Package</ModalHeader>
 							<ModalBody>
-								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] p-1 pb-10 '>
-									<div className='flex gap-4'>
+								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] md:p-1 p-0 pb-10'>
+									<div className='flex md:flex-row flex-col gap-4'>
 										<Input
 											value={form.name}
-											className='w-[50%]'
 											name='name'
 											onChange={onChange}
 											type='text'
@@ -111,30 +109,32 @@ export default function ModalPackage() {
 											placeholder='Enter package name'
 											isRequired
 										/>
-										<Input
-											value={form.type}
-											className='w-[25%]'
-											name='type'
-											onChange={onChange}
-											type='text'
-											size='sm'
-											labelPlacement='outside'
-											label='Type'
-											placeholder='Enter type'
-											isRequired
-										/>
-										<Input
-											name='location'
-											className='w-[25%]'
-											value={form.location}
-											onChange={onChange}
-											type='text'
-											size='sm'
-											labelPlacement='outside'
-											label='Location'
-											placeholder='Enter location'
-											isRequired
-										/>
+										<div className='flex gap-4'>
+											<Input
+												value={form.type}
+												className='w-1/2'
+												name='type'
+												onChange={onChange}
+												type='text'
+												size='sm'
+												labelPlacement='outside'
+												label='Type'
+												placeholder='Enter type'
+												isRequired
+											/>
+											<Input
+												name='location'
+												className='w-1/2'
+												value={form.location}
+												onChange={onChange}
+												type='text'
+												size='sm'
+												labelPlacement='outside'
+												label='Location'
+												placeholder='Enter location'
+												isRequired
+											/>
+										</div>
 									</div>
 									<div className='flex flex-col gap-4'>
 										<Textarea
@@ -163,10 +163,9 @@ export default function ModalPackage() {
 											minRows={4}
 										/>
 									</div>
-									<div className='flex gap-4'>
+									<div className='flex md:flex-row flex-col gap-4'>
 										<Input
 											value={form.duration}
-											className='w-[50%]'
 											name='duration'
 											onChange={onChange}
 											type='text'
@@ -185,7 +184,6 @@ export default function ModalPackage() {
 										>
 											<Input
 												value={form.cancellation}
-												className='w-[50%]'
 												name='cancellation'
 												onChange={onChange}
 												type='text'
