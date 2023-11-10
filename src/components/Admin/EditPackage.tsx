@@ -112,12 +112,11 @@ export default function EditPackage({ id }: Props) {
 	return (
 		<Card>
 			<CardHeader className='flex flex-col gap-1'>Edit Package</CardHeader>
-			<CardBody>
+			<CardBody className='w-full'>
 				<div className='flex flex-col gap-4'>
-					<div className='flex gap-4'>
+					<div className='flex md:flex-row flex-col gap-4'>
 						<Input
 							value={form?.name || ''}
-							className='w-[50%]'
 							name='name'
 							onChange={onChange}
 							type='text'
@@ -127,30 +126,30 @@ export default function EditPackage({ id }: Props) {
 							placeholder='Enter package name'
 							isRequired
 						/>
-						<Input
-							value={form?.type || ''}
-							className='w-[25%]'
-							name='type'
-							onChange={onChange}
-							type='text'
-							size='sm'
-							labelPlacement='outside'
-							label='Type'
-							placeholder='Enter type'
-							isRequired
-						/>
-						<Input
-							name='location'
-							className='w-[25%]'
-							value={form?.location || ''}
-							onChange={onChange}
-							type='text'
-							size='sm'
-							labelPlacement='outside'
-							label='Location'
-							placeholder='Enter location'
-							isRequired
-						/>
+						<div className='flex md:flex-row flex-col w-full items-center gap-4'>
+							<Input
+								value={form?.type || ''}
+								name='type'
+								onChange={onChange}
+								type='text'
+								size='sm'
+								labelPlacement='outside'
+								label='Type'
+								placeholder='Enter type'
+								isRequired
+							/>
+							<Input
+								name='location'
+								value={form?.location || ''}
+								onChange={onChange}
+								type='text'
+								size='sm'
+								labelPlacement='outside'
+								label='Location'
+								placeholder='Enter location'
+								isRequired
+							/>
+						</div>
 					</div>
 					<div className='flex flex-col gap-4'>
 						<Textarea
@@ -243,7 +242,7 @@ export default function EditPackage({ id }: Props) {
 						</Select>
 					</div>
 					<Divider className='my-0' />
-					<div className='flex flex-row gap-4'>
+					<div className='flex md:flex-row flex-col gap-4'>
 						<div className='flex w-full gap-4'>
 							<TableRates onChange={onChange} form={form} />
 						</div>
@@ -257,7 +256,7 @@ export default function EditPackage({ id }: Props) {
 				</div>
 			</CardBody>
 			<CardFooter>
-				<Button color='danger' variant='light' onPress={handleReturn}>
+				<Button color='default' variant='light' onPress={handleReturn} className='font-semibold'>
 					Return
 				</Button>
 				<Button color='secondary' type='submit' onClick={handleSaveClick}>

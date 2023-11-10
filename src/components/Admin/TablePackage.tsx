@@ -25,7 +25,6 @@ import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { fetchPackages } from '@/queries/fetchPackages';
 import axios from 'axios';
-import { set } from 'lodash';
 
 const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
 
@@ -58,9 +57,7 @@ async function deletePackage(id: any) {
 export default function TablePackage() {
 	const [filterValue, setFilterValue] = React.useState('');
 	const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
-	const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
-		typeof window !== 'undefined' && window.innerWidth < 768 ? new Set(['package']) : new Set(INITIAL_VISIBLE_COLUMNS)
-	);
+	const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
 	const [rowsPerPage, setRowsPerPage] = React.useState(5);
 	const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
 		column: 'name',
@@ -136,51 +133,54 @@ export default function TablePackage() {
 		switch (columnKey) {
 			case 'package':
 				return (
-					<div className='flex justify-between'>
-						<div className='flex flex-col'>
-							<p className='font-bold capitalize'>
+					<div className='flex justify-between w-full rounded-lg'>
+						<div className='flex flex-col w-full'>
+							<p className='font-bold capitalize flex items-center text-chocolate'>
 								{Package.name}
-								<span className='text-default-400 rounded px-2 py-1 font-normal'>- {Package.type}</span>
+								<span className='text-default-400 rounded px-2 py-1 font-normal flex md:hidden w-fit'>
+									- {Package.type}
+								</span>
 							</p>
-							<div className='max-w-[400px] flex gap-2'>
-								<span className='bg-chocolate rounded'>{Package.location}</span>
+							<div className='md:max-w-[400px] w-full gap-2 flex md:hidden'>
+								<span>{Package.location}</span>
 							</div>
-							<Divider className='my-1' />
+							<Divider className='my-1 flex md:hidden w-full' />
 							<p
-								className='text-tiny text-default-400 max-w-[400px] overflow-hidden'
+								className='text-tiny text-default-400 md:max-w-[400px] w-full overflow-hidden'
 								style={{
 									display: '-webkit-box',
 									WebkitLineClamp: 2, // Number of lines before truncating
 									WebkitBoxOrient: 'vertical',
 									lineHeight: '1rem', // Adjust to control line height
 									maxHeight: '2rem', // Maximum height before truncating
-									backgroundColor: 'rbg(0,0,0)',
 								}}
 							>
 								{Package.description}
 							</p>
 						</div>
-						<Dropdown aria-label='actions'>
-							<DropdownTrigger aria-label='action-trigger'>
-								<button
-									aria-label='action-button'
-									className='w-4 text-2xl outline-none box-shadow-none tap-highlight-transparent'
-								>
-									<HiDotsVertical />
-								</button>
-							</DropdownTrigger>
-							<DropdownMenu aria-label='action-menu'>
-								<DropdownItem aria-label='action-view'>
-									<Link href={`/tours/${Package.id}`}>View</Link>
-								</DropdownItem>
-								<DropdownItem aria-label='action-edit'>
-									<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
-								</DropdownItem>
-								<DropdownItem aria-label='action-delete' onClick={() => handleDelete(Package.id)}>
-									Delete
-								</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
+						<div className='flex md:hidden'>
+							<Dropdown aria-label='actions'>
+								<DropdownTrigger aria-label='action-trigger'>
+									<button
+										aria-label='action-button'
+										className='ml-4 text-2xl outline-none box-shadow-none tap-highlight-transparent'
+									>
+										<HiDotsVertical />
+									</button>
+								</DropdownTrigger>
+								<DropdownMenu aria-label='action-menu'>
+									<DropdownItem aria-label='action-view'>
+										<Link href={`/tours/${Package.id}`}>View</Link>
+									</DropdownItem>
+									<DropdownItem aria-label='action-edit'>
+										<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
+									</DropdownItem>
+									<DropdownItem aria-label='action-delete' onClick={() => handleDelete(Package.id)}>
+										Delete
+									</DropdownItem>
+								</DropdownMenu>
+							</Dropdown>
+						</div>
 					</div>
 				);
 			case 'type':
@@ -197,10 +197,10 @@ export default function TablePackage() {
 				);
 			case 'actions':
 				return (
-					<div className='relative md:flex hidden justify-end items-center gap-2'>
+					<div className='md:flex hidden relative justify-end items-center gap-2'>
 						<Dropdown aria-label='actions'>
 							<DropdownTrigger aria-label='action-trigger'>
-								<Button isIconOnly size='sm' variant='light' aria-label='action-button'>
+								<Button isIconOnly size='lg' variant='light' aria-label='action-button'>
 									<HiDotsVertical />
 								</Button>
 							</DropdownTrigger>
@@ -257,11 +257,12 @@ export default function TablePackage() {
 	const topContent = React.useMemo(() => {
 		return (
 			<div className='flex flex-col gap-4'>
-				<div className='flex justify-between gap-3 items-end'>
+				<div className='flex justify-between gap-3 items-center'>
 					<Input
 						aria-label='searchbox'
+						size='sm'
 						isClearable
-						className=' w-full sm:max-w-[44%]'
+						className=' sm:max-w-[44%]'
 						placeholder='Search by name...'
 						startContent={<FaSearch />}
 						value={filterValue}
@@ -333,7 +334,7 @@ export default function TablePackage() {
 			bottomContentPlacement='outside'
 			className='sm:w-[600px] w-full'
 			classNames={{
-				wrapper: 'max-h-[384px]',
+				wrapper: 'max-h-[384px] p-2',
 			}}
 			selectedKeys={selectedKeys}
 			sortDescriptor={sortDescriptor}
@@ -350,6 +351,7 @@ export default function TablePackage() {
 						key={column.uid}
 						align={column.uid === 'actions' ? 'center' : 'start'}
 						allowsSorting={column.sortable}
+						className='md:table-cell hidden'
 					>
 						{column.name}
 					</TableColumn>
@@ -358,7 +360,13 @@ export default function TablePackage() {
 
 			<TableBody emptyContent={'No package found'} items={sortedItems} aria-sort='none' aria-label='package-table-body'>
 				{(item) => (
-					<TableRow key={item.id}>{(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>
+					<TableRow key={item.id}>
+						{(columnKey) => (
+							<TableCell className={` ${columnKey == 'package' ? '' : 'md:table-cell hidden'}`}>
+								{renderCell(item, columnKey)}
+							</TableCell>
+						)}
+					</TableRow>
 				)}
 			</TableBody>
 		</Table>

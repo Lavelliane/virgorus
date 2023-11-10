@@ -1,5 +1,15 @@
 import React, { useEffect } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Input } from '@nextui-org/react';
+import {
+	Table,
+	TableHeader,
+	TableColumn,
+	TableBody,
+	TableRow,
+	TableCell,
+	Button,
+	Input,
+	Spacer,
+} from '@nextui-org/react';
 import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { PiNotePencilLight } from 'react-icons/pi';
 import IAddPackage from '@/types/types';
@@ -138,9 +148,9 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 									`₱ ${Number(numberOfPax.ratePerPax).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
 								)}
 							</TableCell>
-							<TableCell className='justify-end flex items-center'>
+							<TableCell className='justify-center flex items-center'>
 								{numberOfPax.isEditing ? (
-									<div className='flex'>
+									<div className='flex justify-center items-center'>
 										<Button
 											onClick={() => handleEdit(index)}
 											isIconOnly
@@ -153,19 +163,19 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 											onClick={() => removePax(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
+											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
 										>
 											<IoRemoveCircleOutline />
 										</Button>
 									</div>
 								) : (
-									<div>
+									<div className='flex justify-center items-center'>
 										<Button
 											disabled={numberOfPax.isEditing}
 											onClick={() => toggleEdit(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover-bg-transparent'
+											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover:bg-transparent'
 										>
 											<PiNotePencilLight />
 										</Button>
@@ -176,7 +186,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					))}
 				</TableBody>
 			</Table>
-			<div className='flex gap-4'>
+			<div className='flex items-center'>
 				<Input
 					type='text'
 					size='sm'
@@ -186,6 +196,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					disabled={numberOfPax.some((numberOfPax) => numberOfPax.isEditing)}
 					className=' sm:text-sm text-xs mx-0'
 				/>
+				<Spacer x={2} />
 				<Input
 					type='text'
 					size='sm'
@@ -195,15 +206,18 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					disabled={numberOfPax.some((numberOfPax) => numberOfPax.isEditing)}
 					className=' sm:text-sm text-xs mx-0'
 				/>
+				<Spacer x={4} />
 				<Button
 					onClick={addPax}
 					size='sm'
 					isIconOnly
-					className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
+					className='text-chocolate hover:text-opacity-60 text-2xl bg-transparent transition-all'
 					disabled={numberOfPax.some((numberOfPax) => numberOfPax.isEditing)}
+					type='submit'
 				>
 					<IoAddCircleOutline />
 				</Button>
+				<Spacer x={4} />
 			</div>
 		</div>
 	);

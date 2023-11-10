@@ -87,7 +87,16 @@ export default function ModalPackage() {
 
 	return (
 		<>
-			<Button onPress={onOpen} color='secondary' endContent={<MdLibraryAdd />}>
+			<Button
+				onPress={onOpen}
+				color='secondary'
+				endContent={
+					<span className='sm:flex hidden'>
+						<MdLibraryAdd />
+					</span>
+				}
+				className='items-center'
+			>
 				Add New
 			</Button>
 			<Modal backdrop={'blur'} isOpen={isOpen} onClose={onClose} size='2xl'>
@@ -95,8 +104,8 @@ export default function ModalPackage() {
 					{(onClose) => (
 						<>
 							<ModalHeader className='flex flex-col gap-1'>Add Package</ModalHeader>
-							<ModalBody>
-								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] md:p-1 p-0 pb-10'>
+							<ModalBody className='p-4'>
+								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] p-2 pb-10'>
 									<div className='flex md:flex-row flex-col gap-4'>
 										<Input
 											value={form.name}
@@ -180,6 +189,7 @@ export default function ModalPackage() {
 											placement='top'
 											delay={500}
 											closeDelay={100}
+											size='sm'
 											content="Leave empty for 'No cancellation' policies."
 										>
 											<Input
@@ -230,7 +240,7 @@ export default function ModalPackage() {
 										</Select>
 									</div>
 									<Divider className='my-0' />
-									<div className='flex flex-row gap-4'>
+									<div className='flex md:flex-row flex-col gap-4'>
 										<div className='flex w-full gap-4'>
 											<TableRates onChange={onChange} form={form} />
 										</div>
@@ -244,7 +254,7 @@ export default function ModalPackage() {
 								</ScrollShadow>
 							</ModalBody>
 							<ModalFooter>
-								<Button color='danger' variant='light' onPress={onClose}>
+								<Button color='default' variant='light' onPress={onClose} className='font-semibold'>
 									Close
 								</Button>
 								<Button color='secondary' onPress={handleActionClick}>

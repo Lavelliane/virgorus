@@ -10,6 +10,7 @@ import {
 	Input,
 	Accordion,
 	AccordionItem,
+	Spacer,
 } from '@nextui-org/react';
 import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { PiNotePencilLight } from 'react-icons/pi';
@@ -251,7 +252,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 									))}
 								</TableBody>
 							</Table>
-							<div className='flex gap-4'>
+							<div className='flex gap-2 items-center'>
 								<Input
 									type='text'
 									size='sm'
@@ -259,7 +260,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 									onChange={(e) => setNewTime(e.target.value)}
 									placeholder='Time'
 									disabled={day[dayIndex].itineraries.some((time) => time.isEditing)}
-									className=' sm:text-sm text-xs mx-0'
+									className=' sm:text-sm text-xs mx-0 w-40'
 								/>
 								<Input
 									type='text'
@@ -276,9 +277,11 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 									isIconOnly
 									className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
 									disabled={day[dayIndex].itineraries.some((time) => time.isEditing)}
+									type='submit'
 								>
 									<IoAddCircleOutline />
 								</Button>
+								<Spacer x={2} />
 							</div>
 						</div>
 					</AccordionItem>

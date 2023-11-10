@@ -11,7 +11,7 @@ const EditPage = (context: any) => {
 			<main className='flex min-h-screen flex-col items-center justify-between bg-white'>
 				<section className='flex flex-col w-full h-fit items-center'>
 					<NavbarAdmin />
-					<div className='flex max-w-6xl py-10'>
+					<div className='flex max-w-6xl md:py-10 py-6 px-2'>
 						<EditPackage id={id} />
 					</div>
 				</section>

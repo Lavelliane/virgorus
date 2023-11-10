@@ -68,7 +68,7 @@ export default function NavbarAdmin() {
 					</Link>
 				</NavbarItem>
 				<NavbarItem isActive={pathname?.includes('settings') ? true : false}>
-					<Link color='foreground' href='/settings' aria-current='page'>
+					<Link color='foreground' href='/admin/settings' aria-current='page'>
 						<span
 							className={`flex px-4 py-2 rounded-xl items-center gap-1 font-semibold ${
 								pathname?.includes('settings') ? 'bg-chocolate text-nude ' : ''
@@ -113,7 +113,9 @@ export default function NavbarAdmin() {
 						<Link
 							className='w-full'
 							color={index === menuItems.length - 1 ? 'danger' : 'foreground'}
-							href={index === 0 ? '/' : index === 1 ? '/packages' : index === 2 ? '/settings' : '/'}
+							href={
+								index === 0 ? '/admin' : index === 1 ? '/admin/packages' : index === 2 ? '/admin/settings' : '/admin'
+							}
 							size='md'
 						>
 							{item}
