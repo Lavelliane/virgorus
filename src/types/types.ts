@@ -1,4 +1,5 @@
 export default interface IAddPackage {
+	id: any;
 	name: string;
 	description: string;
 	type: string;
@@ -8,15 +9,14 @@ export default interface IAddPackage {
 	availability: string;
 	language: string;
 	notice: string;
-	ratesAndInclusions: [RatesAndInclusions];
+	rates: [Rates];
 	itinerary: [DaySchedule];
 	inclusions: [string];
 	exclusions: [string];
-	expectations: [string];
 	photos: [string];
 }
 
-interface RatesAndInclusions {
+interface Rates {
 	numberOfPax: string;
 	ratePerPax: string;
 }

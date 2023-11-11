@@ -24,7 +24,6 @@ import { availabilityData, languagesData } from '@/utils/data';
 import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
-import TableExpectations from './TableExpectation';
 import TableItinerary from './TableItinerary';
 
 async function createPackage(data: IAddPackage) {
@@ -57,6 +56,7 @@ export default function ModalPackage() {
 	const handleActionClick = () => {
 		createPackage(form);
 		onClose(); // Close the modal or perform any other desired action.
+		window.location.reload();
 	};
 
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -66,7 +66,7 @@ export default function ModalPackage() {
 			.map((item) => item.value);
 
 		setAvailability(new Set(sortedSelectedAvailability));
-		const availability = sortedSelectedAvailability.join(', ');
+		const availability = sortedSelectedAvailability.join(',');
 		setForm({ ...form, ['availability']: availability });
 	};
 
@@ -77,7 +77,7 @@ export default function ModalPackage() {
 			.map((item) => item.name);
 
 		setLanguage(new Set(sortedSelectedLanguages));
-		const language = sortedSelectedLanguages.join(', ');
+		const language = sortedSelectedLanguages.join(',');
 		setForm({ ...form, ['language']: language });
 	};
 
@@ -85,10 +85,18 @@ export default function ModalPackage() {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
 
-	console.log(form);
 	return (
 		<>
-			<Button onPress={onOpen} color='secondary' endContent={<MdLibraryAdd />}>
+			<Button
+				onPress={onOpen}
+				color='secondary'
+				endContent={
+					<span className='sm:flex hidden'>
+						<MdLibraryAdd />
+					</span>
+				}
+				className='items-center'
+			>
 				Add New
 			</Button>
 			<Modal backdrop={'blur'} isOpen={isOpen} onClose={onClose} size='2xl'>
@@ -96,12 +104,11 @@ export default function ModalPackage() {
 					{(onClose) => (
 						<>
 							<ModalHeader className='flex flex-col gap-1'>Add Package</ModalHeader>
-							<ModalBody>
-								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] p-1 pb-10 '>
-									<div className='flex gap-4'>
+							<ModalBody className='p-4'>
+								<ScrollShadow size={40} className='flex flex-col gap-4 h-[70vh] p-2 pb-10'>
+									<div className='flex md:flex-row flex-col gap-4'>
 										<Input
 											value={form.name}
-											className='w-[50%]'
 											name='name'
 											onChange={onChange}
 											type='text'
@@ -111,30 +118,32 @@ export default function ModalPackage() {
 											placeholder='Enter package name'
 											isRequired
 										/>
-										<Input
-											value={form.type}
-											className='w-[25%]'
-											name='type'
-											onChange={onChange}
-											type='text'
-											size='sm'
-											labelPlacement='outside'
-											label='Type'
-											placeholder='Enter type'
-											isRequired
-										/>
-										<Input
-											name='location'
-											className='w-[25%]'
-											value={form.location}
-											onChange={onChange}
-											type='text'
-											size='sm'
-											labelPlacement='outside'
-											label='Location'
-											placeholder='Enter location'
-											isRequired
-										/>
+										<div className='flex gap-4'>
+											<Input
+												value={form.type}
+												className='w-1/2'
+												name='type'
+												onChange={onChange}
+												type='text'
+												size='sm'
+												labelPlacement='outside'
+												label='Type'
+												placeholder='Enter type'
+												isRequired
+											/>
+											<Input
+												name='location'
+												className='w-1/2'
+												value={form.location}
+												onChange={onChange}
+												type='text'
+												size='sm'
+												labelPlacement='outside'
+												label='Location'
+												placeholder='Enter location'
+												isRequired
+											/>
+										</div>
 									</div>
 									<div className='flex flex-col gap-4'>
 										<Textarea
@@ -163,10 +172,9 @@ export default function ModalPackage() {
 											minRows={4}
 										/>
 									</div>
-									<div className='flex gap-4'>
+									<div className='flex md:flex-row flex-col gap-4'>
 										<Input
 											value={form.duration}
-											className='w-[50%]'
 											name='duration'
 											onChange={onChange}
 											type='text'
@@ -181,11 +189,11 @@ export default function ModalPackage() {
 											placement='top'
 											delay={500}
 											closeDelay={100}
+											size='sm'
 											content="Leave empty for 'No cancellation' policies."
 										>
 											<Input
 												value={form.cancellation}
-												className='w-[50%]'
 												name='cancellation'
 												onChange={onChange}
 												type='text'
@@ -232,7 +240,7 @@ export default function ModalPackage() {
 										</Select>
 									</div>
 									<Divider className='my-0' />
-									<div className='flex flex-row gap-4'>
+									<div className='flex md:flex-row flex-col gap-4'>
 										<div className='flex w-full gap-4'>
 											<TableRates onChange={onChange} form={form} />
 										</div>
@@ -246,11 +254,11 @@ export default function ModalPackage() {
 								</ScrollShadow>
 							</ModalBody>
 							<ModalFooter>
-								<Button color='danger' variant='light' onPress={onClose}>
+								<Button color='default' variant='light' onPress={onClose} className='font-semibold'>
 									Close
 								</Button>
 								<Button color='secondary' onPress={handleActionClick}>
-									Action
+									Add
 								</Button>
 							</ModalFooter>
 						</>

@@ -12,9 +12,8 @@ const addPackageDefault: IAddPackage = {
 	notice: '',
 	inclusions: [''],
 	exclusions: [''],
-	expectations: [''],
 	photos: [''],
-	ratesAndInclusions: [
+	rates: [
 		{
 			numberOfPax: '',
 			ratePerPax: '',
@@ -31,6 +30,7 @@ const addPackageDefault: IAddPackage = {
 			],
 		},
 	],
+	id: undefined,
 };
 
 export default addPackageDefault;

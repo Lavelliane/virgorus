@@ -1,5 +1,15 @@
 import React, { useEffect } from 'react';
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Input } from '@nextui-org/react';
+import {
+	Table,
+	TableHeader,
+	TableColumn,
+	TableBody,
+	TableRow,
+	TableCell,
+	Button,
+	Input,
+	Spacer,
+} from '@nextui-org/react';
 import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { PiNotePencilLight } from 'react-icons/pi';
 import IAddPackage from '@/types/types';
@@ -16,12 +26,12 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 	const [originalInclusionsStates, setOriginalInclusionsStates] = React.useState<string[]>([]);
 
 	useEffect(() => {
-		if (form.inclusions) {
+		if (form?.inclusions) {
 			setInclusions(form.inclusions.filter((inclusion: string) => inclusion));
 			setIsEditingStates(Array(form.inclusions.length).fill(false));
 			setOriginalInclusionsStates(form.inclusions.filter((inclusion: string) => inclusion));
 		}
-	}, [form.inclusions]);
+	}, [form?.inclusions]);
 
 	const addInclusions = () => {
 		if (newInclusions && !inclusions.includes(newInclusions)) {
@@ -149,7 +159,7 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 					))}
 				</TableBody>
 			</Table>
-			<div className='flex gap-4'>
+			<div className='flex items-center'>
 				<Input
 					type='text'
 					size='sm'
@@ -159,15 +169,18 @@ export default function TableInclusions({ onChange, form }: TableInclusionsProps
 					disabled={isEditingStates.some((isEditing) => isEditing)}
 					className='sm:text-sm text-xs mx-0'
 				/>
+				<Spacer x={4} />
 				<Button
 					onClick={addInclusions}
 					size='sm'
 					isIconOnly
-					className='text-chocolate hover-text-opacity-60 text-xl bg-transparent transition-all'
+					className='text-chocolate hover-text-opacity-60 text-2xl bg-transparent transition-all'
 					disabled={isEditingStates.some((isEditing) => isEditing)}
+					type='submit'
 				>
 					<IoAddCircleOutline />
 				</Button>
+				<Spacer x={4} />
 			</div>
 		</div>
 	);

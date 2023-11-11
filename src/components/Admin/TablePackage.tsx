@@ -13,17 +13,26 @@ import {
 	Dropdown,
 	DropdownMenu,
 	DropdownItem,
-	Chip,
 	Pagination,
 	Selection,
-	ChipProps,
 	SortDescriptor,
+	Divider,
+	Modal,
+	ModalContent,
+	ModalHeader,
+	ModalBody,
+	useDisclosure,
+	ModalFooter,
 } from '@nextui-org/react';
-import { FaSearch, FaChevronDown } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { HiDotsVertical } from 'react-icons/hi';
 import ModalPackage from './ModalPackage';
 import { useQuery } from '@tanstack/react-query';
+import Link from 'next/link';
 import { fetchPackages } from '@/queries/fetchPackages';
+import axios from 'axios';
+import { MdDelete, MdEdit } from 'react-icons/md';
+import { IoMdEye } from 'react-icons/io';
 
 const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
 
@@ -43,7 +52,19 @@ const columns = [
 	{ name: 'ACTIONS', uid: 'actions' },
 ];
 
+async function deletePackage(id: any) {
+	try {
+		const response = await axios.delete(`/api/package/${id}`);
+		console.log(response.data);
+	} catch (error) {
+		console.error('An error occurred while deleting package:', error);
+		throw error;
+	}
+}
+
 export default function TablePackage() {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const [packageId, setPackageId] = useState('');
 	const [filterValue, setFilterValue] = React.useState('');
 	const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
 	const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
@@ -59,7 +80,7 @@ export default function TablePackage() {
 	});
 
 	useEffect(() => {
-		if (!packagesLoading) {
+		if (!packagesLoading && packagesData) {
 			setPackages(
 				packagesData.map((pd: any) => ({
 					id: pd.id,
@@ -72,13 +93,24 @@ export default function TablePackage() {
 		}
 	}, [packagesLoading, packagesData]);
 
+	const handleDeleteModal = React.useCallback(
+		(id: any) => {
+			setPackageId(id);
+			onOpen();
+		},
+		[setPackageId, onOpen]
+	);
+
+	const handleDelete = React.useCallback(() => {
+		deletePackage(packageId);
+		window.location.reload();
+	}, [packageId]);
+
 	const [page, setPage] = React.useState(1);
 
 	const hasSearchFilter = Boolean(filterValue);
 
 	const headerColumns = React.useMemo(() => {
-		if (visibleColumns === 'all') return columns;
-
 		return columns.filter((column) => Array.from(visibleColumns).includes(column.uid));
 	}, [visibleColumns]);
 
@@ -113,61 +145,166 @@ export default function TablePackage() {
 		});
 	}, [sortDescriptor, items]);
 
-	const renderCell = React.useCallback((Package: Package, columnKey: React.Key) => {
-		const cellValue = Package[columnKey as keyof Package];
+	const renderCell = React.useCallback(
+		(Package: Package, columnKey: React.Key) => {
+			const cellValue = Package[columnKey as keyof Package];
 
-		switch (columnKey) {
-			case 'package':
-				return (
-					<div className='flex flex-col'>
-						<p className='font-bold capitalize'>{Package.name}</p>
-						<p
-							className='text-tiny text-default-400 max-w-[400px] overflow-hidden'
-							style={{
-								display: '-webkit-box',
-								WebkitLineClamp: 2, // Number of lines before truncating
-								WebkitBoxOrient: 'vertical',
-								lineHeight: '1rem', // Adjust to control line height
-								maxHeight: '2rem', // Maximum height before truncating
-							}}
-						>
-							{Package.description}
-						</p>
-					</div>
-				);
-			case 'type':
-				return (
-					<div className='flex flex-col'>
-						<p className='text-small capitalize'>{cellValue}</p>
-					</div>
-				);
-			case 'location':
-				return (
-					<div className='flex flex-col'>
-						<p className='text-small capitalize'>{cellValue}</p>
-					</div>
-				);
-			case 'actions':
-				return (
-					<div className='relative flex justify-end items-center gap-2'>
-						<Dropdown>
-							<DropdownTrigger>
-								<Button isIconOnly size='sm' variant='light'>
-									<HiDotsVertical />
-								</Button>
-							</DropdownTrigger>
-							<DropdownMenu>
-								<DropdownItem>View</DropdownItem>
-								<DropdownItem>Edit</DropdownItem>
-								<DropdownItem>Delete</DropdownItem>
-							</DropdownMenu>
-						</Dropdown>
-					</div>
-				);
-			default:
-				return cellValue;
-		}
-	}, []);
+			switch (columnKey) {
+				case 'package':
+					return (
+						<div className='flex justify-between w-full rounded-lg'>
+							<div className='flex flex-col w-full'>
+								<p className='font-bold capitalize flex items-center text-chocolate'>
+									{Package.name}
+									<span className='text-default-400 rounded px-2 py-1 font-normal flex md:hidden w-fit'>
+										- {Package.type}
+									</span>
+								</p>
+								<div className='md:max-w-[400px] w-full gap-2 flex md:hidden'>
+									<span>{Package.location}</span>
+								</div>
+								<Divider className='my-1 flex md:hidden w-full' />
+								<p
+									className='text-tiny text-default-400 md:max-w-[400px] w-full overflow-hidden'
+									style={{
+										display: '-webkit-box',
+										WebkitLineClamp: 2, // Number of lines before truncating
+										WebkitBoxOrient: 'vertical',
+										lineHeight: '1rem', // Adjust to control line height
+										maxHeight: '2rem', // Maximum height before truncating
+									}}
+								>
+									{Package.description}
+								</p>
+							</div>
+							<div className='flex md:hidden'>
+								<Dropdown aria-label='actions'>
+									<DropdownTrigger aria-label='action-trigger'>
+										<button
+											aria-label='action-button'
+											className='ml-4 text-2xl outline-none box-shadow-none tap-highlight-transparent'
+										>
+											<HiDotsVertical />
+										</button>
+									</DropdownTrigger>
+									<DropdownMenu aria-label='action-menu'>
+										<DropdownItem
+											key='view'
+											description='View package as guest'
+											startContent={
+												<span className='text-xl'>
+													<IoMdEye />
+												</span>
+											}
+											aria-label='action-view'
+										>
+											<Link href={`/tours/${Package.id}`}>View</Link>
+										</DropdownItem>
+										<DropdownItem
+											key='edit'
+											showDivider
+											description='edit the package'
+											startContent={
+												<span className='text-xl'>
+													<MdEdit />
+												</span>
+											}
+											aria-label='action-edit'
+										>
+											<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
+										</DropdownItem>
+										<DropdownItem
+											key='delete'
+											className='text-danger'
+											color='danger'
+											description='Permanently delete package'
+											startContent={
+												<span className='text-xl'>
+													<MdDelete />
+												</span>
+											}
+											aria-label='action-delete'
+											onClick={() => handleDeleteModal(Package.id)}
+										>
+											Delete
+										</DropdownItem>
+									</DropdownMenu>
+								</Dropdown>
+							</div>
+						</div>
+					);
+				case 'type':
+					return (
+						<div className='md:flex flex-col hidden'>
+							<p className='text-small capitalize'>{cellValue}</p>
+						</div>
+					);
+				case 'location':
+					return (
+						<div className='md:flex flex-col hidden'>
+							<p className='text-small capitalize'>{cellValue}</p>
+						</div>
+					);
+				case 'actions':
+					return (
+						<div className='md:flex hidden relative justify-end items-center gap-2'>
+							<Dropdown aria-label='actions'>
+								<DropdownTrigger aria-label='action-trigger'>
+									<Button isIconOnly size='lg' variant='light' aria-label='action-button'>
+										<HiDotsVertical />
+									</Button>
+								</DropdownTrigger>
+								<DropdownMenu aria-label='action-menu'>
+									<DropdownItem
+										key='view'
+										description='View package as guest'
+										startContent={
+											<span className='text-xl'>
+												<IoMdEye />
+											</span>
+										}
+										aria-label='action-view'
+									>
+										<Link href={`/tours/${Package.id}`}>View</Link>
+									</DropdownItem>
+									<DropdownItem
+										key='edit'
+										showDivider
+										description='edit the package'
+										startContent={
+											<span className='text-xl'>
+												<MdEdit />
+											</span>
+										}
+										aria-label='action-edit'
+									>
+										<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
+									</DropdownItem>
+									<DropdownItem
+										key='delete'
+										className='text-danger'
+										color='danger'
+										description='Permanently delete package'
+										startContent={
+											<span className='text-xl'>
+												<MdDelete />
+											</span>
+										}
+										aria-label='action-delete'
+										onClick={() => handleDeleteModal(Package.id)}
+									>
+										Delete
+									</DropdownItem>
+								</DropdownMenu>
+							</Dropdown>
+						</div>
+					);
+				default:
+					return cellValue;
+			}
+		},
+		[handleDeleteModal]
+	);
 
 	const onNextPage = React.useCallback(() => {
 		if (page < pages) {
@@ -203,10 +340,30 @@ export default function TablePackage() {
 	const topContent = React.useMemo(() => {
 		return (
 			<div className='flex flex-col gap-4'>
-				<div className='flex justify-between gap-3 items-end'>
+				<Modal isOpen={isOpen} placement='center' onOpenChange={onOpenChange}>
+					<ModalContent>
+						{(onClose) => (
+							<>
+								<ModalHeader className='flex flex-col gap-1'>Delete</ModalHeader>
+								<ModalBody>Are you sure?</ModalBody>
+								<ModalFooter>
+									<Button color='danger' variant='light' onPress={onClose}>
+										No
+									</Button>
+									<Button color='danger' onPress={handleDelete}>
+										Yes
+									</Button>
+								</ModalFooter>
+							</>
+						)}
+					</ModalContent>
+				</Modal>
+				<div className='flex justify-between gap-3 items-center'>
 					<Input
+						aria-label='searchbox'
+						size='sm'
 						isClearable
-						className=' w-full sm:max-w-[44%]'
+						className=' sm:max-w-[44%]'
 						placeholder='Search by name...'
 						startContent={<FaSearch />}
 						value={filterValue}
@@ -214,15 +371,17 @@ export default function TablePackage() {
 						onClear={() => onClear()}
 						onValueChange={onSearchChange}
 					/>
-					<div className='flex gap-3'>
-						<ModalPackage />
-					</div>
+					<ModalPackage />
 				</div>
 				<div className='flex justify-between items-center'>
 					<span className='text-default-400 text-small'>Total {packages.length} Packages</span>
 					<label className='flex items-center text-default-400 text-small'>
 						Rows per page:
-						<select className='bg-transparent outline-none text-default-400 text-small' onChange={onRowsPerPageChange}>
+						<select
+							className='bg-transparent outline-none text-default-400 text-small'
+							onChange={onRowsPerPageChange}
+							aria-label='pagination'
+						>
 							<option value='5'>5</option>
 							<option value='10'>10</option>
 							<option value='15'>15</option>
@@ -231,7 +390,7 @@ export default function TablePackage() {
 				</div>
 			</div>
 		);
-	}, [filterValue, onSearchChange, packages.length, onRowsPerPageChange, onClear]);
+	}, [isOpen, onOpenChange, filterValue, onSearchChange, packages.length, onRowsPerPageChange, handleDelete, onClear]);
 
 	const bottomContent = React.useMemo(() => {
 		return (
@@ -274,8 +433,9 @@ export default function TablePackage() {
 			isHeaderSticky
 			bottomContent={bottomContent}
 			bottomContentPlacement='outside'
+			className='sm:w-[600px] w-full'
 			classNames={{
-				wrapper: 'max-h-[384px]',
+				wrapper: 'max-h-[384px] p-2',
 			}}
 			selectedKeys={selectedKeys}
 			sortDescriptor={sortDescriptor}
@@ -284,21 +444,30 @@ export default function TablePackage() {
 			onSelectionChange={setSelectedKeys}
 			onSortChange={setSortDescriptor}
 		>
-			<TableHeader columns={headerColumns} aria-sort='none'>
+			<TableHeader columns={headerColumns} aria-sort='none' aria-label='table-header'>
 				{(column) => (
 					<TableColumn
+						aria-label={column.name}
 						aria-sort='none'
 						key={column.uid}
 						align={column.uid === 'actions' ? 'center' : 'start'}
 						allowsSorting={column.sortable}
+						className='md:table-cell hidden'
 					>
 						{column.name}
 					</TableColumn>
 				)}
 			</TableHeader>
-			<TableBody emptyContent={'No package found'} items={sortedItems} aria-sort='none'>
+
+			<TableBody emptyContent={'No package found'} items={sortedItems} aria-sort='none' aria-label='package-table-body'>
 				{(item) => (
-					<TableRow key={item.id}>{(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}</TableRow>
+					<TableRow key={item.id}>
+						{(columnKey) => (
+							<TableCell className={` ${columnKey == 'package' ? '' : 'md:table-cell hidden'}`}>
+								{renderCell(item, columnKey)}
+							</TableCell>
+						)}
+					</TableRow>
 				)}
 			</TableBody>
 		</Table>

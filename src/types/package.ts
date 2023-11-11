@@ -9,14 +9,13 @@ export default interface Package {
 	availability?: string;
 	language?: string;
 	notice?: string;
-	expectations?: string[];
 	photos?: string[];
 	inclusions?: string[];
 	exclusions?: string[];
-	ratesAndInclusions?: RatesAndInclusions[];
+	rates?: Rates[];
 }
 
-interface RatesAndInclusions {
+interface Rates {
 	id?: number;
 	numberOfPax?: string;
 	ratePerPax?: string;
