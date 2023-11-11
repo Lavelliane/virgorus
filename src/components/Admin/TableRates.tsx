@@ -17,9 +17,6 @@ import IAddPackage from '@/types/types';
 interface Pax {
 	numberOfPax: string;
 	ratePerPax: string;
-	isEditing: boolean;
-	originalPax: string;
-	originalRate: string;
 }
 
 interface TableRatesProps {
@@ -28,79 +25,109 @@ interface TableRatesProps {
 }
 
 export default function TableRates({ onChange, form }: TableRatesProps) {
-	const [numberOfPax, setNumberOfPax] = React.useState<Pax[]>([]);
+	const [paxRate, setPaxRate] = React.useState<Pax[]>([]);
 	const [newPax, setNewPax] = React.useState('');
 	const [newRate, setNewRate] = React.useState('');
-	const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
+	const [isEditingStates, setIsEditingStates] = React.useState<boolean[]>([]);
+	const [originalPaxStates, setOriginalPaxStates] = React.useState<string[]>([]);
+	const [originalRateStates, setOriginalRateStates] = React.useState<string[]>([]);
 
 	useEffect(() => {
 		if (form?.rates) {
-			const numberOfPax = form.rates
+			const paxRateData = form.rates
 				.filter((item: { numberOfPax: string; ratePerPax: string }) => item.numberOfPax && item.ratePerPax)
 				.map((item: { numberOfPax: string; ratePerPax: string }) => ({
 					numberOfPax: item.numberOfPax,
 					ratePerPax: item.ratePerPax,
-					isEditing: false,
-					originalPax: item.numberOfPax,
-					originalRate: item.ratePerPax,
 				}));
-			setNumberOfPax(numberOfPax);
+			setPaxRate(paxRateData);
+			setIsEditingStates(Array(form.rates.length).fill(false));
+			setOriginalPaxStates(paxRateData.map((pax) => pax.numberOfPax).filter((item: string) => item));
+			setOriginalRateStates(paxRateData.map((pax) => pax.ratePerPax).filter((item: string) => item));
 		}
 	}, [form?.rates]);
 
 	const addPax = () => {
 		if (newPax && newRate) {
-			const existingEntry = numberOfPax.find((pax) => pax.numberOfPax === newPax);
+			const existingEntry = paxRate.find((pax) => pax.numberOfPax === newPax);
 
 			if (existingEntry) {
-				// Handle the case where the entry already exists (e.g., show an error message)
 				console.log('Entry already exists');
 			} else {
 				const newEntry: Pax = {
 					numberOfPax: newPax,
 					ratePerPax: newRate,
-					isEditing: false,
-					originalPax: newPax,
-					originalRate: newRate,
 				};
-				setNumberOfPax([...numberOfPax, newEntry]);
-				onChange({ target: { name: 'rates', value: [...numberOfPax, newEntry] } });
+				setPaxRate([...paxRate, newEntry]);
+				setIsEditingStates([...isEditingStates, false]);
+				setOriginalPaxStates([...originalPaxStates, newPax]);
+				setOriginalRateStates([...originalRateStates, newRate]);
+				onChange({ target: { name: 'rates', value: [...paxRate, newEntry] } });
 				setNewPax('');
 				setNewRate('');
 			}
 		}
 	};
 
-	const removePax = (index: number) => {
-		const updatedPax = [...numberOfPax];
-		updatedPax.splice(index, 1);
-		setNumberOfPax(updatedPax);
-		onChange({ target: { name: 'rates', value: updatedPax } });
+	const removePaxRate = (index: number) => {
+		const updatedPaxRate = [...paxRate];
+		updatedPaxRate.splice(index, 1);
+		setPaxRate(updatedPaxRate);
+
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates.splice(index, 1);
+		setIsEditingStates(updatedIsEditingStates);
+
+		const updatedOriginalPaxStates = [...originalPaxStates];
+		updatedOriginalPaxStates.splice(index, 1);
+		setOriginalPaxStates(updatedOriginalPaxStates);
+
+		const updatedOriginalRateStates = [...originalRateStates];
+		updatedOriginalRateStates.splice(index, 1);
+		setOriginalRateStates(updatedOriginalRateStates);
+
+		onChange({ target: { name: 'rates', value: updatedPaxRate } });
 	};
 
 	const toggleEdit = (index: number) => {
-		if (!isAnyRowEditing) {
-			const updatedPax = [...numberOfPax];
-			updatedPax[index].isEditing = !updatedPax[index].isEditing;
-			setNumberOfPax(updatedPax);
-			setIsAnyRowEditing(true);
-		}
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates[index] = !updatedIsEditingStates[index];
+		setIsEditingStates(updatedIsEditingStates);
 	};
 
 	const handleEdit = (index: number) => {
-		const updatedPax = [...numberOfPax];
-		const newEditedPax = newPax || updatedPax[index].originalPax;
-		const newEditedRate = newRate || updatedPax[index].originalRate;
-		updatedPax[index].numberOfPax = newEditedPax;
-		updatedPax[index].ratePerPax = newEditedRate;
-		updatedPax[index].isEditing = false;
-		updatedPax[index].originalPax = newEditedPax;
-		updatedPax[index].originalRate = newEditedRate;
-		setNumberOfPax(updatedPax);
-		setNewPax('');
-		setNewRate('');
-		onChange({ target: { name: 'rates', value: updatedPax } });
-		setIsAnyRowEditing(false);
+		const updatedPaxRate = [...paxRate];
+		const newEditedPax = newPax || updatedPaxRate[index].numberOfPax;
+		const newEditedRate = newRate || updatedPaxRate[index].ratePerPax;
+
+		if (updatedPaxRate[index].numberOfPax !== newEditedPax || updatedPaxRate[index].ratePerPax !== newEditedRate) {
+			updatedPaxRate[index].numberOfPax = newEditedPax;
+			updatedPaxRate[index].ratePerPax = newEditedRate;
+			setPaxRate(updatedPaxRate);
+
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setIsEditingStates(updatedIsEditingStates);
+
+			const updatedOriginalPaxStates = [...originalPaxStates];
+			updatedOriginalPaxStates[index] = newEditedPax;
+			setOriginalPaxStates(updatedOriginalPaxStates);
+
+			const updatedOriginalRateStates = [...originalRateStates];
+			updatedOriginalRateStates[index] = newEditedRate;
+			setOriginalRateStates(updatedOriginalRateStates);
+
+			setNewPax('');
+			setNewRate('');
+			onChange({ target: { name: 'rates', value: updatedPaxRate } });
+		} else {
+			// Content is the same as the original, exit the edit mode
+			const updatedIsEditingStates = [...isEditingStates];
+			updatedIsEditingStates[index] = false;
+			setIsEditingStates(updatedIsEditingStates);
+			setNewPax('');
+			setNewRate('');
+		}
 	};
 
 	return (
@@ -118,38 +145,38 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					</TableColumn>
 				</TableHeader>
 				<TableBody>
-					{numberOfPax?.map((numberOfPax, index) => (
-						<TableRow key={`${numberOfPax.numberOfPax}-${numberOfPax.ratePerPax}`}>
+					{paxRate?.map((paxRateData, index) => (
+						<TableRow key={`${index}-${paxRateData.numberOfPax}-${paxRateData.ratePerPax}`}>
 							<TableCell className='font-medium'>
-								{numberOfPax.isEditing ? (
+								{isEditingStates[index] ? (
 									<Input
 										type='text'
 										size='sm'
 										value={newPax}
 										onChange={(e) => setNewPax(e.target.value)}
-										placeholder={numberOfPax.originalPax}
+										placeholder={originalPaxStates[index]}
 										className=' sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									' ' + numberOfPax.numberOfPax
+									' ' + paxRateData.numberOfPax
 								)}
 							</TableCell>
 							<TableCell>
-								{numberOfPax.isEditing ? (
+								{isEditingStates[index] ? (
 									<Input
 										type='text'
 										size='sm'
 										value={newRate}
 										onChange={(e) => setNewRate(e.target.value)}
-										placeholder={numberOfPax.originalRate}
+										placeholder={originalRateStates[index]}
 										className=' sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									`₱ ${Number(numberOfPax.ratePerPax).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
+									`₱ ${Number(paxRateData.ratePerPax).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
 								)}
 							</TableCell>
 							<TableCell className='justify-center flex items-center'>
-								{numberOfPax.isEditing ? (
+								{isEditingStates[index] ? (
 									<div className='flex justify-center items-center'>
 										<Button
 											onClick={() => handleEdit(index)}
@@ -160,7 +187,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 											<IoCheckmarkCircleOutline />
 										</Button>
 										<Button
-											onClick={() => removePax(index)}
+											onClick={() => removePaxRate(index)}
 											isIconOnly
 											size='sm'
 											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
@@ -171,7 +198,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 								) : (
 									<div className='flex justify-center items-center'>
 										<Button
-											disabled={numberOfPax.isEditing}
+											disabled={isEditingStates.some((isEditing) => isEditing)}
 											onClick={() => toggleEdit(index)}
 											isIconOnly
 											size='sm'
@@ -190,20 +217,20 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 				<Input
 					type='text'
 					size='sm'
-					value={numberOfPax.some((numberOfPax) => numberOfPax.isEditing) ? '' : newPax}
+					value={isEditingStates.some((isEditing) => isEditing) ? '' : newPax}
 					onChange={(e) => setNewPax(e.target.value)}
 					placeholder='No. of Pax'
-					disabled={numberOfPax.some((numberOfPax) => numberOfPax.isEditing)}
+					disabled={isEditingStates.some((isEditing) => isEditing)}
 					className=' sm:text-sm text-xs mx-0'
 				/>
 				<Spacer x={2} />
 				<Input
 					type='text'
 					size='sm'
-					value={numberOfPax.some((numberOfPax) => numberOfPax.isEditing) ? '' : newRate}
+					value={isEditingStates.some((isEditing) => isEditing) ? '' : newRate}
 					onChange={(e) => setNewRate(e.target.value)}
 					placeholder='Rate/Pax'
-					disabled={numberOfPax.some((numberOfPax) => numberOfPax.isEditing)}
+					disabled={isEditingStates.some((isEditing) => isEditing)}
 					className=' sm:text-sm text-xs mx-0'
 				/>
 				<Spacer x={4} />
@@ -212,7 +239,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					size='sm'
 					isIconOnly
 					className='text-chocolate hover:text-opacity-60 text-2xl bg-transparent transition-all'
-					disabled={numberOfPax.some((numberOfPax) => numberOfPax.isEditing)}
+					disabled={isEditingStates.some((isEditing) => isEditing)}
 					type='submit'
 				>
 					<IoAddCircleOutline />

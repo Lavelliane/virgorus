@@ -71,6 +71,8 @@ export default function EditPackage({ id }: Props) {
 			};
 
 			setForm(data);
+			setAvailability(new Set(packageData.availability.split(',')));
+			setLanguage(new Set(packageData.language.split(',')));
 		}
 	}, [packageLoading, packageData]);
 
@@ -101,7 +103,7 @@ export default function EditPackage({ id }: Props) {
 			.map((item) => item.name);
 
 		setLanguage(new Set(sortedSelectedLanguages));
-		const language = sortedSelectedLanguages.join(', ');
+		const language = sortedSelectedLanguages.toString();
 		setForm({ ...form, ['language']: language });
 	};
 

@@ -40,8 +40,8 @@ model Itinerary {
   id              Int      @id @default(autoincrement())
   time            String?
   activity        String?
-  daySchedule     DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
   dayScheduleId   Int
+  daySchedule     DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
 }
 
 model DaySchedule {

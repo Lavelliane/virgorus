@@ -66,7 +66,7 @@ export default function ModalPackage() {
 			.map((item) => item.value);
 
 		setAvailability(new Set(sortedSelectedAvailability));
-		const availability = sortedSelectedAvailability.join(', ');
+		const availability = sortedSelectedAvailability.join(',');
 		setForm({ ...form, ['availability']: availability });
 	};
 
@@ -77,7 +77,7 @@ export default function ModalPackage() {
 			.map((item) => item.name);
 
 		setLanguage(new Set(sortedSelectedLanguages));
-		const language = sortedSelectedLanguages.join(', ');
+		const language = sortedSelectedLanguages.join(',');
 		setForm({ ...form, ['language']: language });
 	};
 

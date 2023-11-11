@@ -50,48 +50,46 @@ export async function PATCH(req: NextRequest, context: any) {
 	const { id } = context.params;
 	const newData = await req.json();
 	try {
-		const updatedPackage = await prisma.package.update({
-			where: { id: +id },
-			data: {
-				name: newData.name,
-				description: newData.description,
-				type: newData.type,
-				location: newData.location,
-				duration: newData.duration,
-				cancellation: newData.cancellation,
-				availability: newData.availability,
-				language: newData.language,
-				inclusions: { set: newData.inclusions },
-				exclusions: { set: newData.exclusions },
-				notice: newData.notice,
-				rates: {
-					create: newData.rates.map((rate: Rates) => ({
-						numberOfPax: rate.numberOfPax,
-						ratePerPax: rate.ratePerPax,
-					})),
-				},
-				itinerary: {
-					create: newData.itinerary.map((daySchedule: DaySchedule) => ({
-						day: daySchedule.day,
-						itineraries: {
-							create: daySchedule.itineraries.map((itinerary: Itinerary) => ({
-								time: itinerary.time,
-								activity: itinerary.activity,
-							})),
-						},
-					})),
-				},
-				photos: { set: newData.photos },
-			},
-			include: {
-				rates: true,
-				itinerary: {
-					include: {
-						itineraries: true,
+		const updatedPackage = await prisma.$transaction(async (prisma) => {
+			// Update package data
+			const updatedPackage = await prisma.package.update({
+				where: { id: +id },
+				data: {
+					...newData,
+					rates: {
+						deleteMany: { packageId: parseInt(id) },
+						create: newData.rates.map((rate: Rates) => ({
+							numberOfPax: rate.numberOfPax,
+							ratePerPax: rate.ratePerPax,
+						})),
+					},
+					itinerary: {
+						deleteMany: { packageId: parseInt(id) },
+						create: newData.itinerary.map((item: DaySchedule) => ({
+							day: item.day,
+							itineraries: {
+								create: item.itineraries.map((subItem: Itinerary) => ({
+									time: subItem.time,
+									activity: subItem.activity,
+								})),
+							},
+						})),
 					},
 				},
-			},
+
+				include: {
+					rates: true,
+					itinerary: {
+						include: {
+							itineraries: true,
+						},
+					},
+				},
+			});
+
+			return updatedPackage;
 		});
+
 		return NextResponse.json(updatedPackage, { status: 200 });
 	} catch (error) {
 		return NextResponse.json(error, { status: 500 });
