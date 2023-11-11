@@ -17,7 +17,7 @@ import {
 import { MdLibraryAdd } from 'react-icons/md';
 import IAddPackage from '../../types/types';
 import addPackageDefault from '@/utils/defaults';
-import { availabilityData, languagesData } from '@/utils/data';
+import { availabilityData, languagesData, locationData } from '@/utils/data';
 import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
@@ -44,6 +44,7 @@ export default function EditPackage({ id }: Props) {
 	const [form, setForm] = React.useState<IAddPackage>(addPackageDefault);
 	const [availability, setAvailability] = React.useState<Selection>(new Set([]));
 	const [language, setLanguage] = React.useState<Selection>(new Set([]));
+	const [location, setLocation] = React.useState<string>('');
 
 	const { data: packageData, isLoading: packageLoading } = useQuery({
 		queryKey: ['packages', id.id],
@@ -73,6 +74,7 @@ export default function EditPackage({ id }: Props) {
 			setForm(data);
 			setAvailability(new Set(packageData.availability.split(',')));
 			setLanguage(new Set(packageData.language.split(',')));
+			setLocation(packageData.location);
 		}
 	}, [packageLoading, packageData]);
 
@@ -107,6 +109,11 @@ export default function EditPackage({ id }: Props) {
 		setForm({ ...form, ['language']: language });
 	};
 
+	const locationSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setLocation(e.target.value);
+		setForm({ ...form, ['location']: e.target.value });
+	};
+
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
@@ -116,7 +123,7 @@ export default function EditPackage({ id }: Props) {
 			<CardHeader className='flex flex-col gap-1'>Edit Package</CardHeader>
 			<CardBody className='w-full'>
 				<div className='flex flex-col gap-4'>
-					<div className='flex md:flex-row flex-col gap-4'>
+					<div className='flex flex-col gap-4'>
 						<Input
 							value={form?.name || ''}
 							name='name'
@@ -138,19 +145,24 @@ export default function EditPackage({ id }: Props) {
 								labelPlacement='outside'
 								label='Type'
 								placeholder='Enter type'
+								className='w-1/2'
 								isRequired
 							/>
-							<Input
-								name='location'
-								value={form?.location || ''}
-								onChange={onChange}
-								type='text'
-								size='sm'
-								labelPlacement='outside'
+							<Select
 								label='Location'
-								placeholder='Enter location'
-								isRequired
-							/>
+								labelPlacement='outside'
+								placeholder='Select Location'
+								selectedKeys={[location]}
+								size='sm'
+								className='w-1/2'
+								onChange={locationSelectionChange}
+							>
+								{locationData?.map((location) => (
+									<SelectItem key={location.value} value={location.value}>
+										{location.value}
+									</SelectItem>
+								))}
+							</Select>
 						</div>
 					</div>
 					<div className='flex flex-col gap-4'>
