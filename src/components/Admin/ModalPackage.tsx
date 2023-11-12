@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { ReactEventHandler, useEffect } from 'react';
 import {
 	Modal,
 	ModalContent,
@@ -16,6 +16,8 @@ import {
 	Selection,
 	Divider,
 	ScrollShadow,
+	Card,
+	CardHeader,
 } from '@nextui-org/react';
 import { MdLibraryAdd } from 'react-icons/md';
 import IAddPackage from '../../types/types';
@@ -25,6 +27,7 @@ import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
 import TableItinerary from './TableItinerary';
+import ButtonUpload from './ButtonUpload';
 
 async function createPackage(data: IAddPackage) {
 	try {
@@ -52,9 +55,10 @@ export default function ModalPackage() {
 	const [form, setForm] = React.useState<IAddPackage>(addPackageDefault);
 	const [availability, setAvailability] = React.useState<Selection>(new Set([]));
 	const [language, setLanguage] = React.useState<Selection>(new Set([]));
-	const [location, setLocation] = React.useState<string>('');
+	const [location, setLocation] = React.useState<Selection>(new Set([]));
 
-	const handleActionClick = () => {
+	const handleActionClick = (e: any) => {
+		e.preventDefault();
 		createPackage(form);
 		onClose(); // Close the modal or perform any other desired action.
 		window.location.reload();
@@ -62,28 +66,38 @@ export default function ModalPackage() {
 
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedValues = e.target.value.split(',');
-		const sortedSelectedAvailability = availabilityData
-			.filter((item) => selectedValues.includes(item.value))
-			.map((item) => item.value);
+		if (selectedValues.includes('')) {
+			setAvailability(new Set());
+			setForm({ ...form, ['availability']: '' });
+		} else {
+			const sortedSelectedAvailability = availabilityData
+				.filter((item) => selectedValues.includes(item.value))
+				.map((item) => item.value);
 
-		setAvailability(new Set(sortedSelectedAvailability));
-		const availability = sortedSelectedAvailability.join(',');
-		setForm({ ...form, ['availability']: availability });
+			setAvailability(new Set(sortedSelectedAvailability));
+			const availability = sortedSelectedAvailability.join(',');
+			setForm({ ...form, ['availability']: availability });
+		}
 	};
 
 	const languageSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedValues = e.target.value.split(',');
-		const sortedSelectedLanguages = languagesData
-			.filter((item) => selectedValues.includes(item.name))
-			.map((item) => item.name);
-
-		setLanguage(new Set(sortedSelectedLanguages));
-		const language = sortedSelectedLanguages.join(',');
+		if (selectedValues.includes('')) {
+			setLanguage(new Set());
+		} else {
+			setLanguage(new Set(selectedValues));
+		}
+		const language = selectedValues.join(',');
 		setForm({ ...form, ['language']: language });
 	};
 
 	const locationSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setLocation(e.target.value);
+		const locationSelected = e.target.value;
+		if (locationSelected === '') {
+			setLocation(new Set());
+		} else {
+			setLocation(new Set([locationSelected]));
+		}
 		setForm({ ...form, ['location']: e.target.value });
 	};
 
@@ -142,7 +156,7 @@ export default function ModalPackage() {
 												label='Location'
 												labelPlacement='outside'
 												placeholder='Select Location'
-												selectedKeys={[location]}
+												selectedKeys={location}
 												size='sm'
 												className='w-1/2'
 												onChange={locationSelectionChange}
@@ -261,7 +275,10 @@ export default function ModalPackage() {
 									</div>
 									<Divider className='my-0' />
 									<TableItinerary onChange={onChange} form={form} />
+									<Divider className='my-0' />
+									<ButtonUpload onChange={onChange} form={form} />
 								</ScrollShadow>
+								<Divider className='my-0' />
 							</ModalBody>
 							<ModalFooter>
 								<Button color='default' variant='light' onPress={onClose} className='font-semibold'>

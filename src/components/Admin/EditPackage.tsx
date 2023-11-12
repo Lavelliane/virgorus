@@ -14,7 +14,6 @@ import {
 	Selection,
 	Divider,
 } from '@nextui-org/react';
-import { MdLibraryAdd } from 'react-icons/md';
 import IAddPackage from '../../types/types';
 import addPackageDefault from '@/utils/defaults';
 import { availabilityData, languagesData, locationData } from '@/utils/data';

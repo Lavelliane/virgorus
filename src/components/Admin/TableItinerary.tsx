@@ -93,12 +93,9 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 		}
 	};
 
-	console.log(day);
 	const addItinerary = (dayIndex: number) => {
 		if (newTime && newActivity) {
 			const existingEntry = day[dayIndex].itineraries.find((itinerary) => itinerary.time === newTime);
-			console.log(dayIndex);
-			console.log(existingEntry);
 			if (existingEntry) {
 				console.log('Entry already exists for this time on the specified day');
 			} else {
