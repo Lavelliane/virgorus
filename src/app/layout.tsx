@@ -20,14 +20,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
     <html lang="en">
-      <body className={`${efco.variable} ${inter.className}`}><Providers>
+      <body className={`${efco.variable} ${inter.className}`}>
+        <Providers>
           {children}
-        </Providers></body>
+        </Providers>
+        </body>
     </html>
   )
 }
