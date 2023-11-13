@@ -21,6 +21,7 @@ import TableRates from './TableRates';
 import TableInclusions from './TableInclusion';
 import TableExclusions from './TableExclusion';
 import TableItinerary from './TableItinerary';
+import ButtonUpload from './ButtonUpload';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
 import axios from 'axios';
@@ -264,8 +265,11 @@ export default function EditPackage({ id }: Props) {
 							<TableExclusions onChange={onChange} form={form} />
 						</div>
 					</div>
+
 					<Divider className='my-0' />
 					<TableItinerary onChange={onChange} form={form} />
+					<Divider className='my-0' />
+					<ButtonUpload onChange={onChange} form={form} />
 				</div>
 			</CardBody>
 			<CardFooter>
