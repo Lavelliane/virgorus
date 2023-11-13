@@ -305,7 +305,7 @@ export default function TablePackage() {
 					return cellValue;
 			}
 		},
-		[handleDeleteModal, packageId]
+		[handleDeleteModal]
 	);
 
 	const onNextPage = React.useCallback(() => {
