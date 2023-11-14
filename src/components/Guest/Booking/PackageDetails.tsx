@@ -14,6 +14,7 @@ import {
 	CardHeader,
 	Skeleton
 } from '@nextui-org/react';
+import Image from 'next/image';
 import { Gallery } from './Gallery';
 import { RatesTable } from './RatesTable';
 import { BookingForm } from './BookingForm';
@@ -45,6 +46,31 @@ export default function PackageDetails({ id }: { id: number }) {
 			setPackage(packageData);
 		}
 	}, [packageLoading, packageData]);
+	
+	if (!packageLoading && (packageData == undefined)) {
+		return (
+			<div className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-transparent py-6 sm:py-12">
+				<div className="relative bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
+					<div className="mx-auto max-w-md">
+						<div className="divide-y divide-gray-300/50">
+							<div className="space-y-6 text-base leading-7 text-gray-600">
+								<div className='rounded-lg'>
+									<Image src='https://i.ibb.co/2kHkNcZ/pckg-not-found.jpg' alt='package-not-found' width={500} height={500} className='rounded-lg'/>
+								</div>
+								<p className='pb-8'>Are you lost, traveller? Your destination is either unavailable or not a valid location.</p>
+							</div>
+							<div className="pt-8 text-base font-semibold leading-7">
+							<p className="text-gray-900">Looking for a new experience?</p>
+							<p>
+								<a href={`/tours/`} className="text-warning">View our tours &rarr;</a>
+							</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		)
+	}
 
 	/* ====================         VARIABLE DECLARATIONS         ====================*/
 
@@ -60,24 +86,29 @@ export default function PackageDetails({ id }: { id: number }) {
 	return (
 		<div className='flex flex-col w-full mx-2 sm:mx-10'>
 			<div aria-label='Package Header' className='flex flex-col w-full'>
-				<Spacer y={10} />
-				<Skeleton isLoaded={isLoaded} className={`rounded-lg ${isLoaded === false ? 'w-1/2' : ''}`}>
-					{isLoaded ? (
+				{isLoaded ? (
+					<div>
+						<Spacer y={10} />
 						<p className='font-bold text-black text-2xl'>{Package?.name}</p>
-					) : (
-						<div className='text-2xl'>.</div>
-					)}
-				</Skeleton>
-				<Spacer y={6} />
-				<div>
-					<Skeleton isLoaded={isLoaded} className='rounded-lg'>
-						{isLoaded ? (
-							<p className='font-bold text-black text-2xl'><Gallery /></p>
-						) : (
-							<div className='h-96'>.</div>
-						)}
-					</Skeleton>
-				</div>
+						<Spacer y={6} />
+						<div>
+							<Gallery />
+						</div>
+					</div>
+				) : (
+					<div>
+						<Spacer y={10} />
+						<Skeleton isLoaded={isLoaded} className={`rounded-lg ${isLoaded === false ? 'w-1/2' : ''}`}>
+							<div className='text-2xl'>.</div>
+						</Skeleton>
+						<Spacer y={6} />
+						<div>
+							<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<div className='h-96'>.</div>
+							</Skeleton>
+						</div>
+					</div>
+				)}
 			</div>
 			<Spacer y={10} />
 			<div aria-label='Package Body' className='flex lg:flex-row flex-col my-0 '>
@@ -311,7 +342,7 @@ export default function PackageDetails({ id }: { id: number }) {
 								<h1 className='text-lg'>.</h1>
 								</Skeleton>
 							</div>
-							<div className='flex flex-col gap-2 py-4'>
+							<div className='flex flex-col gap-2 pb-2'>
 								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'></p>
 								</Skeleton>
@@ -329,7 +360,7 @@ export default function PackageDetails({ id }: { id: number }) {
 								</Skeleton>
 							</div>
 							<Divider />
-							<div className='flex flex-col gap-2 py-4 w-48'>
+							<div className='flex flex-col w-48 gap-2 pb-2'>
 								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'></p>
 								</Skeleton>
@@ -347,9 +378,12 @@ export default function PackageDetails({ id }: { id: number }) {
 								</Skeleton>
 							</div>
 							<Divider />
-							<Skeleton isLoaded={isLoaded} className='rounded-lg h-52'>
-								<p className='text-md'>.</p>
-							</Skeleton>
+							<div className=''>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg h-64'>
+									<p className='text-md'>.</p>
+								</Skeleton>
+							</div>
+							<Divider />
 						</div>					
 					</div>
 				)}
