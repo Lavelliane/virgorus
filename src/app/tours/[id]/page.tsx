@@ -2,45 +2,17 @@ import NavbarGuest from '../../../components/Guest/NavbarGuest';
 import { ContactBar } from '../../../components/Guest/ContactBar';
 import SitemapFooter from '../../../components/Guest/Footer';
 import PackageDetails from '../../../components/Guest/Booking/PackageDetails';
-import { PrismaClient } from '@prisma/client';
-import Package from '../../../types/package';
-import { Spacer } from '@nextui-org/react';
+//import Package from '../../../types/package';
 
-const prisma = new PrismaClient();
+type Package = {
+	id: number;
+	name: string;
+	description: string;
+	type: string;
+	location: string;
+};
 
-let packageCache: { [key: number]: Package | null } = {};
-
-async function getPackage(id: number): Promise<Package | null> {
-	if (packageCache[id]) {
-		console.log('ALREADY EXISTS');
-		return packageCache[id];
-	} else {
-		console.log('PRISMA QUERY');
-		const packageData = await prisma.package.findUnique({
-			where: {
-				id: id,
-			},
-			include: {
-				rates: true,
-			},
-		});
-
-		prisma.$disconnect();
-		console.log('QUERY DISCONNECTED');
-
-		packageCache[id] = packageData;
-		console.log('ADDED TO CACHE');
-
-		return packageData;
-	}
-}
-
-async function Page({ params }: { params: { id: number } }) {
-	const id = params.id;
-	const packageData = await getPackage(Number(id));
-	if (!packageData) {
-		return <div>Package not found</div>;
-	}
+export function Page({ params }: { params: { id: number } }) {
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between bg-white'>
 			<section className='flex flex-col w-full h-fit items-center'>
@@ -49,7 +21,7 @@ async function Page({ params }: { params: { id: number } }) {
 					<ContactBar />
 				</div>
 				<div className='flex w-full max-w-7xl pt-24'>
-					<PackageDetails packageData={packageData} />
+					<PackageDetails id={params.id} />
 				</div>
 				<SitemapFooter />
 			</section>
