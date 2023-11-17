@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPackages } from "@/queries/fetchPackages";
 import { CatalogPackage } from "@/types/package";
 import NavbarGuest from "@/components/Guest/NavbarGuest";
-import { ContactBar } from "@/components/Guest/ContactBar";
 import SitemapFooter from "@/components/Footer";
 import { CatalogCardSuspense } from "@/components/Guest/CatalogCardSuspense";
 
@@ -33,21 +32,23 @@ export default function Home() {
 
   return (
     <>
-      <main className="flex flex-col items-center justify-between bg-white h-screen">
+      <main className="flex flex-col items-center justify-between bg-white min-h-screen">
+        <div className="flex flex-col w-full fixed z-30">
+          <NavbarGuest />
+        </div>
         <section className="flex flex-col w-full h-full items-center">
-          <div className="flex flex-col w-full fixed z-30">
-            <NavbarGuest />
-            <ContactBar />
-          </div>
-          <div className="flex h-full w-full max-w-7xl pt-24 gap-3 my-10">
-            {!packagesLoading ? (
+          {!packagesLoading ? (
+            <div className="flex flex-wrap h-fit max-w-7xl pt-24 gap-3 my-10">
               <Catalog packages={packages} />
-            ) : (
+            </div>
+          ) : (
+            <div className="flex flex-wrap h-fit w-full max-w-7xl pt-24 gap-3 my-10">
               <CatalogCardSuspense />
-            )}
-          </div>
-          <SitemapFooter />
+              <CatalogCardSuspense />
+            </div>
+          )}
         </section>
+        <SitemapFooter />
       </main>
     </>
   );
