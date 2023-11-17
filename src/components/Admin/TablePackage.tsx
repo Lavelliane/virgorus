@@ -34,7 +34,7 @@ import axios from 'axios';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { IoMdEye } from 'react-icons/io';
 
-const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
+const INITIAL_VISIBLE_COLUMNS = ['id', 'package', 'type', 'location', 'actions'];
 
 type Package = {
 	id: number;
@@ -264,8 +264,9 @@ export default function TablePackage() {
 											</span>
 										}
 										aria-label='action-view'
+										href={`/tours/${Package.id}`}
 									>
-										<Link href={`/tours/${Package.id}`}>View</Link>
+										View
 									</DropdownItem>
 									<DropdownItem
 										key='edit'
@@ -277,8 +278,9 @@ export default function TablePackage() {
 											</span>
 										}
 										aria-label='action-edit'
+										href={`/admin/packages/${Package.id}`}
 									>
-										<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
+										Edit
 									</DropdownItem>
 									<DropdownItem
 										key='delete'

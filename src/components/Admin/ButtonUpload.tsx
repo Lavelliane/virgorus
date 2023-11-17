@@ -49,7 +49,6 @@ const ButtonUpload = ({ onChange, form }: ButtonUploadProps) => {
 		onChange({ target: { name: 'photos', value: files } });
 	};
 
-	console.log(form);
 	const handleRemoveImage = () => {
 		const files: any[] | ((prevState: File[]) => File[]) = [];
 		setImage(files);
