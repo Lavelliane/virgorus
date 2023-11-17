@@ -15,7 +15,7 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
   console.log(catPackage);
   return (
     <>
-      <Card className="w-full">
+      <Card className="w-full h-96">
         <CardHeader className="flex flex-col items-start gap-2">
           <span className="font-bold text-gray-400 uppercase">
             {catPackage.type}

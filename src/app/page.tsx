@@ -47,7 +47,7 @@ export default function Home() {
 
       const multipliedPackages: CatalogPackage[] = multiplyData(
         packagesData,
-        2
+        4
       ); // Change the multiplier as needed FOR DUMMY DATA
       setPackages(multipliedPackages);
     }
@@ -62,11 +62,11 @@ export default function Home() {
             <ContactBar />
           </div>
           {!packagesLoading ? (
-            <div className="grid grid-cols-3 h-full w-full max-w-7xl pt-24 gap-3 my-10">
+            <div className="grid grid-cols-3 gap-3 mt-36 mb-10">
               <Catalog packages={packages} />
             </div>
           ) : (
-            <div className="flex h-full w-full max-w-7xl pt-24 gap-3 my-10">
+            <div className="flex h-full w-full gap-3 my-10">
               <CatalogCardSuspense />
             </div>
           )}
