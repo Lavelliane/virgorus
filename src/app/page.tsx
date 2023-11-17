@@ -18,16 +18,38 @@ export default function Home() {
   });
 
   useEffect(() => {
-    if (!packagesLoading && packagesData) {
-      setPackages(
-        packagesData.map((pd: any) => ({
-          id: pd.id,
+    // FOR DUMMY DATA PURPOSES ONLY
+    const multiplyData = (
+      data: CatalogPackage[],
+      multiplier: number
+    ): CatalogPackage[] => {
+      return data.flatMap((pd, index) => {
+        return Array.from({ length: multiplier }, (_, innerIndex) => ({
+          id: pd.id + innerIndex,
           name: pd.name,
           description: pd.description,
           type: pd.type,
           rate: pd.rates[0].ratePerPax,
-        }))
-      );
+        }));
+      });
+    };
+
+    if (!packagesLoading && packagesData) {
+      // setPackages(
+      //   packagesData.map((pd: any) => ({
+      //     id: pd.id,
+      //     name: pd.name,
+      //     description: pd.description,
+      //     type: pd.type,
+      //     rate: pd.rates[0].ratePerPax,
+      //   }))
+      // );
+
+      const multipliedPackages: CatalogPackage[] = multiplyData(
+        packagesData,
+        2
+      ); // Change the multiplier as needed FOR DUMMY DATA
+      setPackages(multipliedPackages);
     }
   }, [packagesLoading, packagesData]);
 
@@ -39,13 +61,15 @@ export default function Home() {
             <NavbarGuest />
             <ContactBar />
           </div>
-          <div className="flex h-full w-full max-w-7xl pt-24 gap-3 my-10">
-            {!packagesLoading ? (
+          {!packagesLoading ? (
+            <div className="grid grid-cols-3 h-full w-full max-w-7xl pt-24 gap-3 my-10">
               <Catalog packages={packages} />
-            ) : (
+            </div>
+          ) : (
+            <div className="flex h-full w-full max-w-7xl pt-24 gap-3 my-10">
               <CatalogCardSuspense />
-            )}
-          </div>
+            </div>
+          )}
           <SitemapFooter />
         </section>
       </main>

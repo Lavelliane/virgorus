@@ -15,7 +15,7 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
   console.log(catPackage);
   return (
     <>
-      <Card className="max-w-5xl">
+      <Card className="w-full">
         <CardHeader className="flex flex-col items-start gap-2">
           <span className="font-bold text-gray-400 uppercase">
             {catPackage.type}
@@ -23,16 +23,14 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
           <span className="font-bold text-2xl">{catPackage.name}</span>
           <span className="text-lg">{catPackage.description}</span>
         </CardHeader>
-        <CardBody>
+        <CardBody className="w-full h-80 relative my-2">
           <Image
             src={fallbackImage}
             alt="Picture of the tour"
-            width={0}
-            height={0}
-            sizes="100vw"
+            fill={true}
           />
         </CardBody>
-        <CardFooter className="flex justify-between gap-2">
+        <CardFooter className="flex justify-between gap-2 my-2">
           <div className="flex flex-col">
             <span className="text-md">Starts at</span>
             <div className="flex gap-1">
