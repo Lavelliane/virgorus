@@ -6,7 +6,7 @@ import { Card, Skeleton } from "@nextui-org/react";
 export const CatalogCardSuspense = () => {
   return (
     <section className="w-full flex lg:flex-row flex-col justify-evenly gap-6">
-      <Card className="w-full space-y-5 p-4" radius="lg">
+      <Card className="w-96 space-y-5 p-4" radius="lg">
         <div className="space-y-3">
           <Skeleton className="w-3/5 rounded-lg">
             <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>
@@ -30,7 +30,7 @@ export const CatalogCardSuspense = () => {
           </Skeleton>
         </div>
       </Card>
-      <Card className="w-full space-y-5 p-4" radius="lg">
+      <Card className="w-96 space-y-5 p-4" radius="lg">
         <div className="space-y-3">
           <Skeleton className="w-3/5 rounded-lg">
             <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>
@@ -54,7 +54,7 @@ export const CatalogCardSuspense = () => {
           </Skeleton>
         </div>
       </Card>
-      <Card className="w-full space-y-5 p-4" radius="lg">
+      <Card className="w-96 space-y-5 p-4" radius="lg">
         <div className="space-y-3">
           <Skeleton className="w-3/5 rounded-lg">
             <div className="h-3 w-3/5 rounded-lg bg-default-200"></div>

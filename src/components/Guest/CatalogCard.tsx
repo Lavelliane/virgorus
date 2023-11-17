@@ -12,10 +12,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
-  console.log(catPackage);
   return (
     <>
-      <Card className="w-full h-96">
+      <Card className="w-96 h-96 mx-auto">
         <CardHeader className="flex flex-col items-start gap-2">
           <span className="font-bold text-gray-400 uppercase">
             {catPackage.type}
