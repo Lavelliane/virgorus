@@ -17,44 +17,22 @@ export default function Home() {
   });
 
   useEffect(() => {
-    // FOR DUMMY DATA PURPOSES ONLY
-    const multiplyData = (
-      data: CatalogPackage[],
-      multiplier: number
-    ): CatalogPackage[] => {
-      return data.flatMap((pd, index) => {
-        return Array.from({ length: multiplier }, (_, innerIndex) => ({
-          id: pd.id + innerIndex,
+    if (!packagesLoading && packagesData) {
+      setPackages(
+        packagesData.map((pd: any) => ({
+          id: pd.id,
           name: pd.name,
           description: pd.description,
           type: pd.type,
           rate: pd.rates[0].ratePerPax,
-        }));
-      });
-    };
-
-    if (!packagesLoading && packagesData) {
-      // setPackages(
-      //   packagesData.map((pd: any) => ({
-      //     id: pd.id,
-      //     name: pd.name,
-      //     description: pd.description,
-      //     type: pd.type,
-      //     rate: pd.rates[0].ratePerPax,
-      //   }))
-      // );
-
-      const multipliedPackages: CatalogPackage[] = multiplyData(
-        packagesData,
-        4
-      ); // Change the multiplier as needed FOR DUMMY DATA
-      setPackages(multipliedPackages);
+        }))
+      );
     }
   }, [packagesLoading, packagesData]);
 
   return (
     <>
-      <main className="flex flex-col items-center justify-between bg-white h-fit">
+      <main className="flex flex-col items-center justify-between bg-white min-h-screen">
         <div className="flex flex-col w-full fixed z-30">
           <NavbarGuest />
         </div>
