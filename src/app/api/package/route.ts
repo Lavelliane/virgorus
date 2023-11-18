@@ -48,13 +48,13 @@ export async function POST(req: any, res: any) {
 		files.map(async (file: File) => {
 		  const { data } = await supabase.storage
 			.from('virgorus-package-images')
-			.getPublicUrl(`packages/${formData.packageId}/${file.name}`);
+			.getPublicUrl(`packages/${uniqueId}/${file.name}`);
 		  return data?.publicUrl || '';
 		})
 	  );
 	  const packageData = {
 		id: uniqueId,
-		name: formData.get('name').replace(/^"(.*)"$/, '$1'),
+		name: formData.get('name').replace(/^"(.*)"$/, '$1'), // ' "vince" '
 		description: formData.get('description').replace(/^"(.*)"$/, '$1'),
 		type: formData.get('type').replace(/^"(.*)"$/, '$1'),
 		location: formData.get('location').replace(/^"(.*)"$/, '$1'),
@@ -62,15 +62,16 @@ export async function POST(req: any, res: any) {
 		cancellation: formData.get('cancellation').replace(/^"(.*)"$/, '$1'),
 		availability: formData.get('availability').replace(/^"(.*)"$/, '$1'),
 		language: formData.get('language').replace(/^"(.*)"$/, '$1'),
-		inclusions: formData.getAll('inclusions')?.map((e: any) => JSON.parse(e)),
-		exclusions: formData.getAll('exclusions')?.map((e: any) => JSON.parse(e)),
+		inclusions: JSON.parse(formData.getAll('inclusions')[0]),
+		exclusions: JSON.parse(formData.getAll('exclusions')[0]),
 		notice: formData.get('notice').replace(/^"(.*)"$/, '$1'),
-		rates: formData.getAll('rates')?.map((rate: string) => JSON.parse(rate)),
-		itinerary: formData.getAll('itinerary')?.map((daySchedule: string) => JSON.parse(daySchedule)),
+		rates: JSON.parse(formData.getAll('rates')[0]),
+		itinerary: JSON.parse(formData.getAll('itinerary')[0]),
 		photos: photoUrls,
 	  };
 	  const createdPackage = await prisma.package.create({
 		data: {
+			id: uniqueId,
 			name: packageData.name,
 			description: packageData.description,
 			type: packageData.type,

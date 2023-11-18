@@ -34,7 +34,7 @@ import axios from 'axios';
 import { MdDelete, MdEdit } from 'react-icons/md';
 import { IoMdEye } from 'react-icons/io';
 
-const INITIAL_VISIBLE_COLUMNS = ['id', 'package', 'type', 'location', 'actions'];
+const INITIAL_VISIBLE_COLUMNS = ['package', 'type', 'location', 'actions'];
 
 type Package = {
 	id: number;
