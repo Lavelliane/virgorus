@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Package {
-  id              Int      @id @default(autoincrement())
+  id              String      @id @default(uuid())
   name            String
   description     String
   type            String
@@ -32,7 +32,7 @@ model Rates {
   id              Int      @id @default(autoincrement())
   numberOfPax     String
   ratePerPax      String
-  packageId       Int
+  packageId       String
   package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
@@ -48,7 +48,7 @@ model DaySchedule {
   id              Int      @id @default(autoincrement())
   day             String?
   itineraries     Itinerary[]
-  packageId       Int
+  packageId       String
   package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 

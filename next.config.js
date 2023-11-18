@@ -5,6 +5,6 @@ module.exports = nextConfig
 
 module.exports = {
     images: {
-      domains: ['i.ibb.co', 'source.unsplash.com'],
+      domains: ['i.ibb.co', 'source.unsplash.com', 'qttclvmrvrjjibgmwqsi.supabase.co'],
     },
   };

@@ -1,5 +1,5 @@
 export default interface Package {
-	id?: number;
+	id?: string;
 	name?: string;
 	description?: string;
 	type?: string;
@@ -28,4 +28,5 @@ export type CatalogPackage = {
 	description: string;
 	type: string;
 	rate: string;
+	photos: string[];
 };

@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import formidable from 'formidable';
 
 const prisma = new PrismaClient();
 
@@ -27,7 +28,7 @@ export async function GET(req: NextRequest, context: any) {
 	const { id } = context.params;
 	try {
 		const tourPackage = await prisma.package.findUnique({
-			where: { id: +id },
+			where: { id: id },
 			include: {
 				rates: true,
 				itinerary: {
@@ -53,7 +54,7 @@ export async function PATCH(req: NextRequest, context: any) {
 		const updatedPackage = await prisma.$transaction(async (prisma) => {
 			// Update package data
 			const updatedPackage = await prisma.package.update({
-				where: { id: +id },
+				where: { id: id },
 				data: {
 					...newData,
 					rates: {
@@ -100,7 +101,7 @@ export async function DELETE(req: NextRequest, context: any) {
 	const { id } = context.params;
 	try {
 		await prisma.package.delete({
-			where: { id: +id },
+			where: { id: id },
 		});
 		return NextResponse.json({ status: 200 });
 	} catch (error) {

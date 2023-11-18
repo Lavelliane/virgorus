@@ -23,7 +23,7 @@ interface Rates {
 
 interface DaySchedule {
 	day: string;
-	itineraries: [Itinerary];
+	itineraries: Itinerary[];
 }
 
 interface Itinerary {

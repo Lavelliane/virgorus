@@ -29,14 +29,11 @@ import TableExclusions from './TableExclusion';
 import TableItinerary from './TableItinerary';
 import ButtonUpload from './ButtonUpload';
 
-async function createPackage(data: IAddPackage) {
+async function createPackage(data: FormData) {
 	try {
 		const response = await fetch('/api/package', {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
+			body: data,
 		});
 
 		if (response.ok) {
@@ -57,12 +54,35 @@ export default function ModalPackage() {
 	const [language, setLanguage] = React.useState<Selection>(new Set([]));
 	const [location, setLocation] = React.useState<Selection>(new Set([]));
 
-	const handleActionClick = (e: any) => {
+	const handleActionClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
-		createPackage(form);
-		onClose(); // Close the modal or perform any other desired action.
+		const formData = new FormData();
+	  
+		// Append text fields from the form
+		Object.entries(form).forEach(([key, value]) => {
+			if (key !== 'photos') {
+			  formData.append(key, JSON.stringify(value));
+			} else {
+			  const photosArray = value as File[];
+			  photosArray.forEach((photo, index) => {
+				formData.append('photos', photo);
+			  });
+			}
+		  });
+	  
+		for (const pair of formData.entries()) {
+		  console.log(pair[0] + ', ' + pair[1]);
+		}
+	  
+		// Log the formData to check its content
+		console.log(formData);
+	  
+		await createPackage(formData);
+		onClose();
 		window.location.reload();
-	};
+	  };
+	  
+	  
 
 	console.log(form);
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -105,6 +125,10 @@ export default function ModalPackage() {
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
+
+	useEffect(() => {
+		console.log(form)
+	}, [form])
 
 	return (
 		<>
@@ -285,7 +309,7 @@ export default function ModalPackage() {
 								<Button color='default' variant='light' onPress={onClose} className='font-semibold'>
 									Close
 								</Button>
-								<Button color='secondary' onPress={handleActionClick}>
+								<Button color='secondary' onClick={(e) => handleActionClick(e)}>
 									Add
 								</Button>
 							</ModalFooter>
