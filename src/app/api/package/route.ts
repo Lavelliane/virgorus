@@ -7,11 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 const prisma = new PrismaClient();
 const supabase = createClient(`${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}`, `${process.env.NEXT_PUBLIC_SUPABASE_API_KEY}`)
 
-export const config = {
-	api: {
-	  bodyParser: false,
-	},
-  };
 
 interface Rates {
 	numberOfPax: string;
