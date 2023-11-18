@@ -1,7 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import formidable from 'formidable';
 
 const prisma = new PrismaClient();
+
+export const config = {
+	api: {
+	  bodyParser: false,
+	},
+};
 
 interface Rates {
 	id?: number;

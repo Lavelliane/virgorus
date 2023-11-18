@@ -9,11 +9,11 @@ export default interface IAddPackage {
 	availability: string;
 	language: string;
 	notice: string;
-	rates: [Rates];
-	itinerary: [DaySchedule];
-	inclusions: [string];
-	exclusions: [string];
-	photos: [string];
+	rates: Rates[];
+	itinerary: DaySchedule[];
+	inclusions: string[];
+	exclusions: string[];
+	photos: File[];
 }
 
 interface Rates {
@@ -23,7 +23,7 @@ interface Rates {
 
 interface DaySchedule {
 	day: string;
-	itineraries: [Itinerary];
+	itineraries: Itinerary[];
 }
 
 interface Itinerary {
