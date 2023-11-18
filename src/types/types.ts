@@ -13,7 +13,7 @@ export default interface IAddPackage {
 	itinerary: [DaySchedule];
 	inclusions: [string];
 	exclusions: [string];
-	photos: [string];
+	photos: File[];
 }
 
 interface Rates {

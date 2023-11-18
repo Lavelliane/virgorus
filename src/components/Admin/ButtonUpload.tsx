@@ -34,14 +34,14 @@ const ButtonUpload = ({ onChange, form }: ButtonUploadProps) => {
 	const handleMultipleImage = (event: any) => {
 		const files = [...event.target.files];
 		setImage(files);
-
+		console.log(files);
 		const previews: any = [];
 		files.forEach((file) => {
 			const reader = new FileReader();
 			reader.onload = () => {
 				previews.push(reader.result);
 				if (previews.length === files.length) {
-					setImagePreviews(previews.map((preview: any) => ({ src: preview, width: 4, height: 3 })));
+					setImagePreviews(previews.map((preview: IImagePreview) => ({ src: preview, width: 4, height: 3 })));
 				}
 			};
 			reader.readAsDataURL(file);

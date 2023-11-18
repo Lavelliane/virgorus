@@ -64,6 +64,7 @@ export default function ModalPackage() {
 		window.location.reload();
 	};
 
+	console.log(form);
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedValues = e.target.value.split(',');
 		if (selectedValues.includes('')) {

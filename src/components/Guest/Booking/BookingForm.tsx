@@ -135,7 +135,13 @@ export const BookingForm = () => {
 							</CardBody>
 							<CardFooter className='ml-2 mb-2 justify-center'>
 								{!formik.isSubmitting ? (
-									<Button type='submit' variant='ghost' color='success' radius='full' className='font-semibold w-1/2 mr-4'>
+									<Button
+										type='submit'
+										variant='ghost'
+										color='success'
+										radius='full'
+										className='font-semibold w-1/2 mr-4'
+									>
 										Submit
 									</Button>
 								) : (
