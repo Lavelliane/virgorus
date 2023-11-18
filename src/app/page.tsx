@@ -25,6 +25,7 @@ export default function Home() {
           description: pd.description,
           type: pd.type,
           rate: pd.rates[0].ratePerPax,
+          photos: pd.photos
         }))
       );
     }

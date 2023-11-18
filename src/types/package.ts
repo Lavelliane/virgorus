@@ -28,4 +28,5 @@ export type CatalogPackage = {
   description: string;
   type: string;
   rate: string;
+  photos: string[]
 };

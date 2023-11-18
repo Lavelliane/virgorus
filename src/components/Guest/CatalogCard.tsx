@@ -24,7 +24,7 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
         </CardHeader>
         <CardBody className="w-full h-80 relative my-2">
           <Image
-            src={fallbackImage}
+            src={catPackage?.photos[0]}
             alt="Picture of the tour"
             fill={true}
           />
