@@ -45,7 +45,7 @@ type Package = {
 };
 
 const columns = [
-	{ name: 'ID', uid: 'id', sortable: true },
+	{ name: 'ID', uid: 'id' },
 	{ name: 'PACKAGE', uid: 'package', sortable: true },
 	{ name: 'TYPE', uid: 'type', sortable: true },
 	{ name: 'LOCATION', uid: 'location', sortable: true },
