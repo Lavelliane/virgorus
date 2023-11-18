@@ -12,7 +12,7 @@ const addPackageDefault: IAddPackage = {
 	notice: '',
 	inclusions: [''],
 	exclusions: [''],
-	photos: [''],
+	photos: [],
 	rates: [
 		{
 			numberOfPax: '',
