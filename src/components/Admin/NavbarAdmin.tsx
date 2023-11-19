@@ -47,7 +47,7 @@ export default function NavbarAdmin() {
 							className={`flex px-4 py-2 rounded-xl items-center gap-1 font-semibold ${
 								pathname?.includes('packages') || pathname?.includes('settings')
 									? 'bg-transparent '
-									: 'bg-chocolate text-nude'
+									: 'bg-primary text-nude'
 							}`}
 						>
 							<MdSpaceDashboard />
@@ -59,7 +59,7 @@ export default function NavbarAdmin() {
 					<Link color='foreground' href='/admin/packages' aria-current='page'>
 						<span
 							className={`flex px-4 py-2 rounded-xl items-center gap-1 font-semibold ${
-								pathname?.includes('packages') ? 'bg-chocolate text-nude ' : ''
+								pathname?.includes('packages') ? 'bg-primary text-nude ' : ''
 							}`}
 						>
 							<MdPostAdd />

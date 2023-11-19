@@ -1,8 +1,15 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import localFont from 'next/font/local';
 import {Providers} from "./providers";
+
+import { Inter } from 'next/font/google'
+import { Playfair_Display } from 'next/font/google';
+import { Poppins } from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css'
+
+import NavbarGuest from '@/components/Guest/NavbarGuest';
+import SitemapFooter from "@/components/Footer";
+
 
 const inter = Inter({ subsets: ['latin'],
 variable: '--font-inter', })
@@ -12,6 +19,19 @@ const efco = localFont({
   display: 'swap',
   variable: '--font-efco',
 })
+
+const playfairDisplay = Playfair_Display({ 
+	subsets: ['latin'],
+	variable: '--font-playfair',
+});
+
+const poppins = Poppins({ 
+	subsets: ['latin'],
+	variable: '--font-poppins',
+	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+	style: ['italic', 'normal']
+});
+
 
 export const metadata: Metadata = {
   title: 'Virgorus',
@@ -25,11 +45,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${efco.variable} ${inter.className}`}>
+      <body className={`${efco.variable} ${inter.className} ${playfairDisplay.variable} ${poppins.variable}`}>
         <Providers>
           {children}
+          <SitemapFooter />
         </Providers>
-        </body>
+      </body>
     </html>
   )
 }

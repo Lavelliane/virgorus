@@ -41,6 +41,8 @@ module.exports = {
 			fontFamily: {
 				sans: ['var(--font-inter)'],
 				efco: ['var(--font-efco)'],
+				playfair: ['var(--font-playfair)'],
+				poppins: ['var(--font-poppins)'],
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -53,39 +55,21 @@ module.exports = {
 			themes: {
 				light: {
 					colors: {
-						default: {
-							DEFAULT: '#FFFFFF',
-						},
 						primary: {
-							DEFAULT: '#F3EBE4',
+							DEFAULT: '#776B5D',
 						},
 						secondary: {
-							DEFAULT: '#432F2B',
-						},
-						success: {
 							DEFAULT: '#6C7D47',
-						},
-						warning: {
-							DEFAULT: '#FF7F5C',
 						},
 					},
 				},
 				dark: {
 					colors: {
-						default: {
-							DEFAULT: '#FFFFFF',
-						},
 						primary: {
-							DEFAULT: '#F3EBE4',
+							DEFAULT: '#776B5D',
 						},
 						secondary: {
-							DEFAULT: '#432F2B',
-						},
-						success: {
-							DEFAULT: '#6C7D47',
-						},
-						warning: {
-							DEFAULT: '#FF7F5C',
+							DEFAULT: '#F3EBE4',
 						},
 					},
 				},
