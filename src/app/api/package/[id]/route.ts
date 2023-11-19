@@ -1,8 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 import formidable from 'formidable';
 
 const prisma = new PrismaClient();
+const supabase = createClient(
+	`${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}`,
+	`${process.env.NEXT_PUBLIC_SUPABASE_API_KEY}`
+);
 
 interface Rates {
 	id?: number;
@@ -47,26 +52,85 @@ export async function GET(req: NextRequest, context: any) {
 	}
 }
 
-export async function PATCH(req: NextRequest, context: any) {
+export async function PATCH(req: any, context: any) {
 	const { id } = context.params;
-	const newData = await req.json();
+	const formData = await req.formData();
+	const files = formData.getAll('photos');
+	let photoUrls: string[] = [];
+	if (!files) {
+		return NextResponse.json({ error: 'No files received.' }, { status: 400 });
+	}
+
+	const { data: currentImages } = await supabase.storage.from('virgorus-package-images').list(`packages/${id}`);
+
+	for (let file of files) {
+		const fileNames = currentImages?.map((image: any) => image.name);
+
+		if (!fileNames?.includes(file.name)) {
+			const { data, error } = await supabase.storage
+				.from('virgorus-package-images')
+				.upload(`packages/${id}/${file.name}`, file, {
+					cacheControl: '3600',
+					upsert: false,
+				});
+
+			if (error) {
+				console.error('Supabase storage error:', error);
+				return NextResponse.json({ error }, { status: 500 });
+			}
+		} else {
+			const { data: existingUrls } = await supabase.storage
+				.from('virgorus-package-images')
+				.getPublicUrl(`packages/${id}/${file.name}`);
+			photoUrls.push(existingUrls?.publicUrl || '');
+			console.log('File already exists');
+		}
+	}
+
+	photoUrls = await Promise.all(
+		files.map(async (file: File) => {
+			const { data } = await supabase.storage
+				.from('virgorus-package-images')
+				.getPublicUrl(`packages/${id}/${file.name}`);
+			return data?.publicUrl || '';
+		})
+	);
+
+	const packageData = {
+		id: id,
+		name: formData.get('name').replace(/^"(.*)"$/, '$1'),
+		description: formData.get('description').replace(/^"(.*)"$/, '$1'),
+		type: formData.get('type').replace(/^"(.*)"$/, '$1'),
+		location: formData.get('location').replace(/^"(.*)"$/, '$1'),
+		duration: formData.get('duration').replace(/^"(.*)"$/, '$1'),
+		cancellation: formData.get('cancellation').replace(/^"(.*)"$/, '$1'),
+		availability: formData.get('availability').replace(/^"(.*)"$/, '$1'),
+		language: formData.get('language').replace(/^"(.*)"$/, '$1'),
+		inclusions: JSON.parse(formData.getAll('inclusions')[0]),
+		exclusions: JSON.parse(formData.getAll('exclusions')[0]),
+		notice: formData.get('notice').replace(/^"(.*)"$/, '$1'),
+		rates: JSON.parse(formData.getAll('rates')[0]),
+		itinerary: JSON.parse(formData.getAll('itinerary')[0]),
+		photos: photoUrls,
+	};
+
 	try {
 		const updatedPackage = await prisma.$transaction(async (prisma) => {
 			// Update package data
 			const updatedPackage = await prisma.package.update({
 				where: { id: id },
 				data: {
-					...newData,
+					...packageData,
 					rates: {
-						deleteMany: { packageId: parseInt(id) },
-						create: newData.rates.map((rate: Rates) => ({
+						deleteMany: { packageId: id },
+						create: packageData.rates.map((rate: Rates) => ({
 							numberOfPax: rate.numberOfPax,
 							ratePerPax: rate.ratePerPax,
 						})),
 					},
 					itinerary: {
-						deleteMany: { packageId: parseInt(id) },
-						create: newData.itinerary.map((item: DaySchedule) => ({
+						deleteMany: { packageId: id },
+						create: packageData.itinerary.map((item: DaySchedule) => ({
 							day: item.day,
 							itineraries: {
 								create: item.itineraries.map((subItem: Itinerary) => ({
@@ -76,6 +140,7 @@ export async function PATCH(req: NextRequest, context: any) {
 							},
 						})),
 					},
+					photos: { set: photoUrls },
 				},
 
 				include: {

@@ -1,12 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 import { v4 as uuidv4 } from 'uuid';
 
-
 const prisma = new PrismaClient();
-const supabase = createClient(`${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}`, `${process.env.NEXT_PUBLIC_SUPABASE_API_KEY}`)
-
+const supabase = createClient(
+	`${process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL}`,
+	`${process.env.NEXT_PUBLIC_SUPABASE_API_KEY}`
+);
 
 interface Rates {
 	numberOfPax: string;
@@ -25,36 +26,36 @@ interface Itinerary {
 
 export async function POST(req: any, res: any) {
 	const formData = await req.formData();
-	const uniqueId = uuidv4()
-	const files = formData.getAll("photos")
+	const uniqueId = uuidv4();
+	const files = formData.getAll('photos');
 	if (!files) {
-	  return NextResponse.json({ error: "No files received." }, { status: 400 });
+		return NextResponse.json({ error: 'No files received.' }, { status: 400 });
 	}
 
 	for (let file of files) {
 		const { data, error } = await supabase.storage
-          .from('virgorus-package-images')
-          .upload(`packages/${uniqueId}/${file.name}`, file, {
-            cacheControl: '3600',
-            upsert: false,
-          })
-
-        if (error) {
-          console.error('Supabase storage error:', error);
-          return NextResponse.json({ error }, { status: 500 });
-        }
-	}
-	 const photoUrls = await Promise.all(
-		files.map(async (file: File) => {
-		  const { data } = await supabase.storage
 			.from('virgorus-package-images')
-			.getPublicUrl(`packages/${uniqueId}/${file.name}`);
-		  return data?.publicUrl || '';
+			.upload(`packages/${uniqueId}/${file.name}`, file, {
+				cacheControl: '3600',
+				upsert: false,
+			});
+
+		if (error) {
+			console.error('Supabase storage error:', error);
+			return NextResponse.json({ error }, { status: 500 });
+		}
+	}
+	const photoUrls = await Promise.all(
+		files.map(async (file: File) => {
+			const { data } = await supabase.storage
+				.from('virgorus-package-images')
+				.getPublicUrl(`packages/${uniqueId}/${file.name}`);
+			return data?.publicUrl || '';
 		})
-	  );
-	  const packageData = {
+	);
+	const packageData = {
 		id: uniqueId,
-		name: formData.get('name').replace(/^"(.*)"$/, '$1'), // ' "vince" '
+		name: formData.get('name').replace(/^"(.*)"$/, '$1'),
 		description: formData.get('description').replace(/^"(.*)"$/, '$1'),
 		type: formData.get('type').replace(/^"(.*)"$/, '$1'),
 		location: formData.get('location').replace(/^"(.*)"$/, '$1'),
@@ -68,8 +69,8 @@ export async function POST(req: any, res: any) {
 		rates: JSON.parse(formData.getAll('rates')[0]),
 		itinerary: JSON.parse(formData.getAll('itinerary')[0]),
 		photos: photoUrls,
-	  };
-	  const createdPackage = await prisma.package.create({
+	};
+	const createdPackage = await prisma.package.create({
 		data: {
 			id: uniqueId,
 			name: packageData.name,
@@ -80,8 +81,12 @@ export async function POST(req: any, res: any) {
 			cancellation: packageData.cancellation,
 			availability: packageData.availability,
 			language: packageData.language,
-			inclusions: { set: packageData.inclusions.map((e: any) => JSON.stringify(e)) },
-			exclusions: { set: packageData.exclusions.map((e: any) => JSON.stringify(e)) },
+			inclusions: {
+				set: packageData.inclusions,
+			},
+			exclusions: {
+				set: packageData.exclusions,
+			},
 			notice: packageData.notice,
 			rates: {
 				create: packageData?.rates?.map((rate: Rates) => ({
@@ -110,11 +115,10 @@ export async function POST(req: any, res: any) {
 				},
 			},
 		},
-	  });
-	
-	  await prisma.$disconnect();
-	  return NextResponse.json(createdPackage, { status: 200 });
+	});
 
+	await prisma.$disconnect();
+	return NextResponse.json(createdPackage, { status: 200 });
 }
 
 export async function GET(req: NextRequest) {

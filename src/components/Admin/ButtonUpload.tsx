@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactEventHandler } from 'react';
 import { Button, Image, Input } from '@nextui-org/react';
 import axios from 'axios';
-import NextJsImage from '../NextJsImage';
+import NextJsPhoto from '../NextJsImage';
 import PhotoAlbum from 'react-photo-album';
 
 interface ButtonUploadProps {
@@ -9,84 +9,111 @@ interface ButtonUploadProps {
 	readonly form: any;
 }
 
-interface IImagePreview {
+interface IPhotoPreview {
 	src: string;
 	width: number;
 	height: number;
 }
-const imagePreviewsDefault = [{ src: '', width: 0, height: 0 }];
+const photoPreviewsDefault = [{ src: '', width: 0, height: 0 }];
 
 const ButtonUpload = ({ onChange, form }: ButtonUploadProps) => {
-	const [image, setImage] = React.useState<File[]>([]); // Specify File type for 'image'
-	const [imagePreviews, setImagePreviews] = useState<IImagePreview[]>([]); // Specify string type for 'imagePreviews'
+	const [photo, setPhoto] = React.useState<File[]>([]); // Specify File type for 'photo'
+	const [newPhoto, setNewPhoto] = React.useState<File[]>([]); // Specify File type for 'photo'
+	const [photoPreviews, setPhotoPreviews] = useState<IPhotoPreview[]>([]); // Specify string type for 'photoPreviews'
 
-	// useEffect(() => {
-	// 	if (form.photos) {
-	// 		//form to File
-	// 		const imageData = form.photos;
-	// 		//convert imageData from src to File
-	// 		setImage(imageData);
+	const loadImageFromDataLink = async (dataLink: string) => {
+		try {
+			// Convert data link to Blob
+			const response = await fetch(dataLink);
+			const blob = await response.blob();
 
-	// 		setImagePreviews(form.photos.map((photo: any) => ({ src: photo, width: 4, height: 3 })));
-	// 	}
-	// }, [form.photos]);
+			// Create a File from Blob
+			const file = new File([blob], 'imageFileName', { type: blob.type });
 
-	const handleMultipleImage = (event: any) => {
-		const files = [...event.target.files];
-		setImage(files);
+			// Set the File in state
+			setPhoto((prevImageFiles: any) => [...prevImageFiles, file]);
+			setPhotoPreviews(form.photos.map((photo: any) => ({ src: photo, width: 4, height: 3 })));
+
+			// Update the form state
+			onChange({
+				target: { name: 'photos', value: [file] },
+			});
+		} catch (error) {
+			console.error('Error loading image:', error);
+		}
+	};
+
+	useEffect(() => {
+		if (form?.photos && form?.photos.every((image: string) => typeof image === 'string')) {
+			//form to File
+			form?.photos.forEach((dataLink: string) => {
+				loadImageFromDataLink(dataLink);
+			});
+		}
+	}, [form?.photos]);
+
+	const handleMultiplePhoto = (event: any) => {
+		const newUploadedPhotos = [...event.target.files];
+		setPhoto(newUploadedPhotos);
 
 		const previews: any = [];
-		files.forEach((file) => {
+		newUploadedPhotos.forEach((file) => {
 			const reader = new FileReader();
 			reader.onload = () => {
 				previews.push(reader.result);
-				if (previews.length === files.length) {
-					setImagePreviews(previews.map((preview: any) => ({ src: preview, width: 4, height: 3 })));
+				if (previews.length === newUploadedPhotos.length) {
+					setPhotoPreviews(previews.map((preview: any) => ({ src: preview, width: 4, height: 3 })));
 				}
 			};
 			reader.readAsDataURL(file);
 		});
-		onChange({ target: { name: 'photos', value: files } });
+		onChange({ target: { name: 'photos', value: newUploadedPhotos } });
+		setNewPhoto([]);
 	};
 
-	const handleRemoveImage = () => {
+	const handleRemovePhoto = () => {
 		const files: any[] | ((prevState: File[]) => File[]) = [];
-		setImage(files);
+		setPhoto([]);
+		setPhotoPreviews([]);
+		setNewPhoto([]);
 
-		setImagePreviews([]);
+		onChange({ target: { name: 'photos', value: files } });
 	};
 
 	return (
 		<div className='w-full flex flex-col gap-4'>
 			<div className='flex justify-between items-center'>
-				<input
-					id='fileSelect'
-					type='file'
-					multiple
-					onChange={handleMultipleImage}
-					accept='image/*'
-					className='text-sm custom-image-upload'
-					hidden
-				/>
-				<div className='flex gap-4 items-center text-sm text-chocolate/80'>
-					<label htmlFor='fileSelect' className='button-30 font-bold text-sm'>
-						Upload
-					</label>
-				</div>
-				{imagePreviews.length != 0 && (
-					<button className='text-sm font-bold button-29' onClick={handleRemoveImage}>
+				{photoPreviews.length == 0 ? (
+					<>
+						<input
+							id='fileSelect'
+							type='file'
+							multiple
+							onChange={handleMultiplePhoto}
+							accept='photo/*'
+							className='text-sm custom-photo-upload'
+							hidden
+						/>
+						<div className='flex gap-4 items-center text-sm text-chocolate/80'>
+							<label htmlFor='fileSelect' className='button-30 font-bold text-sm'>
+								Upload
+							</label>
+						</div>
+					</>
+				) : (
+					<button className='text-sm font-bold button-29' onClick={handleRemovePhoto}>
 						Remove
 					</button>
 				)}
 			</div>
 			<PhotoAlbum
 				layout='rows'
-				photos={imagePreviews}
-				renderPhoto={NextJsImage}
+				photos={photoPreviews}
+				renderPhoto={NextJsPhoto}
 				defaultContainerWidth={400}
 				sizes={{ size: 'calc(100vw - 240px)' }}
 			/>
-			{imagePreviews.length == 0 && <h4 className='font-bold text-center text-default-400'>NO IMAGE UPLOADED</h4>}
+			{photoPreviews.length == 0 && <h4 className='font-bold text-center text-default-400'>NO IMAGE UPLOADED</h4>}
 		</div>
 	);
 };

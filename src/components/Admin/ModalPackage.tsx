@@ -57,32 +57,30 @@ export default function ModalPackage() {
 	const handleActionClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		e.preventDefault();
 		const formData = new FormData();
-	  
+
 		// Append text fields from the form
 		Object.entries(form).forEach(([key, value]) => {
 			if (key !== 'photos') {
-			  formData.append(key, JSON.stringify(value));
+				formData.append(key, JSON.stringify(value));
 			} else {
-			  const photosArray = value as File[];
-			  photosArray.forEach((photo, index) => {
-				formData.append('photos', photo);
-			  });
+				const photosArray = value as File[];
+				photosArray.forEach((photo, index) => {
+					formData.append('photos', photo);
+				});
 			}
-		  });
-	  
+		});
+
 		for (const pair of formData.entries()) {
-		  console.log(pair[0] + ', ' + pair[1]);
+			console.log(pair[0] + ', ' + pair[1]);
 		}
-	  
+
 		// Log the formData to check its content
 		console.log(formData);
-	  
+
 		await createPackage(formData);
 		onClose();
 		window.location.reload();
-	  };
-	  
-	  
+	};
 
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedValues = e.target.value.split(',');
@@ -124,11 +122,6 @@ export default function ModalPackage() {
 	const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setForm({ ...form, [e.target.name]: e.target.value });
 	};
-
-	useEffect(() => {
-		console.log(form)
-	}, [form])
-
 	return (
 		<>
 			<Button
