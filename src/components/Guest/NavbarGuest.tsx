@@ -68,7 +68,7 @@ export default function NavbarGuest() {
 	});
 
 	useEffect(() => {
-		if (!packagesLoading) {
+		if (!packagesLoading && packagesData) {
 			setPackages(
 				packagesData.map((pd: any) => ({
 					id: pd.id,

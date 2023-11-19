@@ -27,6 +27,7 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
             src={catPackage?.photos[0]}
             alt="Picture of the tour"
             fill={true}
+            objectFit="cover"
           />
         </CardBody>
         <CardFooter className="flex justify-between gap-2 my-2">
