@@ -26,7 +26,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
 import axios from 'axios';
 
-async function editPackage(data: IAddPackage, id: any) {
+async function editPackage(data: FormData, id: any) {
 	try {
 		const response = await axios.patch(`/api/package/${id}`, data);
 		console.log(response.data);
@@ -42,9 +42,9 @@ interface Props {
 
 export default function EditPackage({ id }: Props) {
 	const [form, setForm] = React.useState<IAddPackage>(addPackageDefault);
-	const [availability, setAvailability] = React.useState<Selection>(new Set([]));
-	const [language, setLanguage] = React.useState<Selection>(new Set([]));
-	const [location, setLocation] = React.useState<string>('');
+	const [availability, setAvailability] = React.useState<Selection>(new Set(['Monday']));
+	const [language, setLanguage] = React.useState<Selection>(new Set(['English']));
+	const [location, setLocation] = React.useState<string>('Metro Cebu');
 
 	const { data: packageData, isLoading: packageLoading } = useQuery({
 		queryKey: ['packages', id.id],
@@ -78,8 +78,34 @@ export default function EditPackage({ id }: Props) {
 		}
 	}, [packageLoading, packageData]);
 
-	const handleSaveClick = () => {
-		editPackage(form, packageData.id);
+	const handleSaveClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		e.preventDefault();
+		const formData = new FormData();
+
+		// Append text fields from the form
+		Object.entries(form).forEach(([key, value]) => {
+			if (key !== 'photos') {
+				formData.append(key, JSON.stringify(value));
+			} else if (key === 'photos' && value.length > 0) {
+				if (typeof value === 'string') {
+					formData.append(key, JSON.stringify(value));
+				} else {
+					const photosArray = value as File[];
+					photosArray.forEach((photo, index) => {
+						formData.append('photos', photo);
+					});
+				}
+			}
+		});
+
+		for (const pair of formData.entries()) {
+			console.log(pair[0] + ', ' + pair[1]);
+		}
+
+		// Log the formData to check its content
+		console.log(formData);
+
+		await editPackage(formData, packageData.id);
 		window.location.href = '/admin/packages';
 	};
 
@@ -276,7 +302,7 @@ export default function EditPackage({ id }: Props) {
 				<Button color='default' variant='light' onPress={handleReturn} className='font-semibold'>
 					Return
 				</Button>
-				<Button color='secondary' type='submit' onClick={handleSaveClick}>
+				<Button color='secondary' type='submit' onClick={(e) => handleSaveClick(e)}>
 					Save
 				</Button>
 			</CardFooter>

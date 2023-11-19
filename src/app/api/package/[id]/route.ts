@@ -54,28 +54,40 @@ export async function GET(req: NextRequest, context: any) {
 
 export async function PATCH(req: any, context: any) {
 	const { id } = context.params;
-
-	//const newData = await req.json();
 	const formData = await req.formData();
 	const files = formData.getAll('photos');
+	let photoUrls: string[] = [];
 	if (!files) {
 		return NextResponse.json({ error: 'No files received.' }, { status: 400 });
 	}
 
-	for (let file of files) {
-		const { data, error } = await supabase.storage
-			.from('virgorus-package-images')
-			.upload(`packages/${id}/${file.name}`, file, {
-				cacheControl: '3600',
-				upsert: false,
-			});
+	const { data: currentImages } = await supabase.storage.from('virgorus-package-images').list(`packages/${id}`);
 
-		if (error) {
-			console.error('Supabase storage error:', error);
-			return NextResponse.json({ error }, { status: 500 });
+	for (let file of files) {
+		const fileNames = currentImages?.map((image: any) => image.name);
+
+		if (!fileNames?.includes(file.name)) {
+			const { data, error } = await supabase.storage
+				.from('virgorus-package-images')
+				.upload(`packages/${id}/${file.name}`, file, {
+					cacheControl: '3600',
+					upsert: false,
+				});
+
+			if (error) {
+				console.error('Supabase storage error:', error);
+				return NextResponse.json({ error }, { status: 500 });
+			}
+		} else {
+			const { data: existingUrls } = await supabase.storage
+				.from('virgorus-package-images')
+				.getPublicUrl(`packages/${id}/${file.name}`);
+			photoUrls.push(existingUrls?.publicUrl || '');
+			console.log('File already exists');
 		}
 	}
-	const photoUrls = await Promise.all(
+
+	photoUrls = await Promise.all(
 		files.map(async (file: File) => {
 			const { data } = await supabase.storage
 				.from('virgorus-package-images')
@@ -83,8 +95,9 @@ export async function PATCH(req: any, context: any) {
 			return data?.publicUrl || '';
 		})
 	);
+
 	const packageData = {
-		id: formData.id,
+		id: id,
 		name: formData.get('name').replace(/^"(.*)"$/, '$1'),
 		description: formData.get('description').replace(/^"(.*)"$/, '$1'),
 		type: formData.get('type').replace(/^"(.*)"$/, '$1'),
@@ -98,7 +111,7 @@ export async function PATCH(req: any, context: any) {
 		notice: formData.get('notice').replace(/^"(.*)"$/, '$1'),
 		rates: JSON.parse(formData.getAll('rates')[0]),
 		itinerary: JSON.parse(formData.getAll('itinerary')[0]),
-		photos: photoUrls || formData.photos,
+		photos: photoUrls,
 	};
 
 	try {
@@ -109,14 +122,14 @@ export async function PATCH(req: any, context: any) {
 				data: {
 					...packageData,
 					rates: {
-						deleteMany: { packageId: parseInt(id) },
+						deleteMany: { packageId: id },
 						create: packageData.rates.map((rate: Rates) => ({
 							numberOfPax: rate.numberOfPax,
 							ratePerPax: rate.ratePerPax,
 						})),
 					},
 					itinerary: {
-						deleteMany: { packageId: parseInt(id) },
+						deleteMany: { packageId: id },
 						create: packageData.itinerary.map((item: DaySchedule) => ({
 							day: item.day,
 							itineraries: {
@@ -127,7 +140,7 @@ export async function PATCH(req: any, context: any) {
 							},
 						})),
 					},
-					photos: { set: packageData.photos },
+					photos: { set: photoUrls },
 				},
 
 				include: {

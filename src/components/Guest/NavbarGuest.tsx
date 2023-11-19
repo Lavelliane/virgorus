@@ -41,24 +41,22 @@ interface PackageSection {
 	label: string;
 }
 
-
 function getPackageSections(packages: Package[]): PackageSection[] {
 	const packageSections: PackageSection[] = [];
-  
+
 	packages.forEach((ipackage) => {
-	  const { location } = ipackage;
-  
-	  const existingPackageSection = packageSections.find((section) => section.label === location);
-	  if (!existingPackageSection) {
-		packageSections.push({ key: location, label: location });
-	  }
+		const { location } = ipackage;
+
+		const existingPackageSection = packageSections.find((section) => section.label === location);
+		if (!existingPackageSection) {
+			packageSections.push({ key: location, label: location });
+		}
 	});
-  
+
 	return packageSections;
 }
 
 export default function NavbarGuest() {
-
 	// ################### FETCH ALL PACKAGES
 
 	const [packages, setPackages] = useState<Package[]>([]);
@@ -79,13 +77,13 @@ export default function NavbarGuest() {
 			);
 		}
 	}, [packagesLoading, packagesData]);
-	
+
 	const packageSections = getPackageSections(packages);
 	const renderDropdownItems = (packages: Package[]) => {
 		return packages.map((ipackage) => (
-		  <DropdownItem key={ipackage.id} className='text-black' description={ipackage.type}>
-			<div className='whitespace-normal'>{ipackage.name}</div>
-		  </DropdownItem>
+			<DropdownItem key={ipackage.id} className='text-black' description={ipackage.type}>
+				<div className='whitespace-normal'>{ipackage.name}</div>
+			</DropdownItem>
 		));
 	};
 
@@ -98,7 +96,6 @@ export default function NavbarGuest() {
 		{ text: 'Rentals', icon: <RiArrowDownSLine /> },
 		{ text: 'Contact Us', icon: <IoMdPerson /> },
 	];
-
 
 	return (
 		<Navbar className='backdrop-blur-md' maxWidth='xl'>
@@ -120,45 +117,45 @@ export default function NavbarGuest() {
 					</Button>
 				</NavbarItem>
 				<NavbarItem>
-				<Dropdown>
-					<DropdownTrigger>
-					<Button
-						variant='light'
-						endContent={<RiArrowDownSLine />}
-						className='font-semibold md:text-xs lg:text-lg'
-						radius='sm'
-					>
-						Tour Packages
-					</Button>
-					</DropdownTrigger>
-					<DropdownMenu
-					items={packageSections.map((section) => ({
-						key: section.key,
-						label: section.label,
-					}))}
-					aria-label='Tour Packages'
-					className='w-[380px]'
-					itemClasses={{
-						base: 'gap-4',
-					}}
-					>
-					{(item: object) => {
-						const section: PackageSection = item as PackageSection;
-						const packageItems: Package[] = packages.map((ipackage) => ({
-							id: ipackage.id,
-							name: ipackage.name,
-							type: ipackage.type,
-							location: ipackage.location,
-						}));
+					<Dropdown>
+						<DropdownTrigger>
+							<Button
+								variant='light'
+								endContent={<RiArrowDownSLine />}
+								className='font-semibold md:text-xs lg:text-lg'
+								radius='sm'
+							>
+								Tour Packages
+							</Button>
+						</DropdownTrigger>
+						<DropdownMenu
+							items={packageSections.map((section) => ({
+								key: section.key,
+								label: section.label,
+							}))}
+							aria-label='Tour Packages'
+							className='w-[380px]'
+							itemClasses={{
+								base: 'gap-4',
+							}}
+						>
+							{(item: object) => {
+								const section: PackageSection = item as PackageSection;
+								const packageItems: Package[] = packages.map((ipackage) => ({
+									id: ipackage.id,
+									name: ipackage.name,
+									type: ipackage.type,
+									location: ipackage.location,
+								}));
 
-						return (
-						<DropdownSection title={section.label} showDivider>
-							{renderDropdownItems(packageItems.filter((packageItem) => packageItem.location === section.key))}
-						</DropdownSection>
-						);
-					}}
-					</DropdownMenu>
-				</Dropdown>
+								return (
+									<DropdownSection title={section.label} showDivider>
+										{renderDropdownItems(packageItems.filter((packageItem) => packageItem.location === section.key))}
+									</DropdownSection>
+								);
+							}}
+						</DropdownMenu>
+					</Dropdown>
 				</NavbarItem>
 				<NavbarItem>
 					<Button

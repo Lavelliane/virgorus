@@ -81,8 +81,12 @@ export async function POST(req: any, res: any) {
 			cancellation: packageData.cancellation,
 			availability: packageData.availability,
 			language: packageData.language,
-			inclusions: { set: packageData.inclusions.map((e: any) => JSON.stringify(e)) },
-			exclusions: { set: packageData.exclusions.map((e: any) => JSON.stringify(e)) },
+			inclusions: {
+				set: packageData.inclusions,
+			},
+			exclusions: {
+				set: packageData.exclusions,
+			},
 			notice: packageData.notice,
 			rates: {
 				create: packageData?.rates?.map((rate: Rates) => ({
