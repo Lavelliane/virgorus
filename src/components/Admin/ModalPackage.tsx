@@ -49,12 +49,27 @@ async function createPackage(data: FormData) {
 
 export default function ModalPackage() {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	const [isComplete, setIsComplete] = React.useState<boolean>(true);
 	const [form, setForm] = React.useState<IAddPackage>(addPackageDefault);
 	const [availability, setAvailability] = React.useState<Selection>(new Set([]));
 	const [language, setLanguage] = React.useState<Selection>(new Set([]));
 	const [location, setLocation] = React.useState<Selection>(new Set([]));
 
 	const handleActionClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		if (
+			!form.name ||
+			!form.type ||
+			!form.description ||
+			!form.duration ||
+			!form.cancellation ||
+			!form.inclusions ||
+			!form.exclusions ||
+			!form.itinerary ||
+			!form.photos
+		) {
+			setIsComplete(false);
+			return;
+		}
 		e.preventDefault();
 		const formData = new FormData();
 
@@ -82,7 +97,10 @@ export default function ModalPackage() {
 		window.location.reload();
 	};
 
-	console.log(form);
+	useEffect(() => {
+		setIsComplete(true);
+	}, [form]);
+
 	const availabilitySelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const selectedValues = e.target.value.split(',');
 		if (selectedValues.includes('')) {
@@ -302,9 +320,11 @@ export default function ModalPackage() {
 								<Button color='default' variant='light' onPress={onClose} className='font-semibold'>
 									Close
 								</Button>
-								<Button color='secondary' onClick={(e) => handleActionClick(e)}>
-									Add
-								</Button>
+								<Tooltip isOpen={!isComplete} content='Incomplete package info!' delay={1000} color='danger'>
+									<Button color='secondary' onClick={(e) => handleActionClick(e)}>
+										Add
+									</Button>
+								</Tooltip>
 							</ModalFooter>
 						</>
 					)}
