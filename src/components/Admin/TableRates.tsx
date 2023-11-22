@@ -1,17 +1,9 @@
 import React, { useEffect } from 'react';
-import {
-	Table,
-	TableHeader,
-	TableColumn,
-	TableBody,
-	TableRow,
-	TableCell,
-	Button,
-	Input,
-	Spacer,
-} from '@nextui-org/react';
-import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { Button, Input, Spacer, Tooltip } from '@nextui-org/react';
+import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { MdDeleteOutline } from 'react-icons/md';
 import { PiNotePencilLight } from 'react-icons/pi';
+import { AiOutlineStop } from 'react-icons/ai';
 import IAddPackage from '@/types/types';
 
 interface Pax {
@@ -25,12 +17,18 @@ interface TableRatesProps {
 }
 
 export default function TableRates({ onChange, form }: TableRatesProps) {
+	const [isRepeating, setIsRepeating] = React.useState<boolean>(false);
 	const [paxRate, setPaxRate] = React.useState<Pax[]>([]);
 	const [newPax, setNewPax] = React.useState('');
 	const [newRate, setNewRate] = React.useState('');
 	const [isEditingStates, setIsEditingStates] = React.useState<boolean[]>([]);
 	const [originalPaxStates, setOriginalPaxStates] = React.useState<string[]>([]);
 	const [originalRateStates, setOriginalRateStates] = React.useState<string[]>([]);
+
+	useEffect(() => {
+		const isRepeating = paxRate.some((entry) => entry.numberOfPax === newPax && entry.ratePerPax === newRate);
+		setIsRepeating(isRepeating);
+	}, [newPax, newRate, paxRate]);
 
 	useEffect(() => {
 		if (form?.rates) {
@@ -90,9 +88,19 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 	};
 
 	const toggleEdit = (index: number) => {
+		setNewPax('');
+		setNewRate('');
 		const updatedIsEditingStates = [...isEditingStates];
 		updatedIsEditingStates[index] = !updatedIsEditingStates[index];
 		setIsEditingStates(updatedIsEditingStates);
+	};
+
+	const handleCancel = (index: number) => {
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates[index] = false;
+		setIsEditingStates(updatedIsEditingStates);
+		setNewPax('');
+		setNewRate('');
 	};
 
 	const handleEdit = (index: number) => {
@@ -132,22 +140,27 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 
 	return (
 		<div className='flex flex-col w-full gap-4'>
-			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-[48rem] overflow-auto'>
-				<TableHeader>
-					<TableColumn key='numberOfPax' className='table-cell w-1/2 items-center'>
-						Pax
-					</TableColumn>
-					<TableColumn key='ratePerPax' className=' table-cell w-1/2 items-center'>
-						Rate
-					</TableColumn>
-					<TableColumn key='action' className='justify-end w-full flex items-center'>
-						Actions
-					</TableColumn>
-				</TableHeader>
-				<TableBody>
+			<table aria-label='Rates table' className='max-h-[48rem] overflow-auto'>
+				<thead className=' bg-[#f4f4f5]'>
+					<tr className='text-xs text-default-600  shadow-sm rounded-lg'>
+						<th key='numberOfPax' className='table-cell w-1/3 items-center text-start p-3 rounded-l-lg'>
+							Pax
+						</th>
+						<th key='ratePerPax' className=' table-cell w-2/3 items-center pl-4'>
+							Rate
+						</th>
+						<th key='action' className='justify-end w-full flex items-center text-end p-3 rounded-r-lg'>
+							Actions
+						</th>
+					</tr>
+				</thead>
+				<tbody>
 					{paxRate?.map((paxRateData, index) => (
-						<TableRow key={`${index}-${paxRateData.numberOfPax}-${paxRateData.ratePerPax}`}>
-							<TableCell className='font-medium'>
+						<tr
+							key={`${paxRateData.numberOfPax}-${paxRateData.ratePerPax}`}
+							className=' space-y-4 text-sm items-center'
+						>
+							<td className='table-cell font-medium pt-2'>
 								{isEditingStates[index] ? (
 									<Input
 										type='text'
@@ -155,13 +168,13 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 										value={newPax}
 										onChange={(e) => setNewPax(e.target.value)}
 										placeholder={originalPaxStates[index]}
-										className=' sm:text-sm text-xs mx-0'
+										className=' sm:text-sm text-xs mx-0 '
 									/>
 								) : (
-									' ' + paxRateData.numberOfPax
+									'　' + paxRateData.numberOfPax
 								)}
-							</TableCell>
-							<TableCell>
+							</td>
+							<td className='table-cell pt-2 pl-2'>
 								{isEditingStates[index] ? (
 									<Input
 										type='text'
@@ -174,29 +187,45 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 								) : (
 									`₱ ${Number(paxRateData.ratePerPax).toLocaleString('en-US', { minimumFractionDigits: 2 })}`
 								)}
-							</TableCell>
-							<TableCell className='justify-center flex items-center'>
+							</td>
+							<td className='table-cell justify-center items-center'>
 								{isEditingStates[index] ? (
 									<div className='flex justify-center items-center'>
+										<Tooltip isOpen={isRepeating} content='Rate already exist!' color='danger' delay={1000}>
+											<Button
+												onKeyDown={(e) => {
+													if (e.key === 'Tab') handleEdit(index);
+												}}
+												disabled={isRepeating}
+												onClick={() => handleEdit(index)}
+												isIconOnly
+												size='sm'
+												className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
+											>
+												<IoCheckmarkCircleOutline />
+											</Button>
+										</Tooltip>
 										<Button
-											onClick={() => handleEdit(index)}
+											disabled={isRepeating}
+											onClick={() => handleCancel(index)}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
+											className='bg-transparent text-gray-700 hover:text-gray-600 text-lg hover:bg-transparent'
 										>
-											<IoCheckmarkCircleOutline />
+											<AiOutlineStop />
 										</Button>
+
 										<Button
 											onClick={() => removePaxRate(index)}
 											isIconOnly
 											size='sm'
 											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
 										>
-											<IoRemoveCircleOutline />
+											<MdDeleteOutline />
 										</Button>
 									</div>
 								) : (
-									<div className='flex justify-center items-center'>
+									<div className='flex justify-center items-center m-auto'>
 										<Button
 											disabled={isEditingStates.some((isEditing) => isEditing)}
 											onClick={() => toggleEdit(index)}
@@ -208,12 +237,12 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 										</Button>
 									</div>
 								)}
-							</TableCell>
-						</TableRow>
+							</td>
+						</tr>
 					))}
-				</TableBody>
-			</Table>
-			<div className='flex items-center'>
+				</tbody>
+			</table>
+			<div className='flex items-center pb-2'>
 				<Input
 					type='text'
 					size='sm'
@@ -221,7 +250,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					onChange={(e) => setNewPax(e.target.value)}
 					placeholder='No. of Pax'
 					disabled={isEditingStates.some((isEditing) => isEditing)}
-					className=' sm:text-sm text-xs mx-0'
+					className=' sm:text-sm text-xs mx-0 w-1/3'
 				/>
 				<Spacer x={2} />
 				<Input
@@ -231,19 +260,29 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 					onChange={(e) => setNewRate(e.target.value)}
 					placeholder='Rate/Pax'
 					disabled={isEditingStates.some((isEditing) => isEditing)}
-					className=' sm:text-sm text-xs mx-0'
+					className=' sm:text-sm text-xs mx-0 w-2/3'
 				/>
 				<Spacer x={4} />
-				<Button
-					onClick={addPax}
-					size='sm'
-					isIconOnly
-					className='text-chocolate hover:text-opacity-60 text-2xl bg-transparent transition-all'
-					disabled={isEditingStates.some((isEditing) => isEditing)}
-					type='submit'
+				<Tooltip
+					isOpen={isRepeating && !isEditingStates.some((isEditing) => isEditing)}
+					content='Pax already exist!'
+					delay={1000}
+					color='danger'
 				>
-					<IoAddCircleOutline />
-				</Button>
+					<Button
+						onKeyDown={(e) => {
+							if (e.key === 'Tab') addPax();
+						}}
+						onClick={addPax}
+						size='sm'
+						isIconOnly
+						className='text-chocolate hover:text-opacity-60 text-2xl bg-transparent transition-all'
+						disabled={isEditingStates.some((isEditing) => isEditing) || isRepeating}
+						type='submit'
+					>
+						<IoAddCircleOutline />
+					</Button>
+				</Tooltip>
 				<Spacer x={4} />
 			</div>
 		</div>

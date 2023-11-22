@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { FormEvent, useEffect } from 'react';
 import {
 	Card,
 	CardHeader,
@@ -78,7 +78,7 @@ export default function EditPackage({ id }: Props) {
 		}
 	}, [packageLoading, packageData]);
 
-	const handleSaveClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const handleSaveClick = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData();
 
@@ -145,167 +145,174 @@ export default function EditPackage({ id }: Props) {
 	};
 
 	return (
-		<Card>
-			<CardHeader className='flex flex-col gap-1'>Edit Package</CardHeader>
-			<CardBody className='w-full'>
-				<div className='flex flex-col gap-4'>
+		<form onSubmit={(e) => handleSaveClick(e)}>
+			<Card className='max-w-[800px]'>
+				<CardHeader className='flex flex-col gap-1 font-bold'>Edit Package</CardHeader>
+				<CardBody className='w-full'>
 					<div className='flex flex-col gap-4'>
-						<Input
-							value={form?.name || ''}
-							name='name'
-							onChange={onChange}
-							type='text'
-							size='sm'
-							labelPlacement='outside'
-							label='Package Name'
-							placeholder='Enter package name'
-							isRequired
-						/>
-						<div className='flex md:flex-row flex-col w-full items-center gap-4'>
+						<div className='flex flex-col gap-4'>
 							<Input
-								value={form?.type || ''}
-								name='type'
+								value={form?.name || ''}
+								name='name'
 								onChange={onChange}
 								type='text'
 								size='sm'
 								labelPlacement='outside'
-								label='Type'
-								placeholder='Enter type'
-								className='w-1/2'
+								label='Package Name'
+								placeholder='Enter package name'
 								isRequired
 							/>
-							<Select
-								label='Location'
-								labelPlacement='outside'
-								placeholder='Select Location'
-								selectedKeys={[location]}
+							<div className='flex md:flex-row flex-col w-full items-center gap-4'>
+								<Input
+									value={form?.type || ''}
+									name='type'
+									onChange={onChange}
+									type='text'
+									size='sm'
+									labelPlacement='outside'
+									label='Type'
+									placeholder='Enter type'
+									className='w-full md:w-1/2'
+									isRequired
+								/>
+								<Select
+									label='Location'
+									labelPlacement='outside'
+									placeholder='Select Location'
+									selectedKeys={[location]}
+									size='sm'
+									className='w-full md:w-1/2'
+									onChange={locationSelectionChange}
+								>
+									{locationData?.map((location) => (
+										<SelectItem key={location.value} value={location.value}>
+											{location.value}
+										</SelectItem>
+									))}
+								</Select>
+							</div>
+						</div>
+						<div className='flex flex-col gap-4'>
+							<Textarea
+								className='w-[100%]'
+								name='description'
+								value={form?.description || ''}
+								onChange={onChange}
+								type='text'
 								size='sm'
-								className='w-1/2'
-								onChange={locationSelectionChange}
+								labelPlacement='outside'
+								label='Description'
+								placeholder='Enter package description'
+								isRequired
+								minRows={10}
+							/>
+							<Textarea
+								className='w-[100%]'
+								name='notice'
+								value={form?.notice || ''}
+								onChange={onChange}
+								type='text'
+								size='sm'
+								labelPlacement='outside'
+								label='Notice'
+								placeholder='Enter notice'
+								minRows={4}
+							/>
+						</div>
+						<div className='flex gap-4'>
+							<Input
+								value={form?.duration || ''}
+								className='w-[50%]'
+								name='duration'
+								onChange={onChange}
+								type='text'
+								size='sm'
+								min='1'
+								labelPlacement='outside'
+								label='Package Duration (in hours)'
+								placeholder='i.e. 12, 8-10'
+								isRequired
+							/>
+							<Tooltip
+								placement='top'
+								delay={500}
+								closeDelay={100}
+								content="Leave empty for 'No cancellation' policies."
 							>
-								{locationData?.map((location) => (
-									<SelectItem key={location.value} value={location.value}>
-										{location.value}
+								<Input
+									value={form?.cancellation || ''}
+									className='w-[50%]'
+									name='cancellation'
+									onChange={onChange}
+									type='text'
+									size='sm'
+									labelPlacement='outside'
+									label='Cancellation Policy (in hours)'
+									placeholder='i.e. 24, 48'
+									isRequired
+								/>
+							</Tooltip>
+						</div>
+						<div className='flex gap-4'>
+							<Select
+								label='Availability'
+								labelPlacement='outside'
+								selectionMode='multiple'
+								placeholder='Select Availability'
+								selectedKeys={availability}
+								size='sm'
+								className='w-[50%]'
+								onChange={availabilitySelectionChange}
+							>
+								{availabilityData?.map((availability) => (
+									<SelectItem key={availability.value} value={availability.value}>
+										{availability.label}
+									</SelectItem>
+								))}
+							</Select>
+							<Select
+								label='Language'
+								labelPlacement='outside'
+								selectionMode='multiple'
+								placeholder='Select Language'
+								selectedKeys={language}
+								size='sm'
+								className='w-[50%]'
+								onChange={languageSelectionChange}
+							>
+								{languagesData?.map((language) => (
+									<SelectItem key={language.name} value={language.name}>
+										{language.name}
 									</SelectItem>
 								))}
 							</Select>
 						</div>
-					</div>
-					<div className='flex flex-col gap-4'>
-						<Textarea
-							className='w-[100%]'
-							name='description'
-							value={form?.description || ''}
-							onChange={onChange}
-							type='text'
-							size='sm'
-							labelPlacement='outside'
-							label='Description'
-							placeholder='Enter package description'
-							isRequired
-							minRows={10}
-						/>
-						<Textarea
-							className='w-[100%]'
-							name='notice'
-							value={form?.notice || ''}
-							onChange={onChange}
-							type='text'
-							size='sm'
-							labelPlacement='outside'
-							label='Notice'
-							placeholder='Enter notice'
-							minRows={4}
-						/>
-					</div>
-					<div className='flex gap-4'>
-						<Input
-							value={form?.duration || ''}
-							className='w-[50%]'
-							name='duration'
-							onChange={onChange}
-							type='text'
-							size='sm'
-							min='1'
-							labelPlacement='outside'
-							label='Package Duration (in hours)'
-							placeholder='i.e. 12, 8-10'
-							isRequired
-						/>
-						<Tooltip placement='top' delay={500} closeDelay={100} content="Leave empty for 'No cancellation' policies.">
-							<Input
-								value={form?.cancellation || ''}
-								className='w-[50%]'
-								name='cancellation'
-								onChange={onChange}
-								type='text'
-								size='sm'
-								labelPlacement='outside'
-								label='Cancellation Policy (in hours)'
-								placeholder='i.e. 24, 48'
-								isRequired
-							/>
-						</Tooltip>
-					</div>
-					<div className='flex gap-4'>
-						<Select
-							label='Availability'
-							labelPlacement='outside'
-							selectionMode='multiple'
-							placeholder='Select Availability'
-							selectedKeys={availability}
-							size='sm'
-							className='w-[50%]'
-							onChange={availabilitySelectionChange}
-						>
-							{availabilityData?.map((availability) => (
-								<SelectItem key={availability.value} value={availability.value}>
-									{availability.label}
-								</SelectItem>
-							))}
-						</Select>
-						<Select
-							label='Language'
-							labelPlacement='outside'
-							selectionMode='multiple'
-							placeholder='Select Language'
-							selectedKeys={language}
-							size='sm'
-							className='w-[50%]'
-							onChange={languageSelectionChange}
-						>
-							{languagesData?.map((language) => (
-								<SelectItem key={language.name} value={language.name}>
-									{language.name}
-								</SelectItem>
-							))}
-						</Select>
-					</div>
-					<Divider className='my-0' />
-					<div className='flex md:flex-row flex-col gap-4'>
-						<div className='flex w-full gap-4'>
-							<TableRates onChange={onChange} form={form} />
+						<Divider className='my-0' />
+						<div className='flex md:flex-row flex-col gap-4'>
+							<div className='flex w-full gap-4'>
+								<TableRates onChange={onChange} form={form} />
+							</div>
+							<div className='flex flex-col w-full gap-4'>
+								<TableInclusions onChange={onChange} form={form} />
+								<TableExclusions onChange={onChange} form={form} />
+							</div>
 						</div>
-						<div className='flex flex-col w-full gap-4'>
-							<TableInclusions onChange={onChange} form={form} />
-							<TableExclusions onChange={onChange} form={form} />
-						</div>
-					</div>
 
-					<Divider className='my-0' />
-					<TableItinerary onChange={onChange} form={form} />
-					<Divider className='my-0' />
-					<ButtonUpload onChange={onChange} form={form} />
-				</div>
-			</CardBody>
-			<CardFooter>
-				<Button color='default' variant='light' onPress={handleReturn} className='font-semibold'>
-					Return
-				</Button>
-				<Button color='secondary' type='submit' onClick={(e) => handleSaveClick(e)}>
-					Save
-				</Button>
-			</CardFooter>
-		</Card>
+						<Divider className='my-0' />
+						<TableItinerary onChange={onChange} form={form} />
+						<Divider className='my-0' />
+						<ButtonUpload onChange={onChange} form={form} />
+					</div>
+				</CardBody>
+				<CardFooter>
+					<Button color='default' variant='light' onPress={handleReturn} className='font-semibold'>
+						Return
+					</Button>
+					<Button color='secondary' type='submit'>
+						Save
+					</Button>
+				</CardFooter>
+			</Card>
+		</form>
 	);
 }

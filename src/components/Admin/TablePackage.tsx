@@ -45,7 +45,7 @@ type Package = {
 };
 
 const columns = [
-	{ name: 'ID', uid: 'id', sortable: true },
+	{ name: 'ID', uid: 'id' },
 	{ name: 'PACKAGE', uid: 'package', sortable: true },
 	{ name: 'TYPE', uid: 'type', sortable: true },
 	{ name: 'LOCATION', uid: 'location', sortable: true },
@@ -197,8 +197,9 @@ export default function TablePackage() {
 												</span>
 											}
 											aria-label='action-view'
+											href={`/tours/${Package.id}`}
 										>
-											<Link href={`/tours/${Package.id}`}>View</Link>
+											View
 										</DropdownItem>
 										<DropdownItem
 											key='edit'
@@ -210,8 +211,9 @@ export default function TablePackage() {
 												</span>
 											}
 											aria-label='action-edit'
+											href={`/admin/packages/${Package.id}`}
 										>
-											<Link href={`/admin/packages/${Package.id}`}>Edit</Link>
+											Edit
 										</DropdownItem>
 										<DropdownItem
 											key='delete'

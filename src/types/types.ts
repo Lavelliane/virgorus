@@ -9,10 +9,10 @@ export default interface IAddPackage {
 	availability: string;
 	language: string;
 	notice: string;
-	rates: Rates[];
-	itinerary: DaySchedule[];
-	inclusions: string[];
-	exclusions: string[];
+	rates: [Rates];
+	itinerary: [DaySchedule];
+	inclusions: [string];
+	exclusions: [string];
 	photos: File[];
 }
 

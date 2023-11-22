@@ -10,21 +10,21 @@ const supabase = createClient(
 );
 
 interface Rates {
-	id?: number;
+	id?: string;
 	packageId?: string;
 	numberOfPax: string;
 	ratePerPax: string;
 }
 
 interface DaySchedule {
-	id?: number;
+	id?: string;
 	packageId?: string;
 	day: string;
 	itineraries: [Itinerary];
 }
 
 interface Itinerary {
-	id?: number;
+	id?: string;
 	time?: string;
 	activity?: string;
 }

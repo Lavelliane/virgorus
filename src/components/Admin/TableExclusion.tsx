@@ -1,17 +1,9 @@
 import React, { useEffect } from 'react';
-import {
-	Table,
-	TableHeader,
-	TableColumn,
-	TableBody,
-	TableRow,
-	TableCell,
-	Button,
-	Input,
-	Spacer,
-} from '@nextui-org/react';
-import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { Button, Input, Spacer, Tooltip } from '@nextui-org/react';
+import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { PiNotePencilLight } from 'react-icons/pi';
+import { AiOutlineStop } from 'react-icons/ai';
+import { MdDeleteOutline } from 'react-icons/md';
 import IAddPackage from '@/types/types';
 
 interface TableExclusionsProps {
@@ -20,10 +12,16 @@ interface TableExclusionsProps {
 }
 
 export default function TableExclusions({ onChange, form }: TableExclusionsProps) {
+	const [isRepeating, setIsRepeating] = React.useState<boolean>(false);
 	const [exclusions, setExclusions] = React.useState<string[]>([]);
 	const [newExclusions, setNewExclusions] = React.useState('');
 	const [isEditingStates, setIsEditingStates] = React.useState<boolean[]>([]);
 	const [originalExclusionsStates, setOriginalExclusionsStates] = React.useState<string[]>([]);
+
+	useEffect(() => {
+		const isRepeating = exclusions.includes(newExclusions);
+		setIsRepeating(isRepeating);
+	}, [exclusions, newExclusions]);
 
 	useEffect(() => {
 		if (form?.exclusions) {
@@ -65,6 +63,13 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 		setIsEditingStates(updatedIsEditingStates);
 	};
 
+	const handleCancel = (index: number) => {
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates[index] = false;
+		setIsEditingStates(updatedIsEditingStates);
+		setNewExclusions('');
+	};
+
 	const handleEdit = (index: number) => {
 		const updatedExclusions = [...exclusions];
 		const newEditedExclusions = newExclusions || updatedExclusions[index];
@@ -95,19 +100,21 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 
 	return (
 		<div className='flex flex-col gap-4 w-full'>
-			<Table aria-label='Rates table' removeWrapper isHeaderSticky className='max-h-96 overflow-auto'>
-				<TableHeader>
-					<TableColumn key='exclusions' className='table-cell w-full items-center'>
-						Exclusions
-					</TableColumn>
-					<TableColumn key='action' className='justify-end w-full flex items-center'>
-						Actions
-					</TableColumn>
-				</TableHeader>
-				<TableBody>
+			<table aria-label='Rates table' className='max-h-96 overflow-auto'>
+				<thead className=' bg-[#f4f4f5]'>
+					<tr className='text-xs text-default-600  shadow-sm rounded-lg'>
+						<th key='exclusions' className='table-cell w-full items-center text-start p-3 rounded-l-lg'>
+							Exclusions
+						</th>
+						<th key='action' className='table-cell items-center text-end p-3 rounded-r-lg'>
+							Actions
+						</th>
+					</tr>
+				</thead>
+				<tbody>
 					{exclusions.map((exclusion, index) => (
-						<TableRow key={`${exclusion}`}>
-							<TableCell className='font-medium'>
+						<tr key={`${exclusion}`} className=' space-y-4 text-sm items-center'>
+							<td className='table-cell font-medium pt-2 pr-2'>
 								{isEditingStates[index] ? (
 									<Input
 										type='text'
@@ -118,19 +125,34 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 										className='sm:text-sm text-xs mx-0'
 									/>
 								) : (
-									' ' + exclusion
+									' ' + exclusion
 								)}
-							</TableCell>
-							<TableCell className='justify-end flex items-center'>
+							</td>
+							<td className='justify-center table-cell items-center'>
 								{isEditingStates[index] ? (
-									<div className='flex'>
+									<div className='flex justify-center items-center m-auto'>
+										<Tooltip isOpen={isRepeating} content='Exclusion already exist!' color='danger' delay={1000}>
+											<Button
+												onKeyDown={(e) => {
+													if (e.key === 'Tab') handleEdit(index);
+												}}
+												onClick={() => handleEdit(index)}
+												disabled={isRepeating}
+												isIconOnly
+												size='sm'
+												className='bg-transparent text-green-700 hover:text-green-600 text-xl hover-bg-transparent'
+											>
+												<IoCheckmarkCircleOutline />
+											</Button>
+										</Tooltip>
 										<Button
-											onClick={() => handleEdit(index)}
+											onClick={() => handleCancel(index)}
+											disabled={isRepeating}
 											isIconOnly
 											size='sm'
-											className='bg-transparent text-green-700 hover:text-green-600 text-xl hover-bg-transparent'
+											className='bg-transparent text-gray-700 hover:text-gray-600 text-lg hover-bg-transparent'
 										>
-											<IoCheckmarkCircleOutline />
+											<AiOutlineStop />
 										</Button>
 										<Button
 											onClick={() => removeExclusions(index)}
@@ -138,11 +160,11 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 											size='sm'
 											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
 										>
-											<IoRemoveCircleOutline />
+											<MdDeleteOutline />
 										</Button>
 									</div>
 								) : (
-									<div>
+									<div className='flex justify-center items-center m-auto'>
 										<Button
 											disabled={isEditingStates.some((isEditing) => isEditing)}
 											onClick={() => toggleEdit(index)}
@@ -154,11 +176,11 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 										</Button>
 									</div>
 								)}
-							</TableCell>
-						</TableRow>
+							</td>
+						</tr>
 					))}
-				</TableBody>
-			</Table>
+				</tbody>
+			</table>
 			<div className='flex items-center'>
 				<Input
 					type='text'
@@ -170,16 +192,26 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 					className='sm:text-sm text-xs mx-0'
 				/>
 				<Spacer x={4} />
-				<Button
-					onClick={addExclusions}
-					size='sm'
-					isIconOnly
-					className='text-chocolate hover-text-opacity-60 text-2xl bg-transparent transition-all'
-					disabled={isEditingStates.some((isEditing) => isEditing)}
-					type='submit'
+				<Tooltip
+					isOpen={isRepeating && !isEditingStates.some((isEditing) => isEditing)}
+					content='Exclusion already exist!'
+					delay={1000}
+					color='danger'
 				>
-					<IoAddCircleOutline />
-				</Button>
+					<Button
+						onKeyDown={(e) => {
+							if (e.key === 'Tab') addExclusions();
+						}}
+						onClick={addExclusions}
+						size='sm'
+						isIconOnly
+						className='text-chocolate hover-text-opacity-60 text-2xl bg-transparent transition-all'
+						disabled={isEditingStates.some((isEditing) => isEditing) || isRepeating}
+						type='submit'
+					>
+						<IoAddCircleOutline />
+					</Button>
+				</Tooltip>
 				<Spacer x={4} />
 			</div>
 		</div>

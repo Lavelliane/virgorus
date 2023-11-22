@@ -1,19 +1,9 @@
 import React, { useEffect } from 'react';
-import {
-	Table,
-	TableHeader,
-	TableColumn,
-	TableBody,
-	TableRow,
-	TableCell,
-	Button,
-	Input,
-	Accordion,
-	AccordionItem,
-	Spacer,
-} from '@nextui-org/react';
-import { IoAddCircleOutline, IoRemoveCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { Button, Input, Accordion, AccordionItem, Spacer, Tooltip } from '@nextui-org/react';
+import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
+import { MdDeleteOutline } from 'react-icons/md';
 import { PiNotePencilLight } from 'react-icons/pi';
+import { AiOutlineStop } from 'react-icons/ai';
 import IAddPackage from '@/types/types';
 
 interface Itinerary {
@@ -32,13 +22,25 @@ interface TableItineraryProps {
 }
 
 export default function TableItinerary({ onChange, form }: TableItineraryProps) {
+	const [isRepeating, setIsRepeating] = React.useState<boolean>(false);
 	const [day, setDay] = React.useState<DaySchedule[]>([]);
 	const [isEditingStates, setIsEditingStates] = React.useState<boolean[]>([]);
 	const [originalTimeStates, setOriginalTimeStates] = React.useState<string[]>([]);
 	const [originalActivityStates, setOriginalActivityStates] = React.useState<string[]>([]);
 	const [newDay, setNewDay] = React.useState('Day 1');
+	const [selectedKeys, setSelectedKeys] = React.useState('');
 	const [newTime, setNewTime] = React.useState('');
 	const [newActivity, setNewActivity] = React.useState('');
+
+	useEffect(() => {
+		const isRepeating = day.some(
+			(entry) =>
+				entry.day === selectedKeys &&
+				entry.itineraries.some((itinerary) => itinerary.activity === newActivity && itinerary.time === newTime)
+		);
+
+		setIsRepeating(isRepeating);
+	}, [selectedKeys, newTime, newActivity, day]);
 
 	useEffect(() => {
 		if (form?.itinerary) {
@@ -55,6 +57,8 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 				}));
 
 			// Assuming you're using some kind of state to store the form
+			const newDay = updatedItinerary.length + 1;
+			setNewDay('Day ' + newDay);
 			setDay(updatedItinerary);
 			setIsEditingStates(Array(form.itinerary.length).fill(false));
 			setOriginalTimeStates(
@@ -71,6 +75,10 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 			);
 		}
 	}, [form?.itinerary]);
+
+	const onSelectKey = () => {
+		setIsRepeating(false);
+	};
 
 	const addDay = () => {
 		if (newDay) {
@@ -97,7 +105,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 		if (newTime && newActivity) {
 			const existingEntry = day[dayIndex].itineraries.find((itinerary) => itinerary.time === newTime);
 			if (existingEntry) {
-				console.log('Entry already exists for this time on the specified day');
+				setIsRepeating(true);
 			} else {
 				const newEntry: Itinerary = {
 					time: newTime,
@@ -135,6 +143,15 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 		const updateIsEditingStates = [...isEditingStates];
 		updateIsEditingStates[timeIndex] = !updateIsEditingStates[timeIndex];
 		setIsEditingStates(updateIsEditingStates);
+	};
+
+	const handleCancelItinerary = (dayIndex: number, timeIndex: number) => {
+		const updatedIsEditingStates = [...isEditingStates];
+		updatedIsEditingStates[timeIndex] = false;
+		setIsEditingStates(updatedIsEditingStates);
+
+		setNewTime('');
+		setNewActivity('');
 	};
 
 	const handleEditItinerary = (dayIndex: number, timeIndex: number) => {
@@ -197,14 +214,15 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 	return (
 		<div className='flex flex-col w-full gap-4'>
 			<div className={`w-full h-fit ${day.length !== 0 ? 'flex' : 'hidden'}`}>
-				<Accordion isCompact variant='bordered' defaultExpandedKeys={['0']}>
+				<Accordion isCompact variant='bordered' defaultExpandedKeys={['Day 1']} onSelectionChange={() => onSelectKey()}>
 					{day.map((daySchedule, dayIndex) => (
 						<AccordionItem
-							key={`${dayIndex}`}
+							onSelect={() => setSelectedKeys(daySchedule.day)}
+							key={`${daySchedule.day}`}
 							aria-label={'day' + dayIndex}
 							title={
 								<div className='flex items-center gap-4'>
-									<span className='text-sm h-8 items-center flex'>{daySchedule.day}</span>
+									<span className='text-sm h-8 items-center flex font-bold'>{daySchedule.day}</span>
 									{day.length - 1 === dayIndex && dayIndex !== 0 && (
 										<input
 											className='bg-danger rounded-lg p-2 text-sm text-white shadow-sm cursor-pointer hover:bg-opacity-70 hover:shadow-md'
@@ -217,23 +235,25 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 							}
 							className='text-sm'
 						>
-							<div className='flex flex-col w-full gap-4 py-4 p-1'>
-								<Table aria-label='Itineraries table' removeWrapper isHeaderSticky className='max-h-96 overflow-auto'>
-									<TableHeader>
-										<TableColumn key='time' className='table-cell w-1/2 items-center'>
-											Time
-										</TableColumn>
-										<TableColumn key='activity' className=' table-cell w-1/2 items-center'>
-											<span className='ml-4'>Activity</span>
-										</TableColumn>
-										<TableColumn key='action' className='justify-end w-full flex items-center'>
-											Actions
-										</TableColumn>
-									</TableHeader>
-									<TableBody>
+							<div className='flex flex-col w-full gap-4 p-2'>
+								<table aria-label='Itineraries table' className='max-h-96 overflow-auto'>
+									<thead className=' bg-[#f4f4f5]'>
+										<tr className='text-xs text-default-600  shadow-sm rounded-lg'>
+											<th key='time' className='table-cell w-1/4 items-center text-start p-3 rounded-l-lg'>
+												Time
+											</th>
+											<th key='activity' className=' table-cell w-3/4 items-center pl-4'>
+												Activity
+											</th>
+											<th key='action' className='table-cell w-full items-center text-end p-3 rounded-r-lg'>
+												Actions
+											</th>
+										</tr>
+									</thead>
+									<tbody>
 										{daySchedule.itineraries.map((itinerary, timeIndex) => (
-											<TableRow key={`${timeIndex}-${itinerary.time}-${itinerary.activity}`}>
-												<TableCell className='font-medium'>
+											<tr key={`${itinerary.time}-${itinerary.activity}`} className='space-y-4 text-sm items-center'>
+												<td className='table-cell font-medium pt-2'>
 													{isEditingStates[timeIndex] ? (
 														<Input
 															type='text'
@@ -241,13 +261,13 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 															value={newTime}
 															onChange={(e) => setNewTime(e.target.value)}
 															placeholder={originalTimeStates[timeIndex]}
-															className=' sm:text-sm text-xs mx-0'
+															className=' sm:text-sm text-xs m-0'
 														/>
 													) : (
-														' ' + itinerary.time
+														' ' + itinerary.time
 													)}
-												</TableCell>
-												<TableCell>
+												</td>
+												<td className='table-cell pt-2 pl-2'>
 													{isEditingStates[timeIndex] ? (
 														<Input
 															type='text'
@@ -255,22 +275,40 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 															value={newActivity}
 															onChange={(e) => setNewActivity(e.target.value)}
 															placeholder={originalActivityStates[timeIndex]}
-															className=' sm:text-sm text-xs mx-0'
+															className=' sm:text-sm text-xs mx-0 w-full'
 														/>
 													) : (
 														' ' + itinerary.activity
 													)}
-												</TableCell>
-												<TableCell className='justify-end flex items-center'>
+												</td>
+												<td className='table-cell items-center mx-auto'>
 													{isEditingStates[timeIndex] ? (
-														<div className='flex'>
+														<div className='flex justify-center items-center mx-auto'>
+															<Tooltip
+																isOpen={isRepeating}
+																content='Itinerary already exist!'
+																delay={1000}
+																color='danger'
+															>
+																<Button
+																	onKeyDown={(e) => {
+																		if (e.key === 'Tab') handleEditItinerary(dayIndex, timeIndex);
+																	}}
+																	onClick={() => handleEditItinerary(dayIndex, timeIndex)}
+																	isIconOnly
+																	size='sm'
+																	className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
+																>
+																	<IoCheckmarkCircleOutline />
+																</Button>
+															</Tooltip>
 															<Button
-																onClick={() => handleEditItinerary(dayIndex, timeIndex)}
+																onClick={() => handleCancelItinerary(dayIndex, timeIndex)}
 																isIconOnly
 																size='sm'
-																className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
+																className='bg-transparent text-gray-700 hover:text-gray-600 text-lg hover:bg-transparent'
 															>
-																<IoCheckmarkCircleOutline />
+																<AiOutlineStop />
 															</Button>
 															<Button
 																onClick={() => removeItinerary(dayIndex, timeIndex)}
@@ -278,11 +316,11 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 																size='sm'
 																className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
 															>
-																<IoRemoveCircleOutline />
+																<MdDeleteOutline />
 															</Button>
 														</div>
 													) : (
-														<div>
+														<div className='flex justify-center items-center m-auto'>
 															<Button
 																disabled={isEditingStates.some((isEditing) => isEditing)}
 																onClick={() => toggleEditItinerary(dayIndex, timeIndex)}
@@ -294,12 +332,13 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 															</Button>
 														</div>
 													)}
-												</TableCell>
-											</TableRow>
+												</td>
+											</tr>
 										))}
-									</TableBody>
-								</Table>
-								<div className='flex gap-2 items-center'>
+									</tbody>
+								</table>
+
+								<div className='flex gap-2 items-center pb-2'>
 									<Input
 										type='text'
 										size='sm'
@@ -307,8 +346,9 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 										onChange={(e) => setNewTime(e.target.value)}
 										placeholder='Time'
 										disabled={isEditingStates.some((isEditing) => isEditing)}
-										className=' sm:text-sm text-xs mx-0 w-40'
+										className=' sm:text-sm text-xs mx-0 w-1/4'
 									/>
+
 									<Input
 										type='text'
 										size='sm'
@@ -316,18 +356,26 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 										onChange={(e) => setNewActivity(e.target.value)}
 										placeholder='Activity'
 										disabled={isEditingStates.some((isEditing) => isEditing)}
-										className=' sm:text-sm text-xs mx-0'
+										className=' sm:text-sm text-xs mx-0 w-3/4'
 									/>
-									<Button
-										onClick={() => addItinerary(parseInt(daySchedule.day.split(' ')[1]) - 1)}
-										size='sm'
-										isIconOnly
-										className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
-										disabled={isEditingStates.some((isEditing) => isEditing)}
-										type='submit'
+									<Tooltip
+										isOpen={isRepeating && !isEditingStates.some((isEditing) => isEditing)}
+										content='Itinerary already exist!'
+										delay={1000}
+										color='danger'
 									>
-										<IoAddCircleOutline />
-									</Button>
+										<Button
+											onKeyDown={(e) => e.key === 'Tab' && addItinerary(parseInt(daySchedule.day.split(' ')[1]) - 1)}
+											onClick={() => addItinerary(parseInt(daySchedule.day.split(' ')[1]) - 1)}
+											size='sm'
+											isIconOnly
+											className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
+											disabled={isEditingStates.some((isEditing) => isEditing)}
+											type='submit'
+										>
+											<IoAddCircleOutline />
+										</Button>
+									</Tooltip>
 									<Spacer x={2} />
 								</div>
 							</div>
