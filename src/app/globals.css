@@ -35,6 +35,29 @@ body {
   box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
 }
 
+.about-background {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70%;
+}
+
+.clip-path-div {
+  clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 20% 0%, 0% 100%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.half-bg-primary {
+  background: linear-gradient(to bottom, #776B5D 70%, #ffffff 30%);
+}
+
+
 /* CSS */
 .button-30 {
   align-items: center;

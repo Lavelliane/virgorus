@@ -48,6 +48,11 @@ module.exports = {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
 			},
+			maxWidth: {
+				'8xl': '88rem',
+				'9xl': '96rem',
+				'10xl': '104rem',
+			},
 		},
 	},
 	plugins: [
@@ -59,7 +64,7 @@ module.exports = {
 							DEFAULT: '#776B5D',
 						},
 						secondary: {
-							DEFAULT: '#6C7D47',
+							DEFAULT: '#F3EBE4',
 						},
 					},
 				},

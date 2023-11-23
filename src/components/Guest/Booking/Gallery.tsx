@@ -10,7 +10,7 @@ export function Gallery() {
       layout="rows"
       photos={photos}
       renderPhoto={NextJsImage}
-      defaultContainerWidth={1200}
+      defaultContainerWidth={1536}
       sizes={{ size: "calc(100vw - 240px)" }}
     />
   );

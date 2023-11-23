@@ -92,7 +92,7 @@ export default function NavbarGuest() {
 	];
 
 	return (
-		<Navbar className='bg-white' maxWidth='xl'>
+		<Navbar className='bg-white' maxWidth='full'>
 			<NavbarBrand>
 				<Link className='cursor-pointer' href='/'>
 					<Image src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png' alt='virgorus-main-logo' width={75} height={75} />
@@ -104,7 +104,7 @@ export default function NavbarGuest() {
 					<Dropdown className='rounded-md'>
 						<DropdownTrigger>
 							<span
-								className='md:text-sm lg:text-base flex items-center gap-1 text-black cursor-pointer'
+								className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
 							>
 								Packages
 								<RiArrowDownSLine />
@@ -143,7 +143,7 @@ export default function NavbarGuest() {
 					<Dropdown className='rounded-md'>
 						<DropdownTrigger>
 							<span
-								className='md:text-sm lg:text-base flex items-center gap-1 text-black cursor-pointer'
+								className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
 							>
 								Destinations
 								<RiArrowDownSLine />
@@ -170,7 +170,7 @@ export default function NavbarGuest() {
 				<NavbarItem className='hidden lg:flex'>
 					<Link href='/about'>
 						<span
-							className='md:text-sm lg:text-base flex items-center gap-1 text-black cursor-pointer'
+							className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
 						>
 							About Us
 						</span>
@@ -179,14 +179,14 @@ export default function NavbarGuest() {
 				<NavbarItem>
 					<Link href='/contact'>
 						<span
-							className='md:text-sm lg:text-base flex items-center gap-1 text-black cursor-pointer'
+							className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
 						>
 							Contact Us
 						</span>
 					</Link>
 				</NavbarItem>
 			</NavbarContent>
-			<NavbarContent className={`hidden md:flex gap-4`} justify='end'>
+			<NavbarContent className={`hidden md:flex gap-4 pr-5`} justify='end'>
 				<NavbarItem>
 					<Button
 						color='primary'
