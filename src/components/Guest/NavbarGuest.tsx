@@ -30,12 +30,6 @@ type Package = {
 	location: string;
 };
 
-interface PackageItem {
-	key: string;
-	label: string;
-	sublabel?: string;
-}
-
 interface PackageSection {
 	key: string;
 	label: string;
@@ -81,7 +75,7 @@ export default function NavbarGuest() {
 	const packageSections = getPackageSections(packages);
 	const renderDropdownItems = (packages: Package[]) => {
 		return packages.map((ipackage) => (
-			<DropdownItem key={ipackage.id} className='text-black' description={ipackage.type}>
+			<DropdownItem key={ipackage.id} className='text-black' description={ipackage.id} href={`/tours/${ipackage.location}/${ipackage.id}`}>
 				<div className='whitespace-normal'>{ipackage.name}</div>
 			</DropdownItem>
 		));
@@ -98,35 +92,23 @@ export default function NavbarGuest() {
 	];
 
 	return (
-		<Navbar className='backdrop-blur-md' maxWidth='xl'>
+		<Navbar className='bg-white' maxWidth='full'>
 			<NavbarBrand>
-				<Image src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png' alt='virgorus-main-logo' width={75} height={75} />
-				<span className='font-bold font-efco text-3xl'>virgorus</span>
+				<Link className='cursor-pointer' href='/'>
+					<Image src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png' alt='virgorus-main-logo' width={75} height={75} />
+					<span className='font-bold font-efco text-3xl text-black'>virgorus</span>
+				</Link>
 			</NavbarBrand>
-			<NavbarContent className='hidden md:flex gap-4' justify='end'>
+			<NavbarContent className='hidden md:flex gap-10 font-playfair pl-16' justify='center'>
 				<NavbarItem>
-					<Button
-						as={Link}
-						href='/home'
-						variant='light'
-						endContent={<IoMdHome />}
-						radius='sm'
-						className='font-semibold md:text-xs lg:text-lg'
-					>
-						Home
-					</Button>
-				</NavbarItem>
-				<NavbarItem>
-					<Dropdown>
+					<Dropdown className='rounded-md'>
 						<DropdownTrigger>
-							<Button
-								variant='light'
-								endContent={<RiArrowDownSLine />}
-								className='font-semibold md:text-xs lg:text-lg'
-								radius='sm'
+							<span
+								className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
 							>
-								Tour Packages
-							</Button>
+								Packages
+								<RiArrowDownSLine />
+							</span>
 						</DropdownTrigger>
 						<DropdownMenu
 							items={packageSections.map((section) => ({
@@ -158,13 +140,59 @@ export default function NavbarGuest() {
 					</Dropdown>
 				</NavbarItem>
 				<NavbarItem>
+					<Dropdown className='rounded-md'>
+						<DropdownTrigger>
+							<span
+								className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
+							>
+								Destinations
+								<RiArrowDownSLine />
+							</span>
+						</DropdownTrigger>
+						<DropdownMenu
+							items={packageSections}
+							aria-label='Destinations'
+							className=''
+							itemClasses={{
+								base: 'gap-4',
+							}}
+						>
+							{(section) => (
+								<DropdownItem
+									key={section.key}
+								>
+									{section.label}
+								</DropdownItem>
+							)}
+						</DropdownMenu>
+					</Dropdown>
+				</NavbarItem>
+				<NavbarItem className='hidden lg:flex'>
+					<Link href='/about'>
+						<span
+							className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
+						>
+							About Us
+						</span>
+					</Link>
+				</NavbarItem>
+				<NavbarItem>
+					<Link href='/contact'>
+						<span
+							className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
+						>
+							Contact Us
+						</span>
+					</Link>
+				</NavbarItem>
+			</NavbarContent>
+			<NavbarContent className={`hidden md:flex gap-4 pr-5`} justify='end'>
+				<NavbarItem>
 					<Button
-						variant='flat'
-						color='success'
-						endContent={<IoMdPerson />}
-						className='font-semibold md:text-xs lg:text-lg'
+						color='primary'
+						className='font-extralight font-poppins md:text-xs lg:text-sm p-6 rounded-md'
 					>
-						About Us
+						Book Now
 					</Button>
 				</NavbarItem>
 			</NavbarContent>

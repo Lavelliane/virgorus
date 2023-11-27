@@ -26,12 +26,38 @@ import Package from '../../../types/package';
 import { contactsData } from '@/utils/data';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
+import NextJsPhoto from '../../NextJsImage';
+import PhotoAlbum from 'react-photo-album';
+import { Playfair_Display } from 'next/font/google';
+import { Poppins } from 'next/font/google';
+
+
+const playfairDisplay = Playfair_Display({ 
+	subsets: ['latin'],
+	variable: '--font-playfair',
+});
+
+const poppins = Poppins({ 
+	subsets: ['latin'],
+	variable: '--font-poppins',
+	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+	style: ['italic', 'normal']
+});
+
+interface Photo {
+	src: string;
+	width: number;
+	height: number;
+}
 
 export default function PackageDetails({ id }: { id: number }) {
 	/* ====================         STATES         ====================*/
 
 	const [showDescription, setShowDescription] = useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
+	const [photos, setPhotos] = useState<Photo[]>([]);
+	const [availability, setAvailability] = useState<string>("");
+	const [languages, setLanguages] = useState<string>("");
 	const [Package, setPackage] = useState<Package>();
 	const { data: packageData, isLoading: packageLoading } = useQuery({
 		queryKey: ['package'],
@@ -39,11 +65,53 @@ export default function PackageDetails({ id }: { id: number }) {
 		  return fetchPackage(id); // Pass the id to the fetchPackage function
 		},
 	  });
+
+	const convertPhotos = (photos: string[]): Photo[] => {
+		return photos.map((photoUrl) => {
+			// Extract width and height from the URL
+			const match = photoUrl.match(/\/(\d+)x(\d+)\.jpg$/);
+			const width = match ? parseInt(match[1], 10) : 21;
+			const height = match ? parseInt(match[2], 10) : 9;
+		
+			// Create Photo object
+			const photo: Photo = {
+				src: photoUrl,
+				width: width,
+				height: height,
+			};
+		
+			return photo;
+		});
+	};
+
+	const formatAvailability = (availability: string): string => {
+		if(availability) {
+			const availabilityArray = availability.split(',');
+			const formattedAvailability = availabilityArray.join(', ');
+			return formattedAvailability;
+		} else {
+			return "n/a"
+		}
+	}
+
+	const formatLanguages= (languages: string): string => {
+		if(languages) {
+			const languagesArray = languages.split(',');
+			const formattedLanguages = languagesArray.join(', ');
+			return formattedLanguages;
+		} else {
+			return "n/a"
+		}
+	}
+	  
 	  
 	useEffect(() => {
 		if (!packageLoading && packageData) {
 			setIsLoaded(true)
 			setPackage(packageData);
+			setPhotos(convertPhotos(packageData.photos))
+			setAvailability(formatAvailability(packageData.availability))
+			setLanguages(formatLanguages(packageData.language))
 		}
 	}, [packageLoading, packageData]);
 	
@@ -84,22 +152,28 @@ export default function PackageDetails({ id }: { id: number }) {
 	});
 
 	return (
-		<div className='flex flex-col w-full mx-2 sm:mx-10'>
+		<div className='flex flex-col w-full mx-2 sm:mx-10 font-poppins'>
 			<div aria-label='Package Header' className='flex flex-col w-full'>
 				{isLoaded ? (
 					<div>
-						<Spacer y={10} />
-						<p className='font-bold text-black text-2xl'>{Package?.name}</p>
+						<Spacer y={4} />
+						<p className='font-semibold font-playfair text-black text-3xl'>{Package?.name}</p>
 						<Spacer y={6} />
 						<div>
-							<Gallery />
+							<PhotoAlbum
+								layout='rows'
+								photos={photos}
+								renderPhoto={NextJsPhoto}
+								defaultContainerWidth={400}
+								sizes={{ size: 'calc(100vw - 240px)' }}
+							/>
 						</div>
 					</div>
 				) : (
 					<div>
-						<Spacer y={10} />
+						<Spacer y={4} />
 						<Skeleton isLoaded={isLoaded} className={`rounded-lg ${isLoaded === false ? 'w-1/2' : ''}`}>
-							<div className='text-2xl'>.</div>
+							<div className='text-3xl'>.</div>
 						</Skeleton>
 						<Spacer y={6} />
 						<div>
@@ -111,12 +185,12 @@ export default function PackageDetails({ id }: { id: number }) {
 				)}
 			</div>
 			<Spacer y={10} />
-			<div aria-label='Package Body' className='flex lg:flex-row flex-col my-0 '>
+			<div aria-label='Package Body' className='flex lg:flex-row flex-col my-0 w-full'>
 				{isLoaded ? (
 					<div aria-label='Package Info' className='lg:w-4/6'>
 						<div aria-label='About'>
 							<div className='w-full text-black text-sm'>
-								<h1 className='font-semibold pb-4 text-lg'>About</h1>
+								<h1 className='font-semibold pb-4 text-lg font-playfair'>About</h1>
 								<div className={`${showDescription ? '' : 'gradient-mask'}`}>
 									<p
 										className={`text-justify whitespace-pre-wrap h-fit ${
@@ -126,17 +200,16 @@ export default function PackageDetails({ id }: { id: number }) {
 										{Package?.description}
 									</p>
 								</div>
-								<Button
-									disableAnimation
-									variant='light'
-									color='default'
-									onClick={() => setShowDescription(!showDescription)}
-									className='font-semibold text-sm underline underline-offset-2 p-0 my-2 h-fit justify-start rounded-none hover:bg-white'
-								>
-									{showDescription ? 'Read Less' : 'Read More...'}
-								</Button>
+								<div className='pt-4 pb-2'>
+									<span
+										onClick={() => setShowDescription(!showDescription)}
+										className='font-semibold text-sm underline underline-offset-2 hover:bg-transparent cursor-pointer'
+									>
+										{showDescription ? 'Read Less' : 'Read More...'}
+									</span>
+								</div>
 							</div>
-							<div className='w-full text-black py-2 mb-4 text-sm'>
+							<div className='w-full text-black pt-2 mb-4 text-sm'>
 								starts as low as&nbsp;
 								<span className='text-xl font-medium'>{`₱${Number(minRate).toLocaleString('en-US', {
 									minimumFractionDigits: 2,
@@ -212,9 +285,9 @@ export default function PackageDetails({ id }: { id: number }) {
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
-											<div className='text-small font-bold text-black'>Age range</div>
+											<div className='text-small font-bold text-black'>Availability</div>
 											<div className='text-tiny text-black w-48 text-justify'>
-												Certain locations in the package have age requirements which you are required to follow.
+												Some packages may or may not be available on certain days of the week.
 											</div>
 										</div>
 									}
@@ -225,15 +298,15 @@ export default function PackageDetails({ id }: { id: number }) {
 												<MdOutlineGroups />
 											</span>
 											&nbsp; Available{' '}
-											{Package?.availability === 'Saturday, Sunday' ||
-											Package?.availability === 'Monday, Tuesday, Wednesday, Thursday, Friday' ||
-											Package?.availability === 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday'
-												? Package?.availability === 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday'
+											{availability === 'Saturday, Sunday' ||
+											availability === 'Monday, Tuesday, Wednesday, Thursday, Friday' ||
+											availability === 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday'
+												? availability === 'Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday'
 													? 'daily'
-													: Package?.availability === 'Saturday, Sunday'
+													: availability === 'Saturday, Sunday'
 													? 'on weekends'
 													: 'on weekdays'
-												: Package?.availability}
+												: availability}
 										</p>
 									</div>
 								</Tooltip>
@@ -256,7 +329,7 @@ export default function PackageDetails({ id }: { id: number }) {
 											<span className='text-lg'>
 												<MdLanguage />
 											</span>
-											&nbsp; Live guide: {Package?.language}
+											&nbsp; Live guide: {languages}
 										</p>
 									</div>
 								</Tooltip>

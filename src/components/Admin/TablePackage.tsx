@@ -199,7 +199,11 @@ export default function TablePackage() {
 											aria-label='action-view'
 											href={`/tours/${Package.id}`}
 										>
+<<<<<<< HEAD
 											View
+=======
+											<Link href={`/tours/${Package.location}/${Package.id}`}>View</Link>
+>>>>>>> ceb588d12ece6038f81804c1dfa110817de27f9f
 										</DropdownItem>
 										<DropdownItem
 											key='edit'
@@ -266,14 +270,14 @@ export default function TablePackage() {
 											</span>
 										}
 										aria-label='action-view'
-										href={`/tours/${Package.id}`}
+										href={`/tours/${Package.location}/${Package.id}`}
 									>
 										View
 									</DropdownItem>
 									<DropdownItem
 										key='edit'
 										showDivider
-										description='edit the package'
+										description='Edit to make changes'
 										startContent={
 											<span className='text-xl'>
 												<MdEdit />
@@ -404,7 +408,7 @@ export default function TablePackage() {
 					isCompact
 					showControls
 					showShadow
-					color='secondary'
+					color='primary'
 					variant='flat'
 					page={page}
 					total={pages}

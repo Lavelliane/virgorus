@@ -62,7 +62,7 @@ const ButtonUpload = ({ onChange, form }: ButtonUploadProps) => {
 			reader.onload = () => {
 				previews.push(reader.result);
 				if (previews.length === newUploadedPhotos.length) {
-					setPhotoPreviews(previews.map((preview: any) => ({ src: preview, width: 4, height: 3 })));
+					(previews.map((preview: any) => ({ src: preview, width: 4, height: 3 })));
 				}
 			};
 			reader.readAsDataURL(file);

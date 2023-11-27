@@ -39,12 +39,19 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', ...fontFamily.sans],
         efco: ['var(--font-efco)', ...fontFamily.serif],
-        serif: ['var(--font-jomhuria)', ...fontFamily.serif],
+        playfair: ['var(--font-playfair)', ...fontFamily.serif],
+        poppins: ['var(--font-poppins)', ...fontFamily.sans],
+
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
+      maxWidth: {
+				'8xl': '88rem',
+				'9xl': '96rem',
+				'10xl': '104rem',
       },
     },
   }
@@ -55,20 +62,11 @@ plugin: [
     themes: {
       light: {
         colors: {
-          default: {
-            DEFAULT: '#FFFFFF',
-          },
           primary: {
-            DEFAULT: '#F3EBE4',
+            DEFAULT: '#776B5D',
           },
           secondary: {
-            DEFAULT: '#432F2B',
-          },
-          success: {
-            DEFAULT: '#6C7D47',
-          },
-          warning: {
-            DEFAULT: '#FF7F5C',
+            DEFAULT: '#F3EBE4',
           },
         },
       },

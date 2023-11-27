@@ -145,7 +145,7 @@ export default function ModalPackage() {
 		<>
 			<Button
 				onPress={onOpen}
-				color='secondary'
+				color='primary'
 				endContent={
 					<span className='sm:flex hidden'>
 						<MdLibraryAdd />
