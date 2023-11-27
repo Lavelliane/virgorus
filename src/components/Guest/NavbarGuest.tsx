@@ -75,7 +75,12 @@ export default function NavbarGuest() {
 	const packageSections = getPackageSections(packages);
 	const renderDropdownItems = (packages: Package[]) => {
 		return packages.map((ipackage) => (
-			<DropdownItem key={ipackage.id} className='text-black' description={ipackage.id} href={`/tours/${ipackage.location}/${ipackage.id}`}>
+			<DropdownItem
+				key={ipackage.id}
+				className='text-black'
+				description={ipackage.location}
+				href={`/tours/${ipackage.location}/${ipackage.id}`}
+			>
 				<div className='whitespace-normal'>{ipackage.name}</div>
 			</DropdownItem>
 		));
@@ -92,10 +97,15 @@ export default function NavbarGuest() {
 	];
 
 	return (
-		<Navbar className='bg-white' maxWidth='full'>
+		<Navbar isBlurred isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
 			<NavbarBrand>
 				<Link className='cursor-pointer' href='/'>
-					<Image src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png' alt='virgorus-main-logo' width={75} height={75} />
+					<Image
+						src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png'
+						alt='virgorus-main-logo'
+						width={75}
+						height={75}
+					/>
 					<span className='font-bold font-efco text-3xl text-black'>virgorus</span>
 				</Link>
 			</NavbarBrand>
@@ -103,9 +113,7 @@ export default function NavbarGuest() {
 				<NavbarItem>
 					<Dropdown className='rounded-md'>
 						<DropdownTrigger>
-							<span
-								className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
-							>
+							<span className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'>
 								Packages
 								<RiArrowDownSLine />
 							</span>
@@ -142,9 +150,7 @@ export default function NavbarGuest() {
 				<NavbarItem>
 					<Dropdown className='rounded-md'>
 						<DropdownTrigger>
-							<span
-								className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
-							>
+							<span className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'>
 								Destinations
 								<RiArrowDownSLine />
 							</span>
@@ -157,41 +163,24 @@ export default function NavbarGuest() {
 								base: 'gap-4',
 							}}
 						>
-							{(section) => (
-								<DropdownItem
-									key={section.key}
-								>
-									{section.label}
-								</DropdownItem>
-							)}
+							{(section) => <DropdownItem key={section.key}>{section.label}</DropdownItem>}
 						</DropdownMenu>
 					</Dropdown>
 				</NavbarItem>
 				<NavbarItem className='hidden lg:flex'>
 					<Link href='/about'>
-						<span
-							className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
-						>
-							About Us
-						</span>
+						<span className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'>About Us</span>
 					</Link>
 				</NavbarItem>
 				<NavbarItem>
 					<Link href='/contact'>
-						<span
-							className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'
-						>
-							Contact Us
-						</span>
+						<span className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'>Contact Us</span>
 					</Link>
 				</NavbarItem>
 			</NavbarContent>
 			<NavbarContent className={`hidden md:flex gap-4 pr-5`} justify='end'>
 				<NavbarItem>
-					<Button
-						color='primary'
-						className='font-extralight font-poppins md:text-xs lg:text-sm p-6 rounded-md'
-					>
+					<Button color='primary' className='font-extralight font-poppins md:text-xs lg:text-sm p-6 rounded-md'>
 						Book Now
 					</Button>
 				</NavbarItem>
