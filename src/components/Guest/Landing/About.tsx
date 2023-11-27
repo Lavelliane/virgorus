@@ -44,7 +44,7 @@ function About() {
 								Our tours go beyond exploration—they are meticulously organized adventures that seamlessly blend
 								excitement, comfort, and cultural richness, ensuring that every moment becomes a cherished memory.
 							</p>
-							<Button color='secondary' size='lg' className='font-poppins rounded-md text-primary'>
+							<Button color='default' size='lg' className='font-poppins rounded-md text-primary'>
 								See Destinations
 							</Button>
 						</div>
@@ -62,7 +62,7 @@ function About() {
 							<h1 className='font-playfair text-6xl mr-auto'>Explore Popular Packages</h1>
 						</div>
 						<div className='flex shrink'>
-							<Button color='secondary' size='lg' className='font-poppins rounded-md text-primary'>
+							<Button color='default' size='lg' className='font-poppins rounded-md text-primary'>
 								Browse Packages
 							</Button>
 						</div>

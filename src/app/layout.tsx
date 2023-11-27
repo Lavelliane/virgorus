@@ -45,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${efco.variable} ${inter.className} ${playfairDisplay.variable} ${poppins.variable}`}>
+      <body className={`${efco.variable} ${inter.className} ${playfairDisplay.variable} ${poppins.variable} bg-white`}>
         <Providers>
           {children}
           <SitemapFooter />

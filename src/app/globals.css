@@ -57,6 +57,17 @@ body {
   background: linear-gradient(to bottom, #776B5D 70%, #ffffff 30%);
 }
 
+.button-28 {
+  background-color: transparent;
+  border-color: olive;
+  color: olive    
+}
+
+.button-28:hover {
+  background-color: olive;
+  border-color: olive;
+  color: white    
+}
 
 /* CSS */
 .button-30 {

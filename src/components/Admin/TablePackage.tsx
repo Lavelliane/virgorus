@@ -199,11 +199,7 @@ export default function TablePackage() {
 											aria-label='action-view'
 											href={`/tours/${Package.id}`}
 										>
-<<<<<<< HEAD
-											View
-=======
 											<Link href={`/tours/${Package.location}/${Package.id}`}>View</Link>
->>>>>>> ceb588d12ece6038f81804c1dfa110817de27f9f
 										</DropdownItem>
 										<DropdownItem
 											key='edit'
