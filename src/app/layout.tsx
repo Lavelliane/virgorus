@@ -7,10 +7,6 @@ import { Poppins } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css'
 
-import NavbarGuest from '@/components/Guest/NavbarGuest';
-import SitemapFooter from "@/components/Footer";
-
-
 const inter = Inter({ subsets: ['latin'],
 variable: '--font-inter', })
 
@@ -48,7 +44,6 @@ export default function RootLayout({
       <body className={`${efco.variable} ${inter.className} ${playfairDisplay.variable} ${poppins.variable} bg-white`}>
         <Providers>
           {children}
-          <SitemapFooter />
         </Providers>
       </body>
     </html>

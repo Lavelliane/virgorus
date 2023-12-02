@@ -33,14 +33,15 @@ function About() {
 		}
 	}, [packagesLoading, packagesData]);
 	return (
-		<div aria-label='About Us' className='flex flex-col h-fit w-full justify-center text-white relative'>
+		<div aria-label='About Us' className='flex flex-col h-fit w-full justify-start text-white relative'>
 			{/* About */}
-			<div className='flex flex-col bg-primary font-poppins h-[120vh] w-full'>
-				<div className='flex flex-col justify-start py-16 max-w-6xl mx-auto'>
-					<h1 className='font-playfair text-6xl'>Virgorus Organizes Everything</h1>
-					<div className='flex justify-evenly py-20'>
-						<div className='flex flex-col justify-between items-start w-3/5 mr-auto h-[300px]'>
-							<p className='text-lg font-extralight'>
+			<div className=' bg-primary absolute w-full h-[120vh] -z-0'></div>
+			<div className='flex flex-col font-poppins w-full z-10 xl:px-0 md:px-16 px-4'>
+				<div className='flex flex-col justify-start pt-10 max-w-6xl mx-auto'>
+					<h1 className='font-playfair lg:text-6xl md:text-4xl text-2xl'>Virgorus Organizes Everything</h1>
+					<div className='flex md:flex-row flex-col-reverse justify-evenly md:py-20 pt-10 gap-4'>
+						<div className='flex flex-col md:justify-between md:items-start items-end xl:w-3/5 w-full mr-auto xl:h-[300px] min-h-[200px] gap-4'>
+							<p className='md:text-lg text-sm font-extralight lg:text-left text-justify'>
 								Our tours go beyond exploration—they are meticulously organized adventures that seamlessly blend
 								excitement, comfort, and cultural richness, ensuring that every moment becomes a cherished memory.
 							</p>
@@ -48,34 +49,40 @@ function About() {
 								See Destinations
 							</Button>
 						</div>
+						<div className='overflow-hidden object-cover w-full h-fit xl:hidden flex'>
+							<Image
+								src={landingImage}
+								alt='about image'
+								style={{
+									objectFit: 'cover',
+								}}
+								className='min-h-[200px] w-fit'
+							/>
+						</div>
 					</div>
 				</div>
-				<div className='absolute right-0 flex top-52'>
-					<Image src={landingImage} alt='about image' layout='cover' className='clip-path-div h-[300px] w-fit' />
+				<div className='absolute right-0 flex top-[184px] max-w-[600px] items-center overflow-hidden'>
+					<Image
+						src={landingImage}
+						alt='about image'
+						layout='cover'
+						className='clip-path-div h-[300px] w-fit xl:block hidden'
+					/>
 				</div>
-			</div>
-			{/* Packages */}
-			<div className='flex flex-col h-fit -translate-y-72 max-w-6xl w-full mx-auto'>
-				<div className='flex flex-col w-full'>
-					<div className='flex w-full items-center justify-between'>
-						<div className='flex grow w-full'>
-							<h1 className='font-playfair text-6xl mr-auto'>Explore Popular Packages</h1>
-						</div>
-						<div className='flex shrink'>
+				{/* Packages */}
+				<div className='flex flex-col justify-start max-w-6xl w-full mx-auto min-h-screen'>
+					<div className='flex md:flex-row flex-col w-full items-center justify-between gap-4'>
+						<h1 className='font-playfair lg:text-6xl sm:text-4xl text-2xl'>Explore Popular Packages</h1>
+						<div className='w-fit'>
 							<Button color='default' size='lg' className='font-poppins rounded-md text-primary'>
 								Browse Packages
 							</Button>
 						</div>
 					</div>
-					{!packagesLoading ? (
-						<div className='flex flex-wrap h-fit w-full justify-evenly my-10'>
-							<Catalog packages={packages} />
-						</div>
-					) : (
-						<div className='flex flex-wrap h-fit w-full justify-evenly my-10'>
-							<CatalogCardSuspense />
-						</div>
-					)}
+
+					<div className='flex flex-wrap h-fit w-full justify-evenly my-10'>
+						{!packagesLoading && packages ? <Catalog packages={packages} /> : <CatalogCardSuspense cardNumber={3} />}
+					</div>
 				</div>
 			</div>
 		</div>
