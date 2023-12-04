@@ -17,31 +17,41 @@ export default function Tours() {
 
   useEffect(() => {
     if (!packagesLoading && packagesData) {
-      setPackages(
+      const shuffledPackages = shuffleArray(
         packagesData.map((pd: any) => ({
           id: pd.id,
           name: pd.name,
           description: pd.description,
           type: pd.type,
-          rate: pd.rates[0].ratePerPax,
-          photos: pd.photos
+          location: pd.location,
+          rate: pd.rates[pd.rates.length - 1].ratePerPax,
+          photos: pd.photos,
         }))
       );
+      setPackages(shuffledPackages);
     }
   }, [packagesLoading, packagesData]);
 
+  // Function to shuffle the array
+  const shuffleArray = (array: CatalogPackage[]) => {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+  };
+
   return (
     <>
-      <main className="flex flex-col items-center justify-between bg-white min-h-screen">
-        <section className="flex flex-col w-full h-full items-center">
+      <main className="flex min-h-screen flex-col items-center justify-between bg-white">
+        <section className="flex flex-col h-fit items-center mx-6 max-w-7xl w-full">
           {!packagesLoading ? (
-            <div className="flex flex-wrap h-fit max-w-7xl pt-24 gap-3 my-10">
+            <div className="grid grid-cols-3 gap-10 mx-auto">
               <Catalog packages={packages} />
             </div>
           ) : (
             <div className="flex flex-wrap h-fit w-full max-w-7xl pt-24 gap-3 my-10">
-              <CatalogCardSuspense />
-              <CatalogCardSuspense />
             </div>
           )}
         </section>

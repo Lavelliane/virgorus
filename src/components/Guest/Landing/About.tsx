@@ -10,6 +10,7 @@ import PhotoAlbum from 'react-photo-album';
 import NextJsImage from '@/components/NextJsImage';
 import { photo } from '../../../../public/assets/images/sample-gallery';
 import { Button, Link, Spacer } from '@nextui-org/react';
+import { Recommendations } from '../Booking/Recommendations';
 
 function About() {
 	const [packages, setPackages] = useState<CatalogPackage[]>([]);
@@ -35,7 +36,7 @@ function About() {
 	return (
 		<div aria-label='About Us' className='flex flex-col h-fit w-full justify-start text-white relative'>
 			{/* About */}
-			<div className=' bg-primary absolute w-full h-[120vh] -z-0'></div>
+			<div className=' bg-primary absolute w-full h-[100vh] -z-0'></div>
 			<div className='flex flex-col font-poppins w-full z-10 xl:px-0 md:px-16 px-4'>
 				<div className='flex flex-col justify-start pt-10 max-w-6xl mx-auto'>
 					<h1 className='font-playfair lg:text-6xl md:text-4xl text-2xl'>Virgorus Organizes Everything</h1>
@@ -45,9 +46,11 @@ function About() {
 								Our tours go beyond exploration—they are meticulously organized adventures that seamlessly blend
 								excitement, comfort, and cultural richness, ensuring that every moment becomes a cherished memory.
 							</p>
-							<Button color='default' size='lg' className='font-poppins rounded-md text-primary'>
-								See Destinations
-							</Button>
+							<Link href={`/tours`}>
+								<Button color='default' size='lg' className='font-poppins rounded-md text-primary'>
+									See Destinations
+								</Button>
+							</Link>
 						</div>
 						<div className='overflow-hidden object-cover w-full h-fit xl:hidden flex'>
 							<Image
@@ -80,9 +83,11 @@ function About() {
 						</div>
 					</div>
 
-					<div className='flex flex-wrap h-fit w-full justify-evenly my-10'>
-						{!packagesLoading && packages ? <Catalog packages={packages} /> : <CatalogCardSuspense cardNumber={3} />}
+					<div className='h-fit w-full my-10'>
+						<Recommendations location={null} />
 					</div>
+
+
 				</div>
 			</div>
 		</div>

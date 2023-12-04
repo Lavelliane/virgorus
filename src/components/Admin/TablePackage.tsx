@@ -68,7 +68,7 @@ export default function TablePackage() {
 	const [filterValue, setFilterValue] = React.useState('');
 	const [selectedKeys, setSelectedKeys] = React.useState<Selection>(new Set([]));
 	const [visibleColumns, setVisibleColumns] = React.useState<Selection>(new Set(INITIAL_VISIBLE_COLUMNS));
-	const [rowsPerPage, setRowsPerPage] = React.useState(5);
+	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
 		column: 'name',
 		direction: 'ascending',
@@ -385,6 +385,7 @@ export default function TablePackage() {
 							className='bg-transparent outline-none text-default-400 text-small'
 							onChange={onRowsPerPageChange}
 							aria-label='pagination'
+							defaultValue={10}
 						>
 							<option value='5'>5</option>
 							<option value='10'>10</option>
@@ -437,9 +438,9 @@ export default function TablePackage() {
 			isHeaderSticky
 			bottomContent={bottomContent}
 			bottomContentPlacement='outside'
-			className='sm:w-[600px] w-full'
+			className='sm:w-[600px] md:w-full'
 			classNames={{
-				wrapper: 'max-h-[384px] p-2',
+				wrapper: 'max-h-[684px] p-2',
 			}}
 			selectedKeys={selectedKeys}
 			sortDescriptor={sortDescriptor}
