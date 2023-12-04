@@ -55,6 +55,7 @@ export default function PackageDetails({ id }: { id: number }) {
 
 	const [showDescription, setShowDescription] = useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
+	const [selectedAccordion, setSelectedAccordion] = React.useState(new Set(["1"]));
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [availability, setAvailability] = useState<string>("");
 	const [languages, setLanguages] = useState<string>("");
@@ -191,22 +192,36 @@ export default function PackageDetails({ id }: { id: number }) {
 						<div aria-label='About'>
 							<div className='w-full text-black text-sm'>
 								<h1 className='font-semibold pb-4 text-lg font-playfair'>About</h1>
-								<div className={`${showDescription ? '' : 'gradient-mask'}`}>
-									<p
-										className={`text-justify whitespace-pre-wrap h-fit ${
-											showDescription ? '' : 'max-h-28 overflow-hidden'
-										}`}
-									>
-										{Package?.description}
-									</p>
-								</div>
-								<div className='pt-4 pb-2'>
-									<span
-										onClick={() => setShowDescription(!showDescription)}
-										className='font-semibold text-sm underline underline-offset-2 hover:bg-transparent cursor-pointer'
-									>
-										{showDescription ? 'Read Less' : 'Read More...'}
-									</span>
+								<div className='w-full text-black text-sm'>
+									{showDescription ? 
+										<p
+											className='text-justify w-full overflow-hidden'
+										>
+											{Package?.description}
+										</p>
+									:
+										<div className={`${showDescription ? '' : 'gradient-mask'}`}>
+											<p
+												className='text-justify whitespace-pre-wrap h-fit max-h-28 overflow-hidden'
+												style={{
+													display: '-webkit-box',
+													WebkitLineClamp: 6, // Number of lines before truncating
+													WebkitBoxOrient: 'vertical',
+													maxHeight: '10rem', // Maximum height before truncating
+												}}
+											>
+												{Package?.description}
+											</p>												
+										</div>							
+									}
+									<div className='pt-4 pb-2'>
+										<span
+											onClick={() => setShowDescription(!showDescription)}
+											className='font-semibold text-sm underline underline-offset-2 hover:bg-transparent cursor-pointer'
+										>
+											{showDescription ? 'Read Less' : 'Read More...'}
+										</span>
+									</div>
 								</div>
 							</div>
 							<div className='w-full text-black pt-2 mb-4 text-sm'>
@@ -338,6 +353,7 @@ export default function PackageDetails({ id }: { id: number }) {
 						<Divider />
 						<div aria-label='Accordions'>
 							<Accordion
+								defaultExpandedKeys={selectedAccordion}
 								isCompact={true}
 								selectionMode='multiple'
 								itemClasses={{
@@ -345,7 +361,7 @@ export default function PackageDetails({ id }: { id: number }) {
 									content: 'text-sm font-light text-justify pb-4',
 								}}
 							>
-								<AccordionItem title='Rates and inclusions' className='text-black'>
+								<AccordionItem key="1" title='Rates and inclusions' className='text-black'>
 									<div className='flex flex-col w-full sm:flex-row sm:mb-4'>
 										<div
 											aria-label='Rates Table'
@@ -385,13 +401,13 @@ export default function PackageDetails({ id }: { id: number }) {
 										</div>
 									</div>
 								</AccordionItem>
-								<AccordionItem title='Sample itinerary' className='text-black'>
+								<AccordionItem key="2" title='Sample itinerary' className='text-black'>
 								
 								</AccordionItem>
-								<AccordionItem title='Accessibility' className='text-black'>
+								<AccordionItem key="3"title='Accessibility' className='text-black'>
 								
 								</AccordionItem>
-								<AccordionItem title='Help' className='text-black'>
+								<AccordionItem key="4" title='Help' className='text-black'>
 									If you have any questions or need assistance, feel free to reach out to our support team. We are here to
 									ensure that you have smooth and enjoyable experience. You may contact us at:
 									<div className='mt-4'>
@@ -467,9 +483,15 @@ export default function PackageDetails({ id }: { id: number }) {
 			</div>
 			<Spacer y={14} />
 			<div aria-label='Package Footer'>
-				<h1 className='text-xl text-black font-semibold py-4'>Find more tours in </h1>
+				{isLoaded ? (
+				  	<h1 className='font-playfair text-2xl text-black font-semibold py-4'>Explore more of {Package?.location}</h1>
+				) : (
+					<Skeleton className='w-2/5 rounded-xl my-8'>
+						<div className='h-8 w-full rounded-xl bg-default-200'></div>
+					</Skeleton>
+				)}
 				<div className='flex flex-row'>
-					<Recommendations />
+					<Recommendations location={Package?.location} />
 				</div>
 			</div>
 			<Spacer y={48} />

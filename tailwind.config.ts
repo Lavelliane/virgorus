@@ -62,12 +62,18 @@ plugin: [
     themes: {
       light: {
         colors: {
+          default: {
+            DEFAULT: '#F3EBE4',
+          },	
           primary: {
             DEFAULT: '#776B5D',
           },
           secondary: {
-            DEFAULT: '#F3EBE4',
+            DEFAULT: '#6C7D47',
           },
+          warning: {
+            DEFAULT: '#FF7F5C',
+          }
         },
       },
     },

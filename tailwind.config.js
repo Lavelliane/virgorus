@@ -69,6 +69,9 @@ module.exports = {
 						secondary: {
 							DEFAULT: '#6C7D47',
 						},
+						warning: {
+							DEFAULT: '#FF7F5C',
+						}
 					},
 				},
 				dark: {
@@ -82,6 +85,9 @@ module.exports = {
 						secondary: {
 							DEFAULT: '#6C7D47',
 						},
+						warning: {
+							DEFAULT: '#FF7F5C',
+						}
 					},
 				},
 			},

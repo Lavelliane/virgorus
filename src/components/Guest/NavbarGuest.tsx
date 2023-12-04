@@ -163,7 +163,12 @@ export default function NavbarGuest() {
 								base: 'gap-4',
 							}}
 						>
-							{(section) => <DropdownItem key={section.key}>{section.label}</DropdownItem>}
+							{(section) => 
+								<DropdownItem 
+								  key={section.key}
+								  href={`/tours/${section.label}`}>
+									{section.label}
+								</DropdownItem>}
 						</DropdownMenu>
 					</Dropdown>
 				</NavbarItem>

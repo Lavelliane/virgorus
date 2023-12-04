@@ -9,11 +9,7 @@ export default interface Package {
 	availability?: string;
 	language?: string;
 	notice?: string;
-<<<<<<< HEAD
-	photos?: File[];
-=======
 	photos?: string[];
->>>>>>> 17684d9126b7af02c1663c8f917dfb56ebd54129
 	inclusions?: string[];
 	exclusions?: string[];
 	rates?: Rates[];
@@ -31,6 +27,7 @@ export type CatalogPackage = {
 	name: string;
 	description: string;
 	type: string;
+	location: string;
 	rate: string;
 	photos: string[];
 };
