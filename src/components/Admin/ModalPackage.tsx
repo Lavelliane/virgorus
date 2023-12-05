@@ -196,6 +196,7 @@ export default function ModalPackage() {
 												size='sm'
 												className='w-1/2'
 												onChange={locationSelectionChange}
+												isRequired
 											>
 												{locationData.map((location) => (
 													<SelectItem key={location.value} value={location.value}>

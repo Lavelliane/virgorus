@@ -77,9 +77,11 @@ function About() {
 					<div className='flex md:flex-row flex-col w-full items-center justify-between gap-4'>
 						<h1 className='font-playfair lg:text-6xl sm:text-4xl text-2xl'>Explore Popular Packages</h1>
 						<div className='w-fit'>
-							<Button color='default' size='lg' className='font-poppins rounded-md text-primary'>
-								Browse Packages
-							</Button>
+							<Link href={`/tours`}>
+								<Button color='default' size='lg' className='font-poppins rounded-md text-primary'>
+									Browse Packages
+								</Button>
+							</Link>
 						</div>
 					</div>
 
