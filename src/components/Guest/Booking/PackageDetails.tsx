@@ -84,7 +84,7 @@ export default function PackageDetails({ id }: { id: number }) {
 			return photo;
 		});
 	};
-
+	
 	const formatAvailability = (availability: string): string => {
 		if(availability) {
 			const availabilityArray = availability.split(',');
@@ -104,7 +104,6 @@ export default function PackageDetails({ id }: { id: number }) {
 			return "n/a"
 		}
 	}
-	  
 	  
 	useEffect(() => {
 		if (!packageLoading && packageData) {

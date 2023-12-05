@@ -36,7 +36,7 @@ const availabilityData = [
 ];
 
 const languagesData = [
-	{ code: 'tl', name: 'Filipino' },
+	{ code: 'tl', name: 'Tagalog' },
 	{ code: 'ceb', name: 'Cebuano' },
 	{ code: 'en', name: 'English' },
 	{ code: 'es', name: 'Spanish' },
