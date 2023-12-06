@@ -1,0 +1,48 @@
+import React from 'react';
+import { IoLocationSharp } from "react-icons/io5";
+import { DaySchedule } from '@/types/package'; // Adjust the path accordingly
+
+
+interface ItineraryProps {
+  itinerary?: DaySchedule[];
+}
+
+const Itinerary = ({ itinerary }: ItineraryProps) => {
+  return (
+    <div className='px-5'>
+      {itinerary?.map((daySchedule, index) => (
+        <div key={index}>
+          <h3 className='text-lg font-semibold mb-5 border-2 border-black rounded-full text-center'>{daySchedule.day}</h3>
+          {daySchedule.itineraries !== undefined && (
+            <ol className='space-y-4'>
+              {daySchedule.itineraries && daySchedule.itineraries.map((item, i) => (
+                <li key={item.id}>
+                  <div className='flex'>
+                    <div className="circle">
+                        {(i !== 0 && i !== daySchedule.itineraries!.length - 1) ? (
+                            <span className="bg-black text-white font-bold rounded-full h-10 w-10 flex items-center justify-center text-lg">
+                            {i}
+                            </span>
+                        ) : (
+                            <span className="border-2 border-black text-black font-bold rounded-full h-10 w-10 flex items-center justify-center text-lg">
+                            <IoLocationSharp />
+                            </span>
+                        )}
+                    </div>
+                    <div className="ml-4">
+                        <p className='font-semibold'>{item.time}</p>
+                        <p>{item.activity}</p>
+                    </div>
+                  </div>
+
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default Itinerary

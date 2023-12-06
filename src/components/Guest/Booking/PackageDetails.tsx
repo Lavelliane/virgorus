@@ -30,6 +30,7 @@ import NextJsPhoto from '../../NextJsImage';
 import PhotoAlbum from 'react-photo-album';
 import { Playfair_Display } from 'next/font/google';
 import { Poppins } from 'next/font/google';
+import Itinerary from './Itinerary';
 
 
 const playfairDisplay = Playfair_Display({ 
@@ -172,7 +173,7 @@ export default function PackageDetails({ id }: { id: number }) {
 				) : (
 					<div>
 						<Spacer y={4} />
-						<Skeleton isLoaded={isLoaded} className={`rounded-lg ${isLoaded === false ? 'w-1/2' : ''}`}>
+						<Skeleton isLoaded={isLoaded} className={`rounded-xl ${isLoaded === false ? 'w-1/2' : ''}`}>
 							<div className='text-3xl'>.</div>
 						</Skeleton>
 						<Spacer y={6} />
@@ -194,7 +195,7 @@ export default function PackageDetails({ id }: { id: number }) {
 								<div className='w-full text-black text-sm'>
 									{showDescription ? 
 										<p
-											className='text-justify w-full overflow-hidden'
+											className='text-justify whitespace-pre-wrap w-full overflow-hidden'
 										>
 											{Package?.description}
 										</p>
@@ -401,10 +402,13 @@ export default function PackageDetails({ id }: { id: number }) {
 									</div>
 								</AccordionItem>
 								<AccordionItem key="2" title='Sample itinerary' className='text-black'>
-								
+									<Itinerary itinerary={Package?.itinerary} />
 								</AccordionItem>
 								<AccordionItem key="3"title='Accessibility' className='text-black'>
-								
+									<ul className='list-disc pl-5'>
+										<li>Wheelchair accessible</li>
+										<li>Stroller accessible</li>
+									</ul>
 								</AccordionItem>
 								<AccordionItem key="4" title='Help' className='text-black'>
 									If you have any questions or need assistance, feel free to reach out to our support team. We are here to
@@ -426,48 +430,48 @@ export default function PackageDetails({ id }: { id: number }) {
 					<div className='lg:w-4/6'>
 						<div className='flex flex-col gap-4'>
 							<div>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg w-36'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl w-36'>
 								<h1 className='text-lg'>.</h1>
 								</Skeleton>
 							</div>
 							<div className='flex flex-col gap-2 pb-2'>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'></p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg w-2/3'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl w-2/3'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>
 							<Divider />
 							<div className='flex flex-col w-48 gap-2 pb-2'>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'></p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>
 							<Divider />
 							<div className=''>
-								<Skeleton isLoaded={isLoaded} className='rounded-lg h-64'>
+								<Skeleton isLoaded={isLoaded} className='rounded-xl h-64'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>

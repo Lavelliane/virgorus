@@ -13,6 +13,7 @@ export default interface Package {
 	inclusions?: string[];
 	exclusions?: string[];
 	rates?: Rates[];
+	itinerary?: DaySchedule[];
 }
 
 interface Rates {
@@ -21,6 +22,18 @@ interface Rates {
 	ratePerPax?: string;
 	packageId?: number;
 }
+
+export interface DaySchedule {
+	day?: string;
+	itineraries?: Itinerary[];
+}
+
+interface Itinerary {
+    id: string | null | undefined;
+	time?: string;
+	activity?: string;
+}
+
 
 export type CatalogPackage = {
 	id: number;
