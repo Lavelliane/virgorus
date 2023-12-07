@@ -15,7 +15,7 @@ import {
 	Skeleton
 } from '@nextui-org/react';
 import Image from 'next/image';
-import { Gallery } from './Gallery';
+import { PackageGallery } from './Gallery';
 import { RatesTable } from './RatesTable';
 import { BookingForm } from './BookingForm';
 import { Recommendations } from './Recommendations';
@@ -30,7 +30,7 @@ import NextJsPhoto from '../../NextJsImage';
 import PhotoAlbum from 'react-photo-album';
 import { Playfair_Display } from 'next/font/google';
 import { Poppins } from 'next/font/google';
-import Itinerary from './Itinerary';
+import { Itinerary } from './Itinerary';
 
 
 const playfairDisplay = Playfair_Display({ 
@@ -160,15 +160,7 @@ export default function PackageDetails({ id }: { id: number }) {
 						<Spacer y={4} />
 						<p className='font-semibold font-playfair text-black text-3xl'>{Package?.name}</p>
 						<Spacer y={6} />
-						<div>
-							<PhotoAlbum
-								layout='rows'
-								photos={photos}
-								renderPhoto={NextJsPhoto}
-								defaultContainerWidth={400}
-								sizes={{ size: 'calc(100vw - 240px)' }}
-							/>
-						</div>
+						<PackageGallery photos={photos} />
 					</div>
 				) : (
 					<div>
@@ -197,7 +189,7 @@ export default function PackageDetails({ id }: { id: number }) {
 										<p
 											className='text-justify whitespace-pre-wrap w-full overflow-hidden'
 										>
-											{Package?.description}
+  											{Package?.description && Package.description.replaceAll('\\n', '\n')}
 										</p>
 									:
 										<div className={`${showDescription ? '' : 'gradient-mask'}`}>
@@ -210,7 +202,7 @@ export default function PackageDetails({ id }: { id: number }) {
 													maxHeight: '10rem', // Maximum height before truncating
 												}}
 											>
-												{Package?.description}
+  												{Package?.description && Package.description.replaceAll('\\n', '\n')}
 											</p>												
 										</div>							
 									}

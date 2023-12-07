@@ -7,11 +7,11 @@ interface ItineraryProps {
   itinerary?: DaySchedule[];
 }
 
-const Itinerary = ({ itinerary }: ItineraryProps) => {
+export const Itinerary = ({ itinerary }: ItineraryProps) => {
   return (
     <div className='px-5'>
       {itinerary?.map((daySchedule, index) => (
-        <div key={index}>
+        <div key={index} className='mb-10'>
           <h3 className='text-lg font-semibold mb-5 border-2 border-black rounded-full text-center'>{daySchedule.day}</h3>
           {daySchedule.itineraries !== undefined && (
             <ol className='space-y-4'>
@@ -44,5 +44,3 @@ const Itinerary = ({ itinerary }: ItineraryProps) => {
     </div>
   );
 };
-
-export default Itinerary

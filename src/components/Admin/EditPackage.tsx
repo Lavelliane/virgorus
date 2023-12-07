@@ -196,7 +196,7 @@ export default function EditPackage({ id }: Props) {
 							<Textarea
 								className='w-[100%]'
 								name='description'
-								value={form?.description || ''}
+								value={(form?.description && form.description.replaceAll('\\n', '\n')) || ''}
 								onChange={onChange}
 								type='text'
 								size='sm'
