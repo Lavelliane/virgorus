@@ -59,10 +59,67 @@ body {
   background: linear-gradient(to bottom, #776B5D 70%, #ffffff 30%);
 }
 
-/* Itinerary */
+/* Carousel */
+
+.embla {
+  --slide-spacing: 1rem;
+  --slide-size: 80%;
+  --slide-height: 19rem;
+}
+.embla__viewport {
+  overflow: hidden;
+}
+.embla__container {
+  backface-visibility: hidden;
+  display: flex;
+  touch-action: pan-y;
+  margin-left: calc(var(--slide-spacing) * -1);
+}
+.embla__slide {
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding: var(--slide-spacing);
+  position: relative;
+  height: fit-content;
+}
+
+.embla__dots {
+  z-index: 1;
+  position: relative;
+  left: 0;
+  right: 0;
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.embla__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 0.50rem;
+  margin-left: 0.50rem;
+  background-color: transparent;
+  border: 0.1rem solid #432F2B;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative; 
+  transition: background-color 0.3s ease;
+}
+
+.embla__dot:hover {
+  background-color: #432F2B;
+}
+
+.embla__dot--selected {
+  background-color: #432F2B;
+}
 
 
-
+/* Admin */
 
 .button-28 {
   background-color: transparent;

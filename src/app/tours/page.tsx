@@ -7,6 +7,8 @@ import { fetchPackages } from "@/queries/fetchPackages";
 import { CatalogPackage } from "@/types/package";
 import NavbarGuest from "@/components/Guest/NavbarGuest";
 import { CatalogCardSuspense } from "@/components/Guest/CatalogCardSuspense";
+import { CarouselWrapper } from "@/components/Guest/CarouselWrapper";
+import { Spacer } from "@nextui-org/react";
 
 export default function Tours() {
   const [packages, setPackages] = useState<CatalogPackage[]>([]);
@@ -46,8 +48,13 @@ export default function Tours() {
     <>
       <main className="flex min-h-screen flex-col items-center justify-between bg-white">
         <section className="flex flex-col h-fit items-center mx-6 max-w-7xl w-full">
+          <Spacer y={20}/>
+          <div className="w-full">
+            <CarouselWrapper packages={packages}/>
+          </div>
+          <Spacer y={20}/>
           {!packagesLoading ? (
-            <div className="grid grid-cols-3 gap-10 mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mx-auto">
               <Catalog packages={packages} />
             </div>
           ) : (

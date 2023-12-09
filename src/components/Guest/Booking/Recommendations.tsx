@@ -14,6 +14,7 @@ import {
 } from '@nextui-org/react';
 import { CatalogCardSuspense } from '../CatalogCardSuspense';
 import { CatalogSuspense } from '../CatalogSuspense';
+import { CarouselWrapper } from '../CarouselWrapper';
 
 export const Recommendations = ({ location }: { location: string | null | undefined }) => {
 	const [packages, setPackages] = useState<CatalogPackage[]>([]);
@@ -75,9 +76,14 @@ export const Recommendations = ({ location }: { location: string | null | undefi
 		<main className="flex flex-col w-full items-center justify-between bg-transparent">
 		  <section className="flex flex-col h-fit items-center mx-6 max-w-7xl w-full">
 			{!packagesLoading ? (
-			  <div className="grid grid-cols-3 gap-10 w-full">
-				<Catalog packages={packages} />
-			  </div>
+			  <>
+				<div className="hidden lg:grid grid-cols-3 gap-10 w-full">
+					<Catalog packages={packages} />
+				</div>
+				<div className="w-full lg:hidden">
+					<CarouselWrapper packages={packages}/>
+				</div>
+			  </>
 			) : (
 			  <div className="grid grid-cols-3 gap-10 w-full">
 				<CatalogSuspense numberOfCards={3} />

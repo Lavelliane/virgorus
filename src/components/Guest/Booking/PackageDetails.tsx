@@ -26,8 +26,6 @@ import Package from '../../../types/package';
 import { contactsData } from '@/utils/data';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
-import NextJsPhoto from '../../NextJsImage';
-import PhotoAlbum from 'react-photo-album';
 import { Playfair_Display } from 'next/font/google';
 import { Poppins } from 'next/font/google';
 import { Itinerary } from './Itinerary';
@@ -153,7 +151,7 @@ export default function PackageDetails({ id }: { id: number }) {
 	});
 
 	return (
-		<div className='flex flex-col w-full mx-2 sm:mx-10 font-poppins'>
+		<div className='flex flex-col w-full px-2 lg:px-10 sm:mx-10 font-poppins'>
 			<div aria-label='Package Header' className='flex flex-col w-full'>
 				{isLoaded ? (
 					<div>
@@ -363,7 +361,7 @@ export default function PackageDetails({ id }: { id: number }) {
 												<RatesTable rates={Package?.rates} />
 											</div>
 										</div>
-										<div aria-label='Inclusions and Exclusions' className='mt-4 sm:my-4 mx-2 w-full'>
+										<div aria-label='Inclusions and Exclusions' className='mt-4 sm:my-4 mx-0 lg:mx-2 w-full'>
 											<div className={`mb-4 ${Package?.inclusions?.[0] ? '' : 'hidden'}`}>
 												<h1
 													className={`text-md font-medium underline underline-offset-2 ${
@@ -479,7 +477,7 @@ export default function PackageDetails({ id }: { id: number }) {
 			<Spacer y={14} />
 			<div aria-label='Package Footer'>
 				{isLoaded ? (
-				  	<h1 className='font-playfair text-2xl text-black font-semibold py-4'>Explore more of {Package?.location}</h1>
+				  	<h1 className='font-playfair text-2xl text-black font-semibold py-4 text-center lg:text-start'>Explore more of {Package?.location}</h1>
 				) : (
 					<Skeleton className='w-2/5 rounded-xl my-8'>
 						<div className='h-8 w-full rounded-xl bg-default-200'></div>
