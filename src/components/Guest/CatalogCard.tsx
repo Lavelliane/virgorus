@@ -1,11 +1,10 @@
 'use client';
 import { Button, Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react';
-import { CatalogPackage } from '@/types/package';
-import fallbackImage from '../../../public/fallbackImage.jpg';
+import { IAddPackage } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
+export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 	return (
 		<Card className='max-w-96 w-full h-fit mx-auto'>
 			<CardHeader className='flex flex-col items-start gap-2 h-fit p-4'>
@@ -36,13 +35,15 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
 				</p>
 			</CardHeader>
 			<CardBody className='w-full h-48 relative my-2'>
-				<Image src={catPackage?.photos[0]} alt='Picture of the tour' fill={true} objectFit='cover' />
+				<Image src={String(catPackage?.photos[0])} alt='Picture of the tour' fill={true} objectFit='cover' />
 			</CardBody>
 			<CardFooter className='flex justify-between gap-2 my-2 p-4'>
 				<div className='flex flex-col'>
 					<span className='text-md'>For as low as</span>
 					<div className='flex gap-1'>
-						<span className='text-md text-olive'>{`₱${Number(catPackage.rate).toLocaleString('en-US', {
+						<span className='text-md text-olive'>{`₱${Number(
+							catPackage?.rates.find((rate) => rate.numberOfPax == '1') || 0
+						).toLocaleString('en-US', {
 							minimumFractionDigits: 2,
 						})}`}</span>
 						<span className='text-md'> / person</span>

@@ -29,11 +29,10 @@ export interface DaySchedule {
 }
 
 interface Itinerary {
-    id: string | null | undefined;
+	id: string | null | undefined;
 	time?: string;
 	activity?: string;
 }
-
 
 export type CatalogPackage = {
 	id: number;
