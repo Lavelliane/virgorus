@@ -48,7 +48,7 @@ interface Photo {
 	height: number;
 }
 
-export default function PackageDetails({ id }: { id: number }) {
+export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 	/* ====================         STATES         ====================*/
 
 	const [showDescription, setShowDescription] = useState(false);
@@ -162,8 +162,8 @@ export default function PackageDetails({ id }: { id: number }) {
 	});
 
 	return (
-		<div className='flex flex-col w-full px-2 lg:px-10 sm:mx-10 font-poppins'>
-			<div aria-label='Package Header' className='flex flex-col w-full'>
+		<div className='flex flex-col w-full font-poppins'>
+			<div aria-label='Package Header' className='flex flex-col max-w-7xl xl:px-0 px-4'>
 				{isLoaded ? (
 					<div>
 						<Spacer y={4} />
@@ -187,7 +187,7 @@ export default function PackageDetails({ id }: { id: number }) {
 				)}
 			</div>
 			<Spacer y={10} />
-			<div aria-label='Package Body' className='flex lg:flex-row flex-col my-0 w-full'>
+			<div aria-label='Package Body' className='flex lg:flex-row flex-col max-w-7xl xl:px-0 px-4'>
 				{isLoaded ? (
 					<div aria-label='Package Info' className='lg:w-4/6'>
 						<div aria-label='About'>
@@ -196,7 +196,7 @@ export default function PackageDetails({ id }: { id: number }) {
 								<div className='w-full text-black text-sm'>
 									{showDescription ? (
 										<p className='text-justify whitespace-pre-wrap w-full overflow-hidden'>
-											{Package?.description && Package.description.replaceAll('\\n', '\n')}
+											{Package?.description && Package.description.replaceAll('\\n', '\n').replaceAll('\\', '')}
 										</p>
 									) : (
 										<div className={`${showDescription ? '' : 'gradient-mask'}`}>
@@ -209,7 +209,7 @@ export default function PackageDetails({ id }: { id: number }) {
 													maxHeight: '10rem', // Maximum height before truncating
 												}}
 											>
-												{Package?.description && Package.description.replaceAll('\\n', '\n')}
+												{Package?.description && Package.description.replaceAll('\\n', '\n').replaceAll('\\', '')}
 											</p>
 										</div>
 									)}
@@ -484,7 +484,7 @@ export default function PackageDetails({ id }: { id: number }) {
 				</div>
 			</div>
 			<Spacer y={14} />
-			<div aria-label='Package Footer'>
+			<div aria-label='Package Footer' className='max-w-7xl xl:px-0 px-4'>
 				{isLoaded ? (
 					<h1 className='font-playfair text-2xl text-black font-semibold py-4 text-center lg:text-start'>
 						Explore more of {Package?.location}
@@ -494,9 +494,9 @@ export default function PackageDetails({ id }: { id: number }) {
 						<div className='h-8 w-full rounded-xl bg-default-200'></div>
 					</Skeleton>
 				)}
-				<div className='flex flex-row'>
-					<Recommendations location={Package?.location} />
-				</div>
+			</div>
+			<div className='h-fit w-full my-10 lg:px-10'>
+				<Recommendations location={Package?.location} />
 			</div>
 			<Spacer y={48} />
 		</div>

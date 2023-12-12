@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import {Providers} from "./providers";
+import Loading from "@/components/Loading";
 
 import {Inter, Playfair_Display,Poppins } from 'next/font/google';
 import localFont from 'next/font/local';
@@ -42,6 +43,7 @@ export default function RootLayout({
       <body className={`${efco.variable} ${inter.className} ${playfairDisplay.variable} ${poppins.variable} bg-white`}>
         <Providers>
           {children}
+          <Loading />
         </Providers>
       </body>
     </html>

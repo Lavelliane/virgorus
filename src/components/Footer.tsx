@@ -1,13 +1,13 @@
 'use client';
 
 import { Footer } from 'flowbite-react';
-import { BsDribbble, BsFacebook, BsGithub, BsInstagram, BsTwitter } from 'react-icons/bs';
+import { BsFacebook, BsInstagram, BsTwitter } from 'react-icons/bs';
 
 export default function SitemapFooter() {
 	return (
 		<Footer bgDark>
-			<div className='w-full'>
-				<div className='grid w-full grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4 text-chocolate bg-nude'>
+			<div className='w-full bg-nude'>
+				<div className='grid max-w-7xl mx-auto grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4 text-chocolate'>
 					<div>
 						<Footer.Title title='Company' />
 						<Footer.LinkGroup col>
@@ -44,14 +44,14 @@ export default function SitemapFooter() {
 						</Footer.LinkGroup>
 					</div>
 				</div>
-				<div className='w-full bg-olive px-4 py-6 sm:flex sm:items-center sm:justify-between'>
-					<Footer.Copyright by='Flowbite™' href='#' year={2022} />
-					<div className='mt-4 flex space-x-6 sm:mt-0 sm:justify-center'>
-						<Footer.Icon href='#' icon={BsFacebook} />
-						<Footer.Icon href='#' icon={BsInstagram} />
-						<Footer.Icon href='#' icon={BsTwitter} />
-						<Footer.Icon href='#' icon={BsGithub} />
-						<Footer.Icon href='#' icon={BsDribbble} />
+				<div className=' bg-olive py-6'>
+					<div className='flex max-w-7xl mx-auto sm:flex sm:items-center sm:justify-between'>
+						<Footer.Copyright by={'virgorus'} href='/' year={2023} className=' font-efco text-lg' />
+						<div className='mt-4 flex space-x-6 sm:mt-0 sm:justify-center'>
+							<Footer.Icon href='#' icon={BsFacebook} />
+							<Footer.Icon href='#' icon={BsInstagram} />
+							<Footer.Icon href='#' icon={BsTwitter} />
+						</div>
 					</div>
 				</div>
 			</div>
