@@ -1,4 +1,4 @@
-export default interface IAddPackage {
+interface IAddPackage {
 	id: any;
 	name: string;
 	description: string;
@@ -9,11 +9,11 @@ export default interface IAddPackage {
 	availability: string;
 	language: string;
 	notice: string;
-	rates: [Rates];
+	rates?: [Rates];
 	itinerary: [DaySchedule];
 	inclusions: [string];
 	exclusions: [string];
-	photos: File[];
+	photos: File[] | string[];
 }
 
 interface Rates {
@@ -30,3 +30,5 @@ interface Itinerary {
 	time: string;
 	activity: string;
 }
+
+export type { IAddPackage, Rates, DaySchedule, Itinerary };

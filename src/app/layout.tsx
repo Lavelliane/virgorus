@@ -1,24 +1,22 @@
 import type { Metadata } from 'next'
 import {Providers} from "./providers";
 
-import { Inter } from 'next/font/google'
-import { Playfair_Display } from 'next/font/google';
-import { Poppins } from 'next/font/google';
+import {Inter, Playfair_Display,Poppins } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'],
-variable: '--font-inter', })
+variable: '--font-inter' })
 
 const efco = localFont({
   src: '../assets/fonts/EFCO_Brookshire_Regular.ttf',
   display: 'swap',
-  variable: '--font-efco',
+  variable: '--font-efco'
 })
 
 const playfairDisplay = Playfair_Display({ 
 	subsets: ['latin'],
-	variable: '--font-playfair',
+	variable: '--font-playfair'
 });
 
 const poppins = Poppins({ 

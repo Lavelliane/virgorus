@@ -1,17 +1,16 @@
 'use client';
 import { Button, Card, CardHeader, CardBody, CardFooter } from '@nextui-org/react';
-import { CatalogPackage } from '@/types/package';
-import fallbackImage from '../../../public/fallbackImage.jpg';
+import { IAddPackage } from '@/types/types';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
+export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 	return (
-		<Card className='max-w-96 w-full h-fit mx-auto'>
+		<Card className='max-w-6xl min-w-fit w-full h-fit mx-auto'>
 			<CardHeader className='flex flex-col items-start gap-2 h-fit p-4'>
-				<span className='font-bold text-gray-400 uppercase'>{catPackage.type}</span>
+				<span className='font-bold text-gray-400 uppercase sm:text-md text-sm'>{catPackage.type}</span>
 				<p
-					className={`font-bold h-16 overflow-hidden ${catPackage.name.length > 50 ? 'text-lg' : 'text-2xl'}`}
+					className={`font-bold h-16 overflow-hidden 'text-lg' md:'text-2xl`}
 					style={{
 						display: '-webkit-box',
 						WebkitLineClamp: 2, // Number of lines before truncating
@@ -23,10 +22,10 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
 					{catPackage.name}
 				</p>
 				<p
-					className='text-small text-default-400 md:max-w-[400px] w-full overflow-hidden'
+					className='sm:text-small text-xs text-default-400 lg:max-w-[400px] w-full overflow-hidden'
 					style={{
 						display: '-webkit-box',
-						WebkitLineClamp: 5, // Number of lines before truncating
+						WebkitLineClamp: 4, // Number of lines before truncating
 						WebkitBoxOrient: 'vertical',
 						lineHeight: '1rem', // Adjust to control line height
 						maxHeight: '10rem', // Maximum height before truncating
@@ -35,17 +34,27 @@ export const CatalogCard = ({ catPackage }: { catPackage: CatalogPackage }) => {
 					{catPackage.description}
 				</p>
 			</CardHeader>
-			<CardBody className='w-full h-48 relative my-2'>
-				<Image src={catPackage?.photos[0]} alt='Picture of the tour' fill={true} objectFit='cover' />
+			<CardBody className='min-w-fit w-full h-48 relative my-2'>
+				<Image
+					src={String(catPackage?.photos[0])}
+					alt='Picture of the tour'
+					fill={true}
+					style={{
+						objectFit: 'cover',
+						width: '100%',
+						height: '100%',
+					}}
+					sizes='auto'
+				/>
 			</CardBody>
 			<CardFooter className='flex justify-between gap-2 my-2 p-4'>
 				<div className='flex flex-col'>
-					<span className='text-md'>For as low as</span>
+					<span className='md:text-small text-sm'>For as low as</span>
 					<div className='flex gap-1'>
-						<span className='text-md text-olive'>{`₱${Number(catPackage.rate).toLocaleString('en-US', {
-							minimumFractionDigits: 2,
-						})}`}</span>
-						<span className='text-md'> / person</span>
+						<span className='sm:text-small text-sm font-semibold text-olive'>
+							₱{catPackage.rates ? catPackage?.rates[(catPackage?.rates?.length - 1) | 0]?.ratePerPax : 0}
+						</span>
+						<span className='sm:text-small text-sm'> / person</span>
 					</div>
 				</div>
 				<Link href={`/tours/${catPackage.location}/${catPackage.id}`}>

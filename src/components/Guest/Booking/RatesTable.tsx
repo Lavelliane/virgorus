@@ -1,5 +1,6 @@
 import React from 'react';
 import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, getKeyValue } from '@nextui-org/react';
+import { Rates } from '@/types/types';
 
 const columns = [
 	{
@@ -12,18 +13,11 @@ const columns = [
 	},
 ];
 
-interface Rates {
-	id?: number;
-	numberOfPax?: string;
-	ratePerPax?: string;
-	packageId?: number;
-}
-
 interface RatesTableProps {
-	rates?: Rates[];
+	rates?: [Rates];
 }
 
-export function RatesTable(data: RatesTableProps) {
+export const RatesTable = ({ rates }: RatesTableProps) => {
 	return (
 		<Table
 			aria-label='Rates Table'
@@ -31,7 +25,7 @@ export function RatesTable(data: RatesTableProps) {
 			isCompact
 			shadow='sm'
 			bottomContent={`Contact us for group sizes of ${
-				data.rates?.length !== undefined ? data.rates?.length + 1 : ''
+				rates?.length !== undefined ? rates?.length + 1 : ''
 			} or more people.`}
 			className='text-xs font-semibold'
 			classNames={{
@@ -42,9 +36,9 @@ export function RatesTable(data: RatesTableProps) {
 			<TableHeader columns={columns}>
 				{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
 			</TableHeader>
-			<TableBody items={data.rates}>
+			<TableBody items={rates}>
 				{(item) => (
-					<TableRow key={item.id}>
+					<TableRow>
 						{(columnKey) => (
 							<TableCell>
 								{columnKey === 'ratePerPax'
@@ -57,4 +51,4 @@ export function RatesTable(data: RatesTableProps) {
 			</TableBody>
 		</Table>
 	);
-}
+};

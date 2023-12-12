@@ -63,7 +63,7 @@ body {
 
 .embla {
   --slide-spacing: 1rem;
-  --slide-size: 80%;
+  --slide-size: 100%;
   --slide-height: 19rem;
 }
 .embla__viewport {
@@ -73,11 +73,10 @@ body {
   backface-visibility: hidden;
   display: flex;
   touch-action: pan-y;
-  margin-left: calc(var(--slide-spacing) * -1);
+  margin-left: calc(var(--slide-spacing) * 50%);
 }
 .embla__slide {
   flex: 0 0 var(--slide-size);
-  min-width: 0;
   padding: var(--slide-spacing);
   position: relative;
   height: fit-content;

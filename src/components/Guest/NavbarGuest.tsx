@@ -103,6 +103,11 @@ export default function NavbarGuest() {
 					<Image
 						src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png'
 						alt='virgorus-main-logo'
+						style={{
+							objectFit: 'cover',
+							width: '100%',
+							height: '80px',
+						}}
 						width={75}
 						height={75}
 					/>
@@ -163,12 +168,11 @@ export default function NavbarGuest() {
 								base: 'gap-4',
 							}}
 						>
-							{(section) => 
-								<DropdownItem 
-								  key={section.key}
-								  href={`/tours/${section.label}`}>
+							{(section) => (
+								<DropdownItem key={section.key} href={`/tours/${section.label}`}>
 									{section.label}
-								</DropdownItem>}
+								</DropdownItem>
+							)}
 						</DropdownMenu>
 					</Dropdown>
 				</NavbarItem>
