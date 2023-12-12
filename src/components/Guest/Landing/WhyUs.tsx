@@ -7,7 +7,7 @@ import temple from '@/assets/images/Temple-cebu.png';
 
 const WhyUs = () => {
 	return (
-		<div className='flex flex-col w-full max-w-6xl mx-auto gap-10 min-h-screen'>
+		<div className='flex flex-col w-full max-w-6xl mx-auto gap-10 min-h-fit'>
 			<div className='flex w-full justify-between items-center xl:px-0 px-4'>
 				<h1 className='font-playfair lg:text-6xl md:text-4xl text-2xl'>Why Virgorus?</h1>
 				<Button color='primary' size='lg' radius='sm'>
