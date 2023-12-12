@@ -26,6 +26,7 @@ model Package {
   photos          String[]
   inclusions      String[]
   exclusions      String[]
+  bookings        Booking[]
 }
 
 model Rates {
@@ -52,6 +53,19 @@ model DaySchedule {
   package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
+model Booking {
+  id              Int        @id @default(autoincrement())
+  fullName        String
+  email           String
+  contactNumber   String
+  numLocalGuests  Int
+  numForeignGuests Int
+  tourDate        DateTime   
+  pickupInfo      String
+  packageId       String
+  package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+}
+
 model Account {
   id                 String    @id @default(cuid())
   userId             String
@@ -67,6 +81,7 @@ model Account {
 
   @@unique([providerId, providerAccountId])
 }
+
 
 model Session {
   id           String   @id @default(cuid())
