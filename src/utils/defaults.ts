@@ -1,4 +1,4 @@
-import IAddPackage from '../types/types';
+import { IAddPackage } from '../types/types';
 
 const addPackageDefault: IAddPackage = {
 	name: '',

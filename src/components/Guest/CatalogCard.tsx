@@ -58,7 +58,7 @@ export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 					</div>
 				</div>
 				<Link href={`/tours/${catPackage.location}/${catPackage.id}`}>
-					<Button radius='full' className='bg-chocolate text-white'>
+					<Button radius='full' className='bg-primary text-white'>
 						Book Now
 					</Button>
 				</Link>

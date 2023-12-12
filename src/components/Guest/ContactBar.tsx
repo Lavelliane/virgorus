@@ -3,7 +3,7 @@ import { MdPhoneIphone, MdPhoneEnabled, MdEmail } from 'react-icons/md';
 import { FaFacebook } from 'react-icons/fa';
 import { contactsData } from '@/utils/data';
 
-/* IF YOU WANT TO CHANGE THE CONTACTS DATA, GO TO utils/data.ts INSTEAD, THEN ADD CORRESPONDING ICON IN THE getIcon() FUNCTION */
+/* IF YOU WANT TO CHANGE THE CONTACTS DATA, GO TO utils/data.ts INSTEAD, THEN ADD CORRESPONDING ICON IN THE getContactIcon() FUNCTION */
 
 export function ContactBar() {
 	return (

@@ -90,7 +90,7 @@ function About() {
 				</div>
 			</div>
 			<div className='h-fit w-full my-10 lg:px-10'>
-				<Recommendations location={null} />
+				<Recommendations location="" count={3} />
 			</div>
 		</div>
 	);

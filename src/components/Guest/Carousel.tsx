@@ -1,5 +1,5 @@
 import React from 'react';
-import useEmblaCarousel, { EmblaOptionsType } from 'embla-carousel-react';
+import useEmblaCarousel, { EmblaOptionsType, EmblaPluginType } from 'embla-carousel-react';
 import { CarouselDot, useDotButton } from './CarouselDot';
 import { IAddPackage } from '@/types/types';
 import { CatalogCard } from '@/components/Guest/CatalogCard';
@@ -7,12 +7,13 @@ import { CatalogCard } from '@/components/Guest/CatalogCard';
 type PropType = {
 	slides: number[];
 	options?: EmblaOptionsType;
+	plugins?: EmblaPluginType
 	packages: IAddPackage[];
 };
 
 export const Carousel: React.FC<PropType> = (props) => {
-	const { slides, options, packages } = props;
-	const [emblaRef, emblaApi] = useEmblaCarousel(options);
+	const { slides, options, plugins, packages } = props;
+	const [emblaRef, emblaApi] = useEmblaCarousel(options, plugins);
 	const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi);
 
 	return (

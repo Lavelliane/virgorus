@@ -494,9 +494,9 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 						<div className='h-8 w-full rounded-xl bg-default-200'></div>
 					</Skeleton>
 				)}
-			</div>
-			<div className='h-fit w-full my-10 lg:px-10'>
-				<Recommendations location={Package?.location} />
+				<div className='flex flex-row'>
+					<Recommendations location={Package?.location} count={3} />
+				</div>
 			</div>
 			<Spacer y={48} />
 		</div>
