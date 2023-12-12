@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, PrismaPromise } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import formidable from 'formidable';
@@ -110,12 +110,17 @@ export async function PATCH(req: any, context: any) {
 		exclusions: JSON.parse(formData.getAll('exclusions')[0]),
 		notice: formData.get('notice').replace(/^"(.*)"$/, '$1'),
 		rates: JSON.parse(formData.getAll('rates')[0]),
+		bookings: JSON.parse(formData.getAll('bookings')[0]),
 		itinerary: JSON.parse(formData.getAll('itinerary')[0]),
 		photos: photoUrls,
 	};
 
 	try {
-		const updatedPackage = await prisma.$transaction(async (prisma) => {
+		const updatedPackage = await prisma.$transaction(async (prisma: any) => {
+
+			if (!prisma) {
+				throw new Error('Prisma client not properly initialized.');
+			}
 			// Update package data
 			const updatedPackage = await prisma.package.update({
 				where: { id: id },
@@ -126,6 +131,18 @@ export async function PATCH(req: any, context: any) {
 						create: packageData.rates.map((rate: Rates) => ({
 							numberOfPax: rate.numberOfPax,
 							ratePerPax: rate.ratePerPax,
+						})),
+					},
+					bookings: {
+						deleteMany: { packageId: id },
+						create: packageData.bookings.map((booking: any) => ({
+						  fullName: booking.fullName,
+						  email: booking.email,
+						  contactNumber: booking.contactNumber,
+						  numLocalGuests: booking.numLocalGuests,
+						  numForeignGuests: booking.numForeignGuests,
+						  tourDate: new Date(booking.tourDate),
+						  pickupInfo: booking.pickupInfo,
 						})),
 					},
 					itinerary: {
@@ -145,6 +162,7 @@ export async function PATCH(req: any, context: any) {
 
 				include: {
 					rates: true,
+					bookings: true,
 					itinerary: {
 						include: {
 							itineraries: true,
@@ -159,6 +177,9 @@ export async function PATCH(req: any, context: any) {
 		return NextResponse.json(updatedPackage, { status: 200 });
 	} catch (error) {
 		return NextResponse.json(error, { status: 500 });
+	} finally {
+		// Close the Prisma client connection
+		await prisma.$disconnect();
 	}
 }
 
