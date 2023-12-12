@@ -1,7 +1,6 @@
-import { PrismaClient, PrismaPromise } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
-import formidable from 'formidable';
 
 const prisma = new PrismaClient();
 const supabase = createClient(
@@ -27,6 +26,16 @@ interface Itinerary {
 	id?: string;
 	time?: string;
 	activity?: string;
+}
+interface Booking {
+	fullName: string;
+	email: string;
+	contactNumber: string;
+	numLocalGuests: number;
+	numForeignGuests: number;
+	tourDate: Date;
+	pickupInfo: string;
+	packageId: string;
 }
 
 export async function GET(req: NextRequest, context: any) {
@@ -116,7 +125,7 @@ export async function PATCH(req: any, context: any) {
 	};
 
 	try {
-		const updatedPackage = await prisma.$transaction(async (prisma: any) => {
+		const updatedPackage = await prisma.$transaction(async (prisma) => {
 
 			if (!prisma) {
 				throw new Error('Prisma client not properly initialized.');
@@ -135,7 +144,7 @@ export async function PATCH(req: any, context: any) {
 					},
 					bookings: {
 						deleteMany: { packageId: id },
-						create: packageData.bookings.map((booking: any) => ({
+						create: packageData.bookings.map((booking: Booking) => ({
 						  fullName: booking.fullName,
 						  email: booking.email,
 						  contactNumber: booking.contactNumber,
