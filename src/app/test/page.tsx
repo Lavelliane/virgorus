@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import IAddPackage from '@/types/types';
+import { IAddPackage } from '@/types/types';
 import addPackageDefault from '@/utils/defaults';
 
 import Inclusion from '@/components/Admin/TableInclusion';

@@ -10,7 +10,7 @@ import { Card, CardBody, CardHeader, Skeleton } from '@nextui-org/react';
 import { CatalogSuspense } from '../CatalogSuspense';
 import { CarouselWrapper } from '../CarouselWrapper';
 
-export const Recommendations = ({ location }: { location: string | null | undefined }) => {
+export const Recommendations = ({ location, count }: { location: string | null | undefined, count: number }) => {
 	const [packages, setPackages] = useState<IAddPackage[]>([]);
 	const { data: packagesData, isLoading: packagesLoading } = useQuery({
 		queryKey: ['packages'],
@@ -35,10 +35,10 @@ export const Recommendations = ({ location }: { location: string | null | undefi
 							rates: pd.rates,
 							photos: pd.photos,
 						}))
-						.slice(0, 3) // Take up to three packages for the specified location
+						.slice(0, count) // Take up to n packages for the specified location
 				);
 			} else {
-				// Randomly select three packages from the entire list
+				// Randomly select n packages from the entire list
 				selectedPackages = shuffleArray(
 					packagesData.map((pd: IAddPackage) => ({
 						id: pd.id,
@@ -49,12 +49,12 @@ export const Recommendations = ({ location }: { location: string | null | undefi
 						rates: pd.rates,
 						photos: pd.photos,
 					}))
-				).slice(0, 3);
+				).slice(0, count);
 			}
 
 			setPackages(selectedPackages);
 		}
-	}, [packagesLoading, packagesData, location]);
+	}, [packagesLoading, packagesData, location, count]);
 
 	// Function to shuffle the array
 	const shuffleArray = (array: IAddPackage[]) => {

@@ -22,6 +22,8 @@ import Image from 'next/image';
 import { IoMdHome, IoMdPerson } from 'react-icons/io';
 import { RiArrowDownSLine } from 'react-icons/ri';
 import { fetchPackages } from '@/queries/fetchPackages';
+import { contactsData } from '@/utils/data';
+import { getContactIcon } from './ContactBar';
 
 type Package = {
 	id: number;
@@ -73,6 +75,7 @@ export default function NavbarGuest() {
 	}, [packagesLoading, packagesData]);
 
 	const packageSections = getPackageSections(packages);
+
 	const renderDropdownItems = (packages: Package[]) => {
 		return packages.map((ipackage) => (
 			<DropdownItem
@@ -182,9 +185,28 @@ export default function NavbarGuest() {
 					</Link>
 				</NavbarItem>
 				<NavbarItem>
-					<Link href='/contact'>
-						<span className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'>Contact Us</span>
-					</Link>
+					<Dropdown className='rounded-md'>
+						<DropdownTrigger>
+							<span className='md:text-sm lg:text-lg flex items-center gap-1 text-black cursor-pointer'>
+								Contact Us
+								<RiArrowDownSLine />
+							</span>
+						</DropdownTrigger>
+						<DropdownMenu
+							items={contactsData}
+							aria-label='Contacts'
+							className=''
+							itemClasses={{
+								base: 'gap-4',
+							}}
+						>
+							{(contact) => (
+								<DropdownItem key={contact.key} href={contact.key === 'facebook' ? `https://www.facebook.com/${contact.value}` : undefined} startContent={getContactIcon(contact.key)}>
+									{contact.value}
+								</DropdownItem>
+							)}
+						</DropdownMenu>
+					</Dropdown>
 				</NavbarItem>
 			</NavbarContent>
 			<NavbarContent className={`hidden md:flex gap-4 pr-5`} justify='end'>

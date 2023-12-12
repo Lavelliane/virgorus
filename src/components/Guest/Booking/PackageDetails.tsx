@@ -495,7 +495,7 @@ export default function PackageDetails({ id }: { id: number }) {
 					</Skeleton>
 				)}
 				<div className='flex flex-row'>
-					<Recommendations location={Package?.location} />
+					<Recommendations location={Package?.location} count={3} />
 				</div>
 			</div>
 			<Spacer y={48} />
