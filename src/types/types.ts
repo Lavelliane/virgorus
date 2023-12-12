@@ -9,7 +9,7 @@ interface IAddPackage {
 	availability: string;
 	language: string;
 	notice: string;
-	rates: [Rates];
+	rates?: [Rates];
 	itinerary: [DaySchedule];
 	inclusions: [string];
 	exclusions: [string];

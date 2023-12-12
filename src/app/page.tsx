@@ -3,6 +3,7 @@
 import NavbarGuest from '@/components/Guest/NavbarGuest';
 import Hero from '@/components/Guest/Landing/Hero';
 import About from '@/components/Guest/Landing/About';
+import WhyUs from '@/components/Guest/Landing/WhyUs';
 import SitemapFooter from '@/components/Footer';
 import { Spacer } from '@nextui-org/react';
 
@@ -14,7 +15,8 @@ export default function Home() {
 				<Hero />
 				<Spacer y={20} />
 				<About />
-				<div aria-label='Why Us?'></div>
+				<Spacer y={20} />
+				<WhyUs />
 				<div aria-label='Contact'></div>
 			</section>
 			<SitemapFooter />

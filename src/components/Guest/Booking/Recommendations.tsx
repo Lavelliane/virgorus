@@ -25,14 +25,14 @@ export const Recommendations = ({ location }: { location: string | null | undefi
 				// Filter and shuffle packages for the specified location
 				selectedPackages = shuffleArray(
 					packagesData
-						.filter((pd: any) => pd.location === location)
-						.map((pd: any) => ({
+						.filter((pd: IAddPackage) => pd.location === location)
+						.map((pd: IAddPackage) => ({
 							id: pd.id,
 							name: pd.name,
 							description: pd.description,
 							type: pd.type,
 							location: pd.location,
-							rate: pd.rates[pd.rates.length - 1].ratePerPax,
+							rates: pd.rates,
 							photos: pd.photos,
 						}))
 						.slice(0, 3) // Take up to three packages for the specified location
@@ -40,13 +40,13 @@ export const Recommendations = ({ location }: { location: string | null | undefi
 			} else {
 				// Randomly select three packages from the entire list
 				selectedPackages = shuffleArray(
-					packagesData.map((pd: any) => ({
+					packagesData.map((pd: IAddPackage) => ({
 						id: pd.id,
 						name: pd.name,
 						description: pd.description,
 						type: pd.type,
 						location: pd.location,
-						rate: pd.rates[pd.rates.length - 1].ratePerPax,
+						rates: pd.rates,
 						photos: pd.photos,
 					}))
 				).slice(0, 3);
@@ -67,7 +67,7 @@ export const Recommendations = ({ location }: { location: string | null | undefi
 	};
 	return (
 		<main className='flex flex-col w-full items-center justify-between bg-transparent'>
-			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full'>
+			<section className='flex flex-col h-fit items-center md:mx-6 mx-0 p-0 max-w-7xl w-full'>
 				{!packagesLoading ? (
 					<>
 						<div className='hidden lg:grid grid-cols-3 gap-10 w-full'>
@@ -78,9 +78,14 @@ export const Recommendations = ({ location }: { location: string | null | undefi
 						</div>
 					</>
 				) : (
-					<div className='grid grid-cols-3 gap-10 w-full'>
-						<CatalogSuspense numberOfCards={3} />
-					</div>
+					<>
+						<div className='hidden lg:grid grid-cols-3 gap-10 w-full'>
+							<CatalogSuspense numberOfCards={3} />
+						</div>
+						<div className='lg:hidden w-full px-4'>
+							<CatalogSuspense numberOfCards={1} />
+						</div>
+					</>
 				)}
 			</section>
 		</main>

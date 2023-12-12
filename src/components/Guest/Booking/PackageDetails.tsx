@@ -12,7 +12,7 @@ import {
 	Card,
 	CardBody,
 	CardHeader,
-	Skeleton
+	Skeleton,
 } from '@nextui-org/react';
 import Image from 'next/image';
 import { PackageGallery } from './Gallery';
@@ -22,7 +22,7 @@ import { Recommendations } from './Recommendations';
 import { getContactIcon } from '../ContactBar';
 import { FaExclamationCircle } from 'react-icons/fa';
 import { MdTimelapse, MdCancel, MdLanguage, MdOutlineGroups } from 'react-icons/md';
-import Package from '../../../types/package';
+import { IAddPackage, Rates } from '@/types/types';
 import { contactsData } from '@/utils/data';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
@@ -30,17 +30,16 @@ import { Playfair_Display } from 'next/font/google';
 import { Poppins } from 'next/font/google';
 import { Itinerary } from './Itinerary';
 
-
-const playfairDisplay = Playfair_Display({ 
+const playfairDisplay = Playfair_Display({
 	subsets: ['latin'],
 	variable: '--font-playfair',
 });
 
-const poppins = Poppins({ 
+const poppins = Poppins({
 	subsets: ['latin'],
 	variable: '--font-poppins',
 	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-	style: ['italic', 'normal']
+	style: ['italic', 'normal'],
 });
 
 interface Photo {
@@ -54,17 +53,17 @@ export default function PackageDetails({ id }: { id: number }) {
 
 	const [showDescription, setShowDescription] = useState(false);
 	const [isLoaded, setIsLoaded] = React.useState(false);
-	const [selectedAccordion, setSelectedAccordion] = React.useState(new Set(["1"]));
+	const [selectedAccordion, setSelectedAccordion] = React.useState(new Set(['1']));
 	const [photos, setPhotos] = useState<Photo[]>([]);
-	const [availability, setAvailability] = useState<string>("");
-	const [languages, setLanguages] = useState<string>("");
-	const [Package, setPackage] = useState<Package>();
+	const [availability, setAvailability] = useState<string>('');
+	const [languages, setLanguages] = useState<string>('');
+	const [Package, setPackage] = useState<IAddPackage>();
 	const { data: packageData, isLoading: packageLoading } = useQuery({
 		queryKey: ['package'],
 		queryFn: () => {
-		  return fetchPackage(id); // Pass the id to the fetchPackage function
+			return fetchPackage(id); // Pass the id to the fetchPackage function
 		},
-	  });
+	});
 
 	const convertPhotos = (photos: string[]): Photo[] => {
 		return photos.map((photoUrl) => {
@@ -72,71 +71,83 @@ export default function PackageDetails({ id }: { id: number }) {
 			const match = photoUrl.match(/\/(\d+)x(\d+)\.jpg$/);
 			const width = match ? parseInt(match[1], 10) : 21;
 			const height = match ? parseInt(match[2], 10) : 9;
-		
+
 			// Create Photo object
 			const photo: Photo = {
 				src: photoUrl,
 				width: width,
 				height: height,
 			};
-		
+
 			return photo;
 		});
 	};
-	
+
 	const formatAvailability = (availability: string): string => {
-		if(availability) {
+		if (availability) {
 			const availabilityArray = availability.split(',');
 			const formattedAvailability = availabilityArray.join(', ');
 			return formattedAvailability;
 		} else {
-			return "n/a"
+			return 'n/a';
 		}
-	}
+	};
 
-	const formatLanguages= (languages: string): string => {
-		if(languages) {
+	const formatLanguages = (languages: string): string => {
+		if (languages) {
 			const languagesArray = languages.split(',');
 			const formattedLanguages = languagesArray.join(', ');
 			return formattedLanguages;
 		} else {
-			return "n/a"
+			return 'n/a';
 		}
-	}
-	  
+	};
+
 	useEffect(() => {
 		if (!packageLoading && packageData) {
-			setIsLoaded(true)
+			setIsLoaded(true);
 			setPackage(packageData);
-			setPhotos(convertPhotos(packageData.photos))
-			setAvailability(formatAvailability(packageData.availability))
-			setLanguages(formatLanguages(packageData.language))
+			setPhotos(convertPhotos(packageData.photos));
+			setAvailability(formatAvailability(packageData.availability));
+			setLanguages(formatLanguages(packageData.language));
 		}
 	}, [packageLoading, packageData]);
-	
-	if (!packageLoading && (packageData == undefined)) {
+
+	if (!packageLoading && packageData == undefined) {
 		return (
-			<div className="relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-transparent py-6 sm:py-12">
-				<div className="relative bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10">
-					<div className="mx-auto max-w-md">
-						<div className="divide-y divide-gray-300/50">
-							<div className="space-y-6 text-base leading-7 text-gray-600">
+			<div className='relative flex min-h-screen w-full flex-col justify-center overflow-hidden bg-transparent py-6 sm:py-12'>
+				<div className='relative bg-white px-6 pt-10 pb-8 shadow-xl ring-1 ring-gray-900/5 sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10'>
+					<div className='mx-auto max-w-md'>
+						<div className='divide-y divide-gray-300/50'>
+							<div className='space-y-6 text-base leading-7 text-gray-600'>
 								<div className='rounded-lg'>
-									<Image src='https://i.ibb.co/2kHkNcZ/pckg-not-found.jpg' alt='package-not-found' width={500} height={500} className='rounded-lg'/>
+									<Image
+										src='https://i.ibb.co/2kHkNcZ/pckg-not-found.jpg'
+										alt='package-not-found'
+										width={500}
+										height={500}
+										sizes='auto'
+										className='rounded-lg'
+										style={{ objectFit: 'cover' }}
+									/>
 								</div>
-								<p className='pb-8'>Are you lost, traveller? Your destination is either unavailable or not a valid location.</p>
+								<p className='pb-8'>
+									Are you lost, traveller? Your destination is either unavailable or not a valid location.
+								</p>
 							</div>
-							<div className="pt-8 text-base font-semibold leading-7">
-							<p className="text-gray-900">Looking for a new experience?</p>
-							<p>
-								<a href={`/tours/`} className="text-warning">View our tours &rarr;</a>
-							</p>
+							<div className='pt-8 text-base font-semibold leading-7'>
+								<p className='text-gray-900'>Looking for a new experience?</p>
+								<p>
+									<a href={`/tours/`} className='text-warning'>
+										View our tours &rarr;
+									</a>
+								</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		)
+		);
 	}
 
 	/* ====================         VARIABLE DECLARATIONS         ====================*/
@@ -183,13 +194,11 @@ export default function PackageDetails({ id }: { id: number }) {
 							<div className='w-full text-black text-sm'>
 								<h1 className='font-semibold pb-4 text-lg font-playfair'>About</h1>
 								<div className='w-full text-black text-sm'>
-									{showDescription ? 
-										<p
-											className='text-justify whitespace-pre-wrap w-full overflow-hidden'
-										>
-  											{Package?.description && Package.description.replaceAll('\\n', '\n')}
+									{showDescription ? (
+										<p className='text-justify whitespace-pre-wrap w-full overflow-hidden'>
+											{Package?.description && Package.description.replaceAll('\\n', '\n')}
 										</p>
-									:
+									) : (
 										<div className={`${showDescription ? '' : 'gradient-mask'}`}>
 											<p
 												className='text-justify whitespace-pre-wrap h-fit max-h-28 overflow-hidden'
@@ -200,10 +209,10 @@ export default function PackageDetails({ id }: { id: number }) {
 													maxHeight: '10rem', // Maximum height before truncating
 												}}
 											>
-  												{Package?.description && Package.description.replaceAll('\\n', '\n')}
-											</p>												
-										</div>							
-									}
+												{Package?.description && Package.description.replaceAll('\\n', '\n')}
+											</p>
+										</div>
+									)}
 									<div className='pt-4 pb-2'>
 										<span
 											onClick={() => setShowDescription(!showDescription)}
@@ -351,7 +360,7 @@ export default function PackageDetails({ id }: { id: number }) {
 									content: 'text-sm font-light text-justify pb-4',
 								}}
 							>
-								<AccordionItem key="1" title='Rates and inclusions' className='text-black'>
+								<AccordionItem key='1' title='Rates and inclusions' className='text-black'>
 									<div className='flex flex-col w-full sm:flex-row sm:mb-4'>
 										<div
 											aria-label='Rates Table'
@@ -391,18 +400,18 @@ export default function PackageDetails({ id }: { id: number }) {
 										</div>
 									</div>
 								</AccordionItem>
-								<AccordionItem key="2" title='Sample itinerary' className='text-black'>
+								<AccordionItem key='2' title='Sample itinerary' className='text-black'>
 									<Itinerary itinerary={Package?.itinerary} />
 								</AccordionItem>
-								<AccordionItem key="3"title='Accessibility' className='text-black'>
+								<AccordionItem key='3' title='Accessibility' className='text-black'>
 									<ul className='list-disc pl-5'>
 										<li>Wheelchair accessible</li>
 										<li>Stroller accessible</li>
 									</ul>
 								</AccordionItem>
-								<AccordionItem key="4" title='Help' className='text-black'>
-									If you have any questions or need assistance, feel free to reach out to our support team. We are here to
-									ensure that you have smooth and enjoyable experience. You may contact us at:
+								<AccordionItem key='4' title='Help' className='text-black'>
+									If you have any questions or need assistance, feel free to reach out to our support team. We are here
+									to ensure that you have smooth and enjoyable experience. You may contact us at:
 									<div className='mt-4'>
 										{contactsData.map((contact) => (
 											<div className='flex items-center mb-2' key={contact.key}>
@@ -421,7 +430,7 @@ export default function PackageDetails({ id }: { id: number }) {
 						<div className='flex flex-col gap-4'>
 							<div>
 								<Skeleton isLoaded={isLoaded} className='rounded-xl w-36'>
-								<h1 className='text-lg'>.</h1>
+									<h1 className='text-lg'>.</h1>
 								</Skeleton>
 							</div>
 							<div className='flex flex-col gap-2 pb-2'>
@@ -466,7 +475,7 @@ export default function PackageDetails({ id }: { id: number }) {
 								</Skeleton>
 							</div>
 							<Divider />
-						</div>					
+						</div>
 					</div>
 				)}
 				<Spacer x={10} />
@@ -477,7 +486,9 @@ export default function PackageDetails({ id }: { id: number }) {
 			<Spacer y={14} />
 			<div aria-label='Package Footer'>
 				{isLoaded ? (
-				  	<h1 className='font-playfair text-2xl text-black font-semibold py-4 text-center lg:text-start'>Explore more of {Package?.location}</h1>
+					<h1 className='font-playfair text-2xl text-black font-semibold py-4 text-center lg:text-start'>
+						Explore more of {Package?.location}
+					</h1>
 				) : (
 					<Skeleton className='w-2/5 rounded-xl my-8'>
 						<div className='h-8 w-full rounded-xl bg-default-200'></div>

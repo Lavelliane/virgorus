@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import landingImage from '../../../../public/assets/images/landing-image2.jpg';
+import landingImage from '@/assets/images/landing-image2.jpg';
 
 function Hero() {
 	return (
@@ -19,7 +19,16 @@ function Hero() {
 				</div>
 			</div>
 			<div>
-				<Image src={landingImage} alt='island photo' layout='cover' />
+				<Image
+					src={landingImage}
+					alt='island photo'
+					style={{
+						objectFit: 'cover',
+						width: 'auto',
+						height: 'auto',
+					}}
+					priority
+				/>
 			</div>
 		</div>
 	);
