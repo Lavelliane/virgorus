@@ -22,13 +22,14 @@ export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 					{catPackage.name}
 				</p>
 				<p
-					className='sm:text-small text-xs text-default-400 lg:max-w-[400px] w-full overflow-hidden'
+					className='sm:text-small text-xs text-default-400  w-full overflow-hidden'
 					style={{
 						display: '-webkit-box',
 						WebkitLineClamp: 4, // Number of lines before truncating
 						WebkitBoxOrient: 'vertical',
 						lineHeight: '1rem', // Adjust to control line height
-						maxHeight: '10rem', // Maximum height before truncating
+						maxHeight: '4rem', // Maximum height before truncating
+						height: '4rem',
 					}}
 				>
 					{catPackage.description}

@@ -54,6 +54,7 @@ export default function ModalPackage() {
 	const [availability, setAvailability] = React.useState<Selection>(new Set([]));
 	const [language, setLanguage] = React.useState<Selection>(new Set([]));
 	const [location, setLocation] = React.useState<Selection>(new Set([]));
+	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
 	const handleActionClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		if (
@@ -70,6 +71,7 @@ export default function ModalPackage() {
 			setIsComplete(false);
 			return;
 		}
+		setIsLoading(true);
 		e.preventDefault();
 		const formData = new FormData();
 
@@ -322,7 +324,12 @@ export default function ModalPackage() {
 									Close
 								</Button>
 								<Tooltip isOpen={!isComplete} content='Incomplete package info!' delay={1000} color='danger'>
-									<Button color='secondary' onClick={(e) => handleActionClick(e)}>
+									<Button
+										color='secondary'
+										onClick={(e) => handleActionClick(e)}
+										disabled={isLoading}
+										className={`${isLoading && ' bg-secondary/60'}`}
+									>
 										Add
 									</Button>
 								</Tooltip>
