@@ -7,11 +7,18 @@ import { CatalogCard } from '@/components/Guest/CatalogCard';
 type PropType = {
 	slides: number[];
 	options?: EmblaOptionsType;
-	plugins?: EmblaPluginType
+	plugins?: EmblaPluginType;
 	packages: IAddPackage[];
 };
 
 export const Carousel: React.FC<PropType> = (props) => {
+	const autoplayOptions = {
+		delay: 4000,
+		stopOnInteraction: true,
+		AutoPlay: true,
+		rootNode: (emblaRoot: HTMLElement) => emblaRoot.parentElement,
+	};
+
 	const { slides, options, plugins, packages } = props;
 	const [emblaRef, emblaApi] = useEmblaCarousel(options, plugins);
 	const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(emblaApi);

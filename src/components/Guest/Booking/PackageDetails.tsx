@@ -1,19 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import {
-	Accordion,
-	AccordionItem,
-	Divider,
-	Spacer,
-	Textarea,
-	Tooltip,
-	Button,
-	Card,
-	CardBody,
-	CardHeader,
-	Skeleton,
-} from '@nextui-org/react';
+import { Accordion, AccordionItem, Divider, Spacer, Tooltip, Skeleton } from '@nextui-org/react';
 import Image from 'next/image';
 import { PackageGallery } from './Gallery';
 import { RatesTable } from './RatesTable';
@@ -22,25 +10,11 @@ import { Recommendations } from './Recommendations';
 import { getContactIcon } from '../ContactBar';
 import { FaExclamationCircle } from 'react-icons/fa';
 import { MdTimelapse, MdCancel, MdLanguage, MdOutlineGroups } from 'react-icons/md';
-import { IAddPackage, Rates } from '@/types/types';
+import { IAddPackage } from '@/types/types';
 import { contactsData } from '@/utils/data';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
-import { Playfair_Display } from 'next/font/google';
-import { Poppins } from 'next/font/google';
 import { Itinerary } from './Itinerary';
-
-const playfairDisplay = Playfair_Display({
-	subsets: ['latin'],
-	variable: '--font-playfair',
-});
-
-const poppins = Poppins({
-	subsets: ['latin'],
-	variable: '--font-poppins',
-	weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
-	style: ['italic', 'normal'],
-});
 
 interface Photo {
 	src: string;

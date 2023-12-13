@@ -7,7 +7,7 @@ export default function SitemapFooter() {
 	return (
 		<Footer bgDark>
 			<div className='w-full bg-nude'>
-				<div className='grid max-w-7xl mx-auto grid-cols-2 gap-8 px-6 py-8 md:grid-cols-4 text-chocolate'>
+				<div className='grid max-w-7xl mx-auto grid-cols-2 gap-8 md:px-10 px-6 py-8 md:grid-cols-4 text-chocolate'>
 					<div>
 						<Footer.Title title='Company' />
 						<Footer.LinkGroup col>
@@ -45,9 +45,9 @@ export default function SitemapFooter() {
 					</div>
 				</div>
 				<div className=' bg-olive py-6'>
-					<div className='flex max-w-7xl mx-auto sm:flex sm:items-center sm:justify-between'>
+					<div className='flex max-w-7xl mx-auto md:px-10 px-6 items-center justify-between'>
 						<Footer.Copyright by={'virgorus'} href='/' year={2023} className=' font-efco text-lg' />
-						<div className='mt-4 flex space-x-6 sm:mt-0 sm:justify-center'>
+						<div className='flex space-x-6 sm:mt-0 justify-center'>
 							<Footer.Icon href='#' icon={BsFacebook} />
 							<Footer.Icon href='#' icon={BsInstagram} />
 							<Footer.Icon href='#' icon={BsTwitter} />

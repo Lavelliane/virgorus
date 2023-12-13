@@ -8,12 +8,12 @@ const Contact = () => {
 	return (
 		<div className='flex w-full min-h-fit bg-nude md:p-10 p-4'>
 			<div className='flex sm:flex-row flex-col max-w-7xl min-h-[90vh] justify-center mx-auto md:gap-10 gap-4 md:items-center items-start'>
-				<div className='w-full h-full'>
+				<div className='w-full h-full md:mt-0 mt-10'>
 					<Image src={touch} alt='plaza cebu image' style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
 				</div>
 				<div className='flex flex-col sm:gap-10 gap-6 w-full text-primary my-4'>
 					<h1 className='font-playfair lg:text-4xl text-2xl'>Get In Touch</h1>
-					<p className='lg:text-lg text-sm font-light lg:text-left'>
+					<p className='lg:text-lg text-base font-light lg:text-left'>
 						Contact Us at Virgorus Adventures! We{"'"}re here to assist you on your journey of a lifetime. Whether you
 						have inquiries about our tours, need assistance with bookings, or simply want to share your travel dreams,
 						our dedicated team is ready to help.
