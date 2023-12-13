@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, PrismaPromise } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
@@ -125,63 +125,56 @@ export async function PATCH(req: any, context: any) {
 	};
 
 	try {
-		const updatedPackage = await prisma.$transaction(async (prisma) => {
-
-			if (!prisma) {
-				throw new Error('Prisma client not properly initialized.');
-			}
-			// Update package data
-			const updatedPackage = await prisma.package.update({
-				where: { id: id },
-				data: {
+		const updatedPackage = await prisma.$transaction([
+			prisma.package.update({
+				  where: { id: id },
+				  data: {
 					...packageData,
 					rates: {
-						deleteMany: { packageId: id },
-						create: packageData.rates.map((rate: Rates) => ({
-							numberOfPax: rate.numberOfPax,
-							ratePerPax: rate.ratePerPax,
-						})),
+					  deleteMany: { packageId: id },
+					  create: packageData.rates.map((rate: Rates) => ({
+						numberOfPax: rate.numberOfPax,
+						ratePerPax: rate.ratePerPax,
+					  })),
 					},
 					bookings: {
-						deleteMany: { packageId: id },
-						create: packageData.bookings.map((booking: Booking) => ({
-						  fullName: booking.fullName,
-						  email: booking.email,
-						  contactNumber: booking.contactNumber,
-						  numLocalGuests: booking.numLocalGuests,
-						  numForeignGuests: booking.numForeignGuests,
-						  tourDate: new Date(booking.tourDate),
-						  pickupInfo: booking.pickupInfo,
-						})),
+					  deleteMany: { packageId: id },
+					  create: packageData.bookings.map((booking: Booking) => ({
+						fullName: booking.fullName,
+						email: booking.email,
+						contactNumber: booking.contactNumber,
+						numLocalGuests: booking.numLocalGuests,
+						numForeignGuests: booking.numForeignGuests,
+						tourDate: new Date(booking.tourDate),
+						pickupInfo: booking.pickupInfo,
+					  })),
 					},
 					itinerary: {
-						deleteMany: { packageId: id },
-						create: packageData.itinerary.map((item: DaySchedule) => ({
-							day: item.day,
-							itineraries: {
-								create: item.itineraries.map((subItem: Itinerary) => ({
-									time: subItem.time,
-									activity: subItem.activity,
-								})),
-							},
-						})),
+					  deleteMany: { packageId: id },
+					  create: packageData.itinerary.map((item: DaySchedule) => ({
+						day: item.day,
+						itineraries: {
+						  create: item.itineraries.map((subItem: Itinerary) => ({
+							time: subItem.time,
+							activity: subItem.activity,
+						  })),
+						},
+					  })),
 					},
 					photos: { set: photoUrls },
-				},
-
-				include: {
+				  },
+			
+				  include: {
 					rates: true,
 					bookings: true,
 					itinerary: {
-						include: {
-							itineraries: true,
-						},
+					  include: {
+						itineraries: true,
+					  },
 					},
-				},
-			});
-
-			return updatedPackage;
-		});
+				  },
+			}) 
+		]);
 
 		return NextResponse.json(updatedPackage, { status: 200 });
 	} catch (error) {
