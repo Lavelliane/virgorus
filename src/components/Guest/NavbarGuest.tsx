@@ -21,6 +21,7 @@ import {
 import Image from 'next/image';
 import { IoMdHome, IoMdPerson } from 'react-icons/io';
 import { RiArrowDownSLine } from 'react-icons/ri';
+import { IoDocumentText, IoNavigate } from "react-icons/io5";
 import { fetchPackages } from '@/queries/fetchPackages';
 import { contactsData } from '@/utils/data';
 import { getContactIcon } from './ContactBar';
@@ -81,7 +82,7 @@ export default function NavbarGuest() {
 			<DropdownItem
 				key={ipackage.id}
 				className='text-black'
-				description={ipackage.location}
+				description={ipackage.type}
 				href={`/tours/${ipackage.location}/${ipackage.id}`}
 			>
 				<div className='whitespace-normal'>{ipackage.name}</div>
@@ -90,14 +91,23 @@ export default function NavbarGuest() {
 	};
 
 	// ###################
-
+	
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	const menuItems = [
-		{ text: 'Home', icon: <IoMdHome /> },
-		{ text: 'Packages', icon: <RiArrowDownSLine /> },
-		{ text: 'Rentals', icon: <RiArrowDownSLine /> },
-		{ text: 'Contact Us', icon: <IoMdPerson /> },
+		{ text: 'Home', icon: <IoMdHome /> , link: '/'},
+		{ text: 'Packages', icon: <IoDocumentText />, link: '/tours'},
+		{ text: 'Destinations', icon: <IoNavigate />, link: '/destinations' },
+		{ text: 'Contact Us', icon: <IoMdPerson />, link: '/about' },
 	];
+
+	// Function to handle click event on "Packages" or "Destinations"
+	const handleClickItem = (location: any) => {
+		// Scroll to the respective section in the "Packages" dropdown
+		const sectionElement = document.getElementById(`package-section-${location}`);
+		if (sectionElement) {
+			sectionElement.scrollIntoView({ behavior: 'smooth' });
+		}
+	};
 
 	return (
 		<Navbar isBlurred isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
@@ -132,7 +142,7 @@ export default function NavbarGuest() {
 								label: section.label,
 							}))}
 							aria-label='Tour Packages'
-							className='w-[380px]'
+							className='w-[380px] h-[500px] overflow-auto'
 							itemClasses={{
 								base: 'gap-4',
 							}}
@@ -221,9 +231,9 @@ export default function NavbarGuest() {
 				{menuItems.map((item, index) => (
 					<NavbarMenuItem key={`${item}-${index}`}>
 						<Link
-							color={index === menuItems.length - 1 ? 'success' : 'foreground'}
+							color={index === menuItems.length - 1 ? 'foreground' : 'foreground'}
 							className='w-full'
-							href='#'
+							href={item.link}
 							size='lg'
 						>
 							{item.text}&nbsp;{item.icon}

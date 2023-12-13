@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@nextui-org/react';
+import { Button, Link } from '@nextui-org/react';
 import Image from 'next/image';
 import simala from '@/assets/images/Simala-cebu.png';
 import beach from '@/assets/images/Beach-cebu.jpg';
@@ -10,9 +10,11 @@ const WhyUs = () => {
 		<div className='flex flex-col w-full max-w-6xl mx-auto gap-4 min-h-fit'>
 			<div className='flex w-full justify-between items-center xl:px-0 px-4'>
 				<h1 className='font-playfair lg:text-6xl md:text-4xl text-2xl'>Why Virgorus?</h1>
-				<Button color='primary' size='lg' radius='sm'>
-					About Us
-				</Button>
+				<Link href='/about'>
+					<Button color='primary' size='lg' radius='sm'>
+						About Us
+					</Button>
+				</Link>
 			</div>
 			<div className='flex w-full items-center xl:px-0 px-4'>
 				<p className='lg:text-lg text-base font-playfair lg:text-left text-justify'>

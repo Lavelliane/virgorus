@@ -6,7 +6,7 @@ import AutoPlay from 'embla-carousel-autoplay';
 
 const autoplayOptions = {
 	delay: 4000,
-	stopOnInteraction: true,
+	stopOnInteraction: false,
 	AutoPlay: true,
 	rootNode: (emblaRoot: HTMLElement) => emblaRoot.parentElement,
 };
