@@ -20,7 +20,7 @@ import {
 	CardHeader,
 } from '@nextui-org/react';
 import { MdLibraryAdd } from 'react-icons/md';
-import IAddPackage from '../../types/types';
+import { IAddPackage } from '../../types/types';
 import addPackageDefault from '@/utils/defaults';
 import { availabilityData, languagesData, locationData } from '@/utils/data';
 import TableRates from './TableRates';

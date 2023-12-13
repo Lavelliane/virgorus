@@ -38,6 +38,17 @@ interface Booking {
 	packageId: string;
 }
 
+const bookingsInitial = {
+	fullName: '',
+	email: '',
+	contactNumber: '',
+	numLocalGuests: '',
+	numForeignGuests: '',
+	tourDate: new Date(),
+	pickupInfo: '',
+	packageId: '',
+}
+
 export async function GET(req: NextRequest, context: any) {
 	const { id } = context.params;
 	try {
@@ -119,7 +130,6 @@ export async function PATCH(req: any, context: any) {
 		exclusions: JSON.parse(formData.getAll('exclusions')[0]),
 		notice: formData.get('notice').replace(/^"(.*)"$/, '$1'),
 		rates: JSON.parse(formData.getAll('rates')[0]),
-		bookings: JSON.parse(formData.getAll('bookings')[0]),
 		itinerary: JSON.parse(formData.getAll('itinerary')[0]),
 		photos: photoUrls,
 	};
@@ -135,18 +145,6 @@ export async function PATCH(req: any, context: any) {
 					  create: packageData.rates.map((rate: Rates) => ({
 						numberOfPax: rate.numberOfPax,
 						ratePerPax: rate.ratePerPax,
-					  })),
-					},
-					bookings: {
-					  deleteMany: { packageId: id },
-					  create: packageData.bookings.map((booking: Booking) => ({
-						fullName: booking.fullName,
-						email: booking.email,
-						contactNumber: booking.contactNumber,
-						numLocalGuests: booking.numLocalGuests,
-						numForeignGuests: booking.numForeignGuests,
-						tourDate: new Date(booking.tourDate),
-						pickupInfo: booking.pickupInfo,
 					  })),
 					},
 					itinerary: {

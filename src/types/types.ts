@@ -14,6 +14,18 @@ interface IAddPackage {
 	inclusions: [string];
 	exclusions: [string];
 	photos: File[] | string[];
+	bookings?: Booking[]
+}
+
+interface Booking {
+	fullName: string;
+	email: string;
+	contactNumber: string;
+	numLocalGuests: number;
+	numForeignGuests: number;
+	tourDate: Date;
+	pickupInfo: string;
+	packageId: string;
 }
 
 interface Rates {
@@ -31,4 +43,4 @@ interface Itinerary {
 	activity: string;
 }
 
-export type { IAddPackage, Rates, DaySchedule, Itinerary };
+export type { IAddPackage, Rates, DaySchedule, Itinerary, Booking };

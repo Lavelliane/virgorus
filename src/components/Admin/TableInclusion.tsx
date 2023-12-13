@@ -4,7 +4,7 @@ import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { PiNotePencilLight } from 'react-icons/pi';
 import { AiOutlineStop } from 'react-icons/ai';
 import { MdDeleteOutline } from 'react-icons/md';
-import IAddPackage from '@/types/types';
+import {IAddPackage} from '@/types/types';
 
 interface TableInclusionsProps {
 	readonly onChange: (e: any) => void;

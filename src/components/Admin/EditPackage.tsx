@@ -14,7 +14,7 @@ import {
 	Selection,
 	Divider,
 } from '@nextui-org/react';
-import IAddPackage from '../../types/types';
+import { IAddPackage } from '../../types/types';
 import addPackageDefault from '@/utils/defaults';
 import { availabilityData, languagesData, locationData } from '@/utils/data';
 import TableRates from './TableRates';
@@ -41,7 +41,7 @@ interface Props {
 }
 
 export default function EditPackage({ id }: Props) {
-	const [form, setForm] = React.useState<IAddPackage>(addPackageDefault);
+	const [form, setForm] = React.useState<any>(addPackageDefault);
 	const [availability, setAvailability] = React.useState<Selection>(new Set(['Monday']));
 	const [language, setLanguage] = React.useState<Selection>(new Set(['English']));
 	const [location, setLocation] = React.useState<string>('Metro Cebu');
@@ -83,7 +83,7 @@ export default function EditPackage({ id }: Props) {
 		const formData = new FormData();
 
 		// Append text fields from the form
-		Object.entries(form).forEach(([key, value]) => {
+		Object.entries(form).forEach(([key, value]: any) => {
 			if (key !== 'photos') {
 				formData.append(key, JSON.stringify(value));
 			} else if (key === 'photos' && value.length > 0) {

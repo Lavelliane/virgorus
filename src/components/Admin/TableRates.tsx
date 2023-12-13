@@ -4,7 +4,7 @@ import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { MdDeleteOutline } from 'react-icons/md';
 import { PiNotePencilLight } from 'react-icons/pi';
 import { AiOutlineStop } from 'react-icons/ai';
-import IAddPackage from '@/types/types';
+import {IAddPackage} from '@/types/types';
 
 interface Pax {
 	numberOfPax: string;
