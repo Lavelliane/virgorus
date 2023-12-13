@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, AccordionItem, Divider, Spacer, Tooltip, Skeleton } from '@nextui-org/react';
 import Image from 'next/image';
-import { PackageGallery } from './Gallery';
+import { PackageGallery } from './PackageGallery';
 import { RatesTable } from './RatesTable';
 import { BookingForm } from './BookingForm';
 import { Recommendations } from './Recommendations';
@@ -221,7 +221,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 						<div aria-label='Tooltips' className='flex flex-col py-4'>
 							<div>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
@@ -244,7 +244,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 							</div>
 							<div>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
@@ -269,7 +269,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 							</div>
 							<div>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
@@ -301,7 +301,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 							</div>
 							<div className='w-full'>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>

@@ -53,7 +53,7 @@ export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 					<span className='md:text-small text-sm'>For as low as</span>
 					<div className='flex gap-1'>
 						<span className='sm:text-small text-sm font-semibold text-olive'>
-							₱{catPackage.rates ? catPackage?.rates[(catPackage?.rates?.length - 1) | 0]?.ratePerPax : 0}
+							{`₱${Number(catPackage.rates ? catPackage?.rates[(catPackage?.rates?.length - 1) | 0]?.ratePerPax : 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
 						</span>
 						<span className='sm:text-small text-sm'> / person</span>
 					</div>
