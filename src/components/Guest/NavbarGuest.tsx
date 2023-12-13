@@ -100,15 +100,6 @@ export default function NavbarGuest() {
 		{ text: 'Contact Us', icon: <IoMdPerson />, link: '/about' },
 	];
 
-	// Function to handle click event on "Packages" or "Destinations"
-	const handleClickItem = (location: any) => {
-		// Scroll to the respective section in the "Packages" dropdown
-		const sectionElement = document.getElementById(`package-section-${location}`);
-		if (sectionElement) {
-			sectionElement.scrollIntoView({ behavior: 'smooth' });
-		}
-	};
-
 	return (
 		<Navbar isBlurred isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
 			<NavbarBrand>

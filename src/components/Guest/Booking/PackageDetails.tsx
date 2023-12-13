@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, AccordionItem, Divider, Spacer, Tooltip, Skeleton } from '@nextui-org/react';
 import Image from 'next/image';
-import { PackageGallery } from './Gallery';
+import { PackageGallery } from './PackageGallery';
 import { RatesTable } from './RatesTable';
 import { BookingForm } from './BookingForm';
 import { Recommendations } from './Recommendations';
