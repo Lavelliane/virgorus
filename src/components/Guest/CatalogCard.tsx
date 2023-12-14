@@ -22,13 +22,14 @@ export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 					{catPackage.name}
 				</p>
 				<p
-					className='sm:text-small text-xs text-default-400 lg:max-w-[400px] w-full overflow-hidden'
+					className='sm:text-small text-xs text-default-400  w-full overflow-hidden'
 					style={{
 						display: '-webkit-box',
 						WebkitLineClamp: 4, // Number of lines before truncating
 						WebkitBoxOrient: 'vertical',
 						lineHeight: '1rem', // Adjust to control line height
-						maxHeight: '10rem', // Maximum height before truncating
+						maxHeight: '4rem', // Maximum height before truncating
+						height: '4rem',
 					}}
 				>
 					{catPackage.description}
@@ -52,7 +53,7 @@ export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 					<span className='md:text-small text-sm'>For as low as</span>
 					<div className='flex gap-1'>
 						<span className='sm:text-small text-sm font-semibold text-olive'>
-							₱{catPackage.rates ? catPackage?.rates[(catPackage?.rates?.length - 1) | 0]?.ratePerPax : 0}
+							{`₱${Number(catPackage.rates ? catPackage?.rates[(catPackage?.rates?.length - 1) | 0]?.ratePerPax : 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
 						</span>
 						<span className='sm:text-small text-sm'> / person</span>
 					</div>

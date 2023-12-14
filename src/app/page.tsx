@@ -18,7 +18,7 @@ export default function Home() {
 				<About />
 				<Spacer y={10} />
 				<WhyUs />
-				<Spacer y={20} />
+				<Spacer y={14} />
 				<Contact />
 			</section>
 			<SitemapFooter />

@@ -1,6 +1,5 @@
-import React, { useState, useEffect, ReactEventHandler } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Image, Input } from '@nextui-org/react';
-import axios from 'axios';
 import NextJsPhoto from '../NextJsImage';
 import PhotoAlbum from 'react-photo-album';
 
@@ -32,7 +31,7 @@ const ButtonUpload = ({ onChange, form }: ButtonUploadProps) => {
 
 			// Set the File in state
 			setPhoto((prevImageFiles: any) => [...prevImageFiles, file]);
-			setPhotoPreviews(form.photos.map((photo: any) => ({ src: photo, width: 4, height: 3 })));
+			setPhotoPreviews(form.photos.map((photo: IPhotoPreview) => ({ src: photo, width: 4, height: 3 })));
 
 			// Update the form state
 			onChange({
@@ -52,6 +51,9 @@ const ButtonUpload = ({ onChange, form }: ButtonUploadProps) => {
 		}
 	}, [form?.photos]);
 
+	console.log(form.photos);
+	console.log(photo);
+	console.log(photoPreviews);
 	const handleMultiplePhoto = (event: any) => {
 		const newUploadedPhotos = [...event.target.files];
 		setPhoto(newUploadedPhotos);
@@ -62,12 +64,14 @@ const ButtonUpload = ({ onChange, form }: ButtonUploadProps) => {
 			reader.onload = () => {
 				previews.push(reader.result);
 				if (previews.length === newUploadedPhotos.length) {
-					(previews.map((preview: any) => ({ src: preview, width: 4, height: 3 })));
+					previews.map((preview: IPhotoPreview) => ({ src: preview, width: 4, height: 3 }));
+					setPhotoPreviews(previews.map((preview: IPhotoPreview) => ({ src: preview, width: 4, height: 3 })));
 				}
 			};
 			reader.readAsDataURL(file);
 		});
 		onChange({ target: { name: 'photos', value: newUploadedPhotos } });
+		setPhotoPreviews(previews);
 		setNewPhoto([]);
 	};
 

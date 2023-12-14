@@ -9,7 +9,7 @@ import { ToursList } from '@/components/Guest/ToursList';
 import { Spacer } from '@nextui-org/react';
 import { EmblaOptionsType, EmblaPluginType } from 'embla-carousel-react';
 import Image from 'next/image';
-import toursImage from '@/assets/images/palawan.jpg';
+import toursImage from '@/assets/images/all-packages.jpg';
 
 type Package = {
 	id: number;
@@ -93,15 +93,19 @@ export default function Tours() {
 					}}
 					sizes='auto'
 				/>
-			</div>			
-			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full'>
-				<div className='w-full text-4xl font-semibold font-playfair my-2'>All Destinations</div>
-				<Spacer y={5} />
-				<div className='w-full'>
-					{locations.map((location: Location) => (
-						<ToursList key={location.key} location={location.name} />
-					))}
-				</div>
+			</div>	
+			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-10'>
+				<Spacer y={12} />
+				<div className='w-full text-3xl font-semibold font-playfair my-8'>All Packages</div>
+				{!packagesLoading ? (
+					<>
+						<div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mx-auto'>
+							<Catalog packages={packages} />
+						</div>
+					</>
+				) : (
+					<div className='flex flex-wrap h-fit w-full max-w-7xl pt-24 gap-3 my-10'></div>
+				)}
 			</section>
 		</main>
 	);

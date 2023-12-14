@@ -45,6 +45,7 @@ export default function EditPackage({ id }: Props) {
 	const [availability, setAvailability] = React.useState<Selection>(new Set(['Monday']));
 	const [language, setLanguage] = React.useState<Selection>(new Set(['English']));
 	const [location, setLocation] = React.useState<string>('Metro Cebu');
+	const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
 	const { data: packageData, isLoading: packageLoading } = useQuery({
 		queryKey: ['packages', id.id],
@@ -79,9 +80,9 @@ export default function EditPackage({ id }: Props) {
 	}, [packageLoading, packageData]);
 
 	const handleSaveClick = async (e: FormEvent<HTMLFormElement>) => {
+		setIsLoading(true);
 		e.preventDefault();
 		const formData = new FormData();
-
 		// Append text fields from the form
 		Object.entries(form).forEach(([key, value]: any) => {
 			if (key !== 'photos') {
@@ -196,7 +197,14 @@ export default function EditPackage({ id }: Props) {
 							<Textarea
 								className='w-[100%]'
 								name='description'
-								value={(form?.description && form.description.replaceAll('\\n', '\n')) || ''}
+								value={
+									(form?.description &&
+										form.description
+											.replaceAll('\\n', '\n')
+											.toString()
+											.replaceAll('\\', '')) ||
+									''
+								}
 								onChange={onChange}
 								type='text'
 								size='sm'
@@ -304,11 +312,16 @@ export default function EditPackage({ id }: Props) {
 						<ButtonUpload onChange={onChange} form={form} />
 					</div>
 				</CardBody>
-				<CardFooter>
+				<CardFooter className='flex gap-4'>
 					<Button color='default' variant='light' onPress={handleReturn} className='font-semibold'>
 						Return
 					</Button>
-					<Button color='secondary' type='submit'>
+					<Button
+						color='secondary'
+						type='submit'
+						disabled={packageLoading || isLoading}
+						className={`${isLoading && ' bg-secondary/60'}`}
+					>
 						Save
 					</Button>
 				</CardFooter>
