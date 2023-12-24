@@ -19,9 +19,7 @@ const WhyUs = () => {
 			<div className='flex w-full items-center xl:px-0 px-4'>
 				<p className='lg:text-lg text-base font-playfair lg:text-left text-justify'>
 					We redefine travel with a commitment to meticulous planning, ensuring every journey is a masterpiece of
-					organization and discovery. From seamless itineraries to curated experiences, we blend the precision of a
-					Virgo with the spirit of exploration, crafting unforgettable tours where every detail is as vibrant as your
-					adventure.
+					organization and discovery. From seamless itineraries to curated experiences, <span className='font-semibold'>we blend the cultural curiosity of a Virgo with the nature-loving affinity of a Taurus</span>, crafting unforgettable tours where every detail is as vibrant as your adventure.
 				</p>
 			</div>
 			<div className='flex w-full md:h-[380px] h-[200px] items-center md:gap-3 gap-1 xl:px-0 px-4 mt-6'>

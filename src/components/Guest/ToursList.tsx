@@ -65,12 +65,11 @@ export const ToursList = ({ location }: { location: string | null | undefined}) 
 
 	const SLIDE_COUNT = packages.length;
 	const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
-	const OPTIONS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: true};
+	const OPTIONS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: false, slidesToScroll: 1};
 
 	return (
 		<main className='flex flex-col items-center justify-between bg-white'>
 			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full'>
-                <div className='w-full text-2xl font-semibold font-playfair my-2'>Tours in {location}</div>
 				<div className='w-full'>
 					{SLIDES.length > 0 && <CarouselList slides={SLIDES} options={OPTIONS} packages={packages} />}
 				</div>

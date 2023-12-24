@@ -97,8 +97,8 @@ export default function Tours() {
 					}}
 					sizes='auto'
 				/>
-				<div className="absolute inset-0 text-white z-10 w-full flex h-full items-center justify-center">
-					<div className='flex flex-col max-w-6xl h-full w-full justify-end mx-16'>
+				<div className="absolute inset-0 text-white z-10 w-full flex h-full items-center justify-center bg-black/30">
+					<div className='flex flex-col max-w-6xl h-full w-full justify-end mx-16 '>
 						<h1 className='text-center xl:text-start text-xl sm:text-3xl md:text-5xl xl:text-6xl font-bold mt-10 font-poppins'>
 							Explore, Discover, Wander
 						</h1>
@@ -110,10 +110,10 @@ export default function Tours() {
 				</div>
 			</div>
 
-			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-10'>
+			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-2 lg:px-10'>
 				<div className='mb-10'>
-					<div className='w-full text-center md:text-start text-xl md:text-2xl xl:text-3xl font-semibold font-playfair px-4 my-8'>- The Complete Catalog -</div>
-					<div className='font-light mb-10 xl:w-1/2'>
+					<div className='w-full text-center md:text-start text-xl md:text-2xl xl:text-3xl font-semibold font-playfair px-0 my-8'>- The Complete Catalog -</div>
+					<div className='font-light mb-6 xl:w-1/2'>
 						Where will your next adventure take you? Delve into our treasure trove of curated tours, spanning across breathtaking landscapes, vibrant cultures, and hidden gems. Uncover ancient mysteries, embark on culinary journeys, or reconnect with nature&apos;s wonders. We offer experiences that touch the soul, inspire the mind, and leave you yearning for more.
 					</div>
 					<div className='font-light mb-10 xl:w-1/2'>
@@ -123,17 +123,19 @@ export default function Tours() {
 				</div>
 				{!packagesLoading ? (
 					<>
-						<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mx-auto pb-10'>
+						<div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mx-auto pb-10'>
 							<Catalog packages={packages} />
+						</div>
+						<div className='visible lg:hidden w-full'>
+							{locations.map((location: Location) => (
+								<ToursList key={location.key} location={location.name} />
+							))}
 						</div>
 					</>
 				) : (
 					<>
-						<div className='hidden lg:grid grid-cols-3 gap-10 w-full pb-10'>
+						<div className='grid grid-cols-3 gap-10 w-full pb-10'>
 							<CatalogSuspense numberOfCards={9} />
-						</div>
-						<div className='lg:hidden w-full px-4'>
-							<CatalogSuspense numberOfCards={1} />
 						</div>
 					</>
 				)}

@@ -17,6 +17,7 @@ import {
 	DropdownSection,
 	Link,
 	Button,
+	Skeleton,
 } from '@nextui-org/react';
 import Image from 'next/image';
 import { IoMdHome, IoMdPerson } from 'react-icons/io';
@@ -90,13 +91,29 @@ export default function NavbarGuest() {
 		));
 	};
 
+	const renderEmptyDropdown = (count: number) => {
+		const widthOptions = [2, 3, 4, 5]; // Available width options (as fractions of 5)
+	  
+		return (
+		  <div className="w-full flex flex-col gap-2">
+			{Array.from({ length: count }, (_, index) => (
+			  <Skeleton
+				key={index}
+				className={`h-5 w-${widthOptions[Math.floor(Math.random() * widthOptions.length)]}/5 rounded-lg`}
+			  />
+			))}
+		  </div>
+		);
+	  };
+	  
+
 	// ###################
 	
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	const menuItems = [
 		{ text: 'Home', icon: <IoMdHome /> , link: '/'},
-		{ text: 'Packages', icon: <IoDocumentText />, link: '/tours'},
-		{ text: 'Destinations', icon: <IoNavigate />, link: '/destinations' },
+		{ text: 'Packages', icon: <IoDocumentText />, link: '/tours/all'},
+		{ text: 'Destinations', icon: <IoNavigate />, link: '/tours' },
 		{ text: 'Contact Us', icon: <IoMdPerson />, link: '/about' },
 	];
 
@@ -133,7 +150,8 @@ export default function NavbarGuest() {
 								label: section.label,
 							}))}
 							aria-label='Tour Packages'
-							className='w-[380px] h-[500px] overflow-auto'
+							className='w-[380px] h-fit max-h-[500px] overflow-auto'
+							emptyContent={renderEmptyDropdown(12)}
 							itemClasses={{
 								base: 'gap-4',
 							}}
@@ -168,6 +186,7 @@ export default function NavbarGuest() {
 							items={packageSections}
 							aria-label='Destinations'
 							className=''
+							emptyContent={renderEmptyDropdown(4)}
 							itemClasses={{
 								base: 'gap-4',
 							}}
@@ -197,6 +216,7 @@ export default function NavbarGuest() {
 							items={contactsData}
 							aria-label='Contacts'
 							className=''
+							emptyContent={renderEmptyDropdown(5)}
 							itemClasses={{
 								base: 'gap-4',
 							}}
@@ -212,9 +232,11 @@ export default function NavbarGuest() {
 			</NavbarContent>
 			<NavbarContent className={`hidden md:flex gap-4 pr-5`} justify='end'>
 				<NavbarItem>
-					<Button color='primary' className='font-extralight font-poppins md:text-xs lg:text-sm p-6 rounded-md'>
-						Book Now
-					</Button>
+					<Link href={`/tours/all`}>
+						<Button color='primary' className='font-extralight font-poppins md:text-xs lg:text-sm p-6 rounded-md'>
+							Book Now
+						</Button>
+					</Link>
 				</NavbarItem>
 			</NavbarContent>
 			<NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className='md:hidden text-black h-8 w-8' />
