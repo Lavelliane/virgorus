@@ -43,4 +43,10 @@ interface Itinerary {
 	activity: string;
 }
 
-export type { IAddPackage, Rates, DaySchedule, Itinerary, Booking };
+interface Photo {
+	src: string;
+	width: number;
+	height: number;
+}
+
+export type { IAddPackage, Rates, DaySchedule, Itinerary, Booking, Photo };

@@ -81,19 +81,29 @@ export default function Tours() {
 
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between bg-white'>
-			<Spacer y={5} />
-			<div className='min-w-fit h-96 relative my-2 diagonal-image-clip'>
+			<div className="flex min-w-fit h-96 relative my-2 w-full items-center justify-center">
 				<Image
 					src={toursImage}
-					alt='tours image'
+					alt="tours image"
 					style={{
-						objectFit: 'cover',
-						width: '100%',
-						height: '100%',
+					objectFit: 'cover',
+					width: '100%',
+					height: '100%',
 					}}
 					sizes='auto'
 				/>
-			</div>			
+				<div className="absolute inset-0 text-white z-10 w-full flex h-full items-center justify-center bg-black/30">
+					<div className='flex flex-col max-w-6xl h-full w-full justify-end mx-16 '>
+						<h1 className='text-center xl:text-start text-xl sm:text-3xl md:text-5xl xl:text-6xl font-bold mt-10 font-poppins'>
+							Explore, Discover, Wander
+						</h1>
+						<span className='bg-white h-[2px] rounded-full my-3'></span>
+						<div className='text-center xl:text-start text-lg sm:text-xl md:text-3xl xl:text-4xl font-regular mb-10 font-poppins'>
+							All Destinations
+						</div>
+					</div>
+				</div>
+			</div>		
 			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full'>
 				<div className='w-full text-4xl font-semibold font-playfair my-2'>All Destinations</div>
 				<Spacer y={5} />

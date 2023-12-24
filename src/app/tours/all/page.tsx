@@ -1,15 +1,20 @@
 'use client';
 
-import { Catalog } from '@/components/Guest/Catalog';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+	Divider
+} from '@nextui-org/react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackages } from '@/queries/fetchPackages';
 import { IAddPackage } from '@/types/types';
+import { Catalog } from '@/components/Guest/Catalog';
 import { ToursList } from '@/components/Guest/ToursList';
 import { Spacer } from '@nextui-org/react';
 import { EmblaOptionsType, EmblaPluginType } from 'embla-carousel-react';
 import Image from 'next/image';
 import toursImage from '@/assets/images/all-packages.jpg';
+import { CatalogSuspense } from '@/components/Guest/CatalogSuspense';
+import Footer from '@/components/Guest/Footer';
 
 type Package = {
 	id: number;
@@ -57,7 +62,7 @@ export default function Tours() {
 					description: pd.description,
 					type: pd.type,
 					location: pd.location,
-					rate: pd.rates[pd.rates.length - 1].ratePerPax,
+					rates: pd.rates,
 					photos: pd.photos,
 				}))
 			);
@@ -81,32 +86,61 @@ export default function Tours() {
 
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between bg-white'>
-			<Spacer y={5} />
-			<div className='min-w-fit h-96 relative my-2 diagonal-image-clip'>
+			<div className="flex min-w-fit h-96 relative my-2 w-full items-center justify-center">
 				<Image
 					src={toursImage}
-					alt='tours image'
+					alt="tours image"
 					style={{
-						objectFit: 'cover',
-						width: '100%',
-						height: '100%',
+					objectFit: 'cover',
+					width: '100%',
+					height: '100%',
 					}}
 					sizes='auto'
 				/>
-			</div>	
-			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-10'>
-				<Spacer y={12} />
-				<div className='w-full text-3xl font-semibold font-playfair my-8'>All Packages</div>
+				<div className="absolute inset-0 text-white z-10 w-full flex h-full items-center justify-center bg-black/30">
+					<div className='flex flex-col max-w-6xl h-full w-full justify-end mx-16 '>
+						<h1 className='text-center xl:text-start text-xl sm:text-3xl md:text-5xl xl:text-6xl font-bold mt-10 font-poppins'>
+							Explore, Discover, Wander
+						</h1>
+						<span className='bg-white h-[2px] rounded-full my-3'></span>
+						<div className='text-center xl:text-start text-lg sm:text-xl md:text-3xl xl:text-4xl font-regular mb-10 font-poppins'>
+							All Tours
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-2 lg:px-10'>
+				<div className='mb-10'>
+					<div className='w-full text-center md:text-start text-xl md:text-2xl xl:text-3xl font-semibold font-playfair px-0 my-8'>- The Complete Catalog -</div>
+					<div className='font-light mb-6 xl:w-1/2'>
+						Where will your next adventure take you? Delve into our treasure trove of curated tours, spanning across breathtaking landscapes, vibrant cultures, and hidden gems. Uncover ancient mysteries, embark on culinary journeys, or reconnect with nature&apos;s wonders. We offer experiences that touch the soul, inspire the mind, and leave you yearning for more.
+					</div>
+					<div className='font-light mb-10 xl:w-1/2'>
+						What are you waiting for? It&apos;s time to find your perfect getaway now from our full list below.
+					</div>
+					<Divider />
+				</div>
 				{!packagesLoading ? (
 					<>
-						<div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mx-auto'>
+						<div className='hidden lg:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 px-4 mx-auto pb-10'>
 							<Catalog packages={packages} />
+						</div>
+						<div className='visible lg:hidden w-full'>
+							{locations.map((location: Location) => (
+								<ToursList key={location.key} location={location.name} />
+							))}
 						</div>
 					</>
 				) : (
-					<div className='flex flex-wrap h-fit w-full max-w-7xl pt-24 gap-3 my-10'></div>
+					<>
+						<div className='grid grid-cols-3 gap-10 w-full pb-10'>
+							<CatalogSuspense numberOfCards={9} />
+						</div>
+					</>
 				)}
 			</section>
+			<Footer />
 		</main>
 	);
 }

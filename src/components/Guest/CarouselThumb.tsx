@@ -21,9 +21,6 @@ export const CarouselThumb: React.FC<PropType> = (props) => {
         className="carousel_image-thumbs__slide__button"
         type="button"
       >
-        <div className="carousel_image-thumbs__slide__number">
-          <span>{index + 1}</span>
-        </div>
         <img
           className="carousel_image-thumbs__slide__img"
           src={imgSrc}

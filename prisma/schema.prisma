@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,59 +8,59 @@ datasource db {
 }
 
 model Package {
-  id              String      @id @default(uuid())
-  name            String
-  description     String
-  type            String
-  location        String
-  duration        String
-  cancellation    String
-  availability    String
-  language        String
-  notice          String
-  rates           Rates[]
-  itinerary       DaySchedule[]
-  photos          String[]
-  inclusions      String[]
-  exclusions      String[]
-  bookings        Booking[]
+  id           String        @id @default(uuid())
+  name         String
+  description  String
+  type         String
+  location     String
+  duration     String
+  cancellation String
+  availability String
+  language     String
+  notice       String
+  photos       String[]
+  exclusions   String[]
+  inclusions   String[]
+  bookings     Booking[]
+  itinerary    DaySchedule[]
+  rates        Rates[]
 }
 
 model Rates {
-  id              Int      @id @default(autoincrement())
-  numberOfPax     String
-  ratePerPax      String
-  packageId       String
-  package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  id          Int     @id @default(autoincrement())
+  numberOfPax String
+  ratePerPax  String
+  packageId   String
+  package     Package @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
 model Itinerary {
-  id              Int      @id @default(autoincrement())
-  time            String?
-  activity        String?
-  dayScheduleId   Int
-  daySchedule     DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
+  id            Int         @id @default(autoincrement())
+  time          String?
+  activity      String?
+  dayScheduleId Int
+  daySchedule   DaySchedule @relation(fields: [dayScheduleId], references: [id], onDelete: Cascade)
 }
 
 model DaySchedule {
-  id              Int      @id @default(autoincrement())
-  day             String?
-  itineraries     Itinerary[]
-  packageId       String
-  package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  id          Int         @id @default(autoincrement())
+  day         String?
+  packageId   String
+  package     Package     @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  itineraries Itinerary[]
 }
 
 model Booking {
-  id              Int        @id @default(autoincrement())
-  fullName        String
-  email           String
-  contactNumber   String
-  numLocalGuests  Int
+  id               Int      @id @default(autoincrement())
+  fullName         String
+  email            String
+  contactNumber    String
+  numLocalGuests   Int
   numForeignGuests Int
-  tourDate        DateTime   
-  pickupInfo      String
-  packageId       String
-  package         Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  tourDate         DateTime
+  pickupInfo       String
+  packageId        String
+  package          Package  @relation(fields: [packageId], references: [id], onDelete: Cascade)
 }
 
 model Account {
@@ -81,7 +78,6 @@ model Account {
 
   @@unique([providerId, providerAccountId])
 }
-
 
 model Session {
   id           String   @id @default(cuid())
@@ -106,4 +102,3 @@ model User {
   accounts      Account[]
   sessions      Session[]
 }
-
