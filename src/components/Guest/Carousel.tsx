@@ -16,6 +16,13 @@ type PropType = {
 	photos?: Photo[]
 };
 
+type PropType2 = {
+	slides: number[];
+	options?: EmblaOptionsType;
+	plugins?: EmblaPluginType;
+	photos: Photo[];
+};
+
 const CarouselShowcase: React.FC<PropType> = (props) => {
 	const { slides, options, plugins, packages } = props;
 	const [emblaRef, emblaApi] = useEmblaCarousel(options, plugins);
@@ -187,17 +194,17 @@ const CarouselImage: React.FC<PropType> = (props) => {
 	return (
 	  <>
 		<div className="carousel_image">
-		  <div className="carousel_image__viewport rounded-t-2xl relative" 
+		  <div className="carousel_image__viewport rounded-none sm:rounded-t-2xl relative" 
 		  	  ref={emblaRef}
 			  onMouseEnter={() => setButtonsVisible(true)}
 			  onMouseLeave={() => setButtonsVisible(false)}
 			>
 		    <div className="carousel_image__container">
 			  {slides.map((index) => (
-			    <div className="carousel_image__slide rounded-t-2xl" key={index}>
+			    <div className="carousel_image__slide " key={index}>
 				  {photos && (
 					<img
-					  className="carousel_image__slide__img rounded-t-2xl"
+					  className="carousel_image__slide__img"
 					  src={String(photos[index].src)}
 					  alt={String(photos[index])}
 					/>

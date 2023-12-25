@@ -49,13 +49,13 @@ export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 				/>
 			</CardBody>
 			<CardFooter className='flex justify-between gap-2 my-2 p-4'>
-				<div className='flex flex-col'>
+				<div className='flex flex-col mr-10'>
 					<span className='md:text-small text-sm'>For as low as</span>
 					<div className='flex gap-1'>
 						<span className='sm:text-small text-sm font-semibold text-olive'>
 							{`₱${Number(catPackage.rates ? catPackage?.rates[(catPackage?.rates?.length - 1) | 0]?.ratePerPax : 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`}
 						</span>
-						<span className='sm:text-small text-sm'> / person</span>
+						<span className='sm:text-small text-sm whitespace-nowrap'> / person</span>
 					</div>
 				</div>
 				<Link href={`/tours/${catPackage.location}/${catPackage.id}`}>
