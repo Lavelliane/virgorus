@@ -6,19 +6,57 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackages } from '@/queries/fetchPackages';
 import { IAddPackage } from '@/types/types';
-import { Card, CardBody, CardHeader, Skeleton } from '@nextui-org/react';
 import { CatalogSuspense } from '../CatalogSuspense';
-import { CarouselWrapper } from '../CarouselWrapper';
+import { CarouselShowcase } from '../Carousel';
+import { EmblaOptionsType, EmblaPluginType } from 'embla-carousel-react';
+import AutoPlay from 'embla-carousel-autoplay';
 
-export const Recommendations = ({ location, count }: { location: string | null | undefined, count: number }) => {
+const autoplayOptions = {
+	delay: 4000,
+	stopOnInteraction: false,
+	AutoPlay: true,
+	rootNode: (emblaRoot: HTMLElement) => emblaRoot.parentElement,
+};
+
+export const Recommendations = ({ location, count }: { location: string | null | undefined, count: number | null | undefined }) => {
 	const [packages, setPackages] = useState<IAddPackage[]>([]);
 	const { data: packagesData, isLoading: packagesLoading } = useQuery({
 		queryKey: ['packages'],
 		queryFn: fetchPackages,
 	});
 
-	useEffect(() => {
+	// Function to shuffle the array
+	const shuffleArray = (array: IAddPackage[]) => {
+		const newArray = [...array];
+		for (let i = newArray.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+		}
+		return newArray;
+	};
+
+	let selectedPackages: IAddPackage[] = [];
+	if (count == null || count == undefined) {
 		if (!packagesLoading && packagesData) {
+			selectedPackages = shuffleArray(
+				packagesData
+					.filter((pd: IAddPackage) => pd.location === location)
+					.map((pd: IAddPackage) => ({
+						id: pd.id,
+						name: pd.name,
+						description: pd.description,
+						type: pd.type,
+						location: pd.location,
+						rates: pd.rates,
+						photos: pd.photos,
+					}))
+			);
+		}
+		count = selectedPackages.length;
+	}
+
+	useEffect(() => {
+		if (!packagesLoading && packagesData && count) {
 			let selectedPackages: IAddPackage[];
 
 			if (location) {
@@ -56,15 +94,12 @@ export const Recommendations = ({ location, count }: { location: string | null |
 		}
 	}, [packagesLoading, packagesData, location, count]);
 
-	// Function to shuffle the array
-	const shuffleArray = (array: IAddPackage[]) => {
-		const newArray = [...array];
-		for (let i = newArray.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-		}
-		return newArray;
-	};
+
+	const SLIDE_COUNT = packages.length;
+	const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
+	const OPTIONS: EmblaOptionsType = { loop: false, align: 'center', containScroll: false, dragFree: false};
+	const PLUGINS: EmblaPluginType = OPTIONS ? [AutoPlay(autoplayOptions)] : [];
+
 	return (
 		<main className='flex flex-col w-full items-center justify-between bg-transparent'>
 			<section className='flex flex-col h-fit items-center md:mx-6 mx-0 p-0 max-w-7xl w-full'>
@@ -74,7 +109,7 @@ export const Recommendations = ({ location, count }: { location: string | null |
 							<Catalog packages={packages} />
 						</div>
 						<div className='w-full lg:hidden'>
-							<CarouselWrapper packages={packages} />
+							{SLIDES.length > 0 && <CarouselShowcase slides={SLIDES} options={OPTIONS} plugins={PLUGINS} packages={packages} />}
 						</div>
 					</>
 				) : (

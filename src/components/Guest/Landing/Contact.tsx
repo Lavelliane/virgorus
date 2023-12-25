@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import touch from '@/assets/images/touch-nature.jpeg';
 import { FaPhone, FaEnvelope, FaFacebookSquare } from 'react-icons/fa';
-import { Button } from '@nextui-org/react';
+import { Button, Link } from '@nextui-org/react';
 
 const Contact = () => {
 	return (
@@ -14,7 +14,7 @@ const Contact = () => {
 				<div className='flex flex-col sm:gap-10 gap-6 w-full text-primary my-4'>
 					<h1 className='font-playfair lg:text-4xl text-2xl'>Get In Touch</h1>
 					<p className='lg:text-lg text-base font-light lg:text-left'>
-						Contact Us at Virgorus Adventures! We{"'"}re here to assist you on your journey of a lifetime. Whether you
+						Contact us at Virgorus Adventures! We&apos;re here to assist you on your journey of a lifetime. Whether you
 						have inquiries about our tours, need assistance with bookings, or simply want to share your travel dreams,
 						our dedicated team is ready to help.
 					</p>
@@ -39,9 +39,11 @@ const Contact = () => {
 						</div>
 					</div>
 					<div>
-						<Button color='primary' size='lg' radius='sm'>
-							Book Now
-						</Button>
+						<Link href='https://www.facebook.com/VTSCebuPH'>
+							<Button color='primary' size='lg' radius='sm'>
+								Visit Our Page
+							</Button>
+						</Link>
 					</div>
 				</div>
 			</div>

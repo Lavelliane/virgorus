@@ -80,9 +80,9 @@ const About = () => {
 							Explore Popular Packages
 						</h1>
 						<div className='w-fit'>
-							<Link href={`/tours`}>
+							<Link href={`/tours/all`}>
 								<Button color='default' size='lg' radius='sm' className='font-poppins text-primary'>
-									Browse Packages
+									Browse All Packages
 								</Button>
 							</Link>
 						</div>

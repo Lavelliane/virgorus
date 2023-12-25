@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { Accordion, AccordionItem, Divider, Spacer, Tooltip, Skeleton } from '@nextui-org/react';
 import Image from 'next/image';
-import { PackageGallery } from './Gallery';
 import { RatesTable } from './RatesTable';
 import { BookingForm } from './BookingForm';
 import { Recommendations } from './Recommendations';
@@ -15,12 +14,40 @@ import { contactsData } from '@/utils/data';
 import { useQuery } from '@tanstack/react-query';
 import { fetchPackage } from '@/queries/fetchPackages';
 import { Itinerary } from './Itinerary';
+import useEmblaCarousel, { EmblaOptionsType, EmblaPluginType, EmblaCarouselType } from 'embla-carousel-react';
+import { CarouselGallery } from '@/components/Guest/Carousel';
+import AutoPlay from 'embla-carousel-autoplay';
 
 interface Photo {
 	src: string;
 	width: number;
 	height: number;
 }
+
+const autoplayOptions = {
+	delay: 8000,
+	stopOnInteraction: false,
+	AutoPlay: true,
+	rootNode: (emblaRoot: HTMLElement) => emblaRoot.parentElement,
+};
+
+export const convertPhotos = (photos: string[]): Photo[] => {
+	return photos.map((photoUrl) => {
+		// Extract width and height from the URL
+		const match = photoUrl.match(/\/(\d+)x(\d+)\.jpg$/);
+		const width = match ? parseInt(match[1], 10) : 21;
+		const height = match ? parseInt(match[2], 10) : 9;
+
+		// Create Photo object
+		const photo: Photo = {
+			src: photoUrl,
+			width: width,
+			height: height,
+		};
+
+		return photo;
+	});
+};
 
 export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 	/* ====================         STATES         ====================*/
@@ -38,24 +65,6 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 			return fetchPackage(id); // Pass the id to the fetchPackage function
 		},
 	});
-
-	const convertPhotos = (photos: string[]): Photo[] => {
-		return photos.map((photoUrl) => {
-			// Extract width and height from the URL
-			const match = photoUrl.match(/\/(\d+)x(\d+)\.jpg$/);
-			const width = match ? parseInt(match[1], 10) : 21;
-			const height = match ? parseInt(match[2], 10) : 9;
-
-			// Create Photo object
-			const photo: Photo = {
-				src: photoUrl,
-				width: width,
-				height: height,
-			};
-
-			return photo;
-		});
-	};
 
 	const formatAvailability = (availability: string): string => {
 		if (availability) {
@@ -135,20 +144,27 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 		return <li key={exclusion}>{exclusion}</li>;
 	});
 
+
+	const SLIDE_COUNT = photos.length;
+	const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
+	const OPTIONS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: false};
+	const PLUGINS: EmblaPluginType = OPTIONS ? [AutoPlay(autoplayOptions)] : [];
+
 	return (
 		<div className='flex flex-col w-full font-poppins'>
 			<div aria-label='Package Header' className='flex flex-col max-w-7xl xl:px-0 px-4'>
 				{isLoaded ? (
 					<div>
-						<Spacer y={4} />
 						<p className='font-semibold font-playfair text-black text-3xl'>{Package?.name}</p>
 						<Spacer y={6} />
-						<PackageGallery photos={photos} />
+						<div className='w-full'>
+							{SLIDES.length > 0 && <CarouselGallery slides={SLIDES} photos={photos} options={OPTIONS} plugins={PLUGINS}/>}
+						</div>
 					</div>
 				) : (
 					<div>
 						<Spacer y={4} />
-						<Skeleton isLoaded={isLoaded} className={`rounded-xl ${isLoaded === false ? 'w-1/2' : ''}`}>
+						<Skeleton isLoaded={isLoaded} className={`rounded-full ${isLoaded === false ? 'w-1/2' : ''}`}>
 							<div className='text-3xl'>.</div>
 						</Skeleton>
 						<Spacer y={6} />
@@ -221,7 +237,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 						<div aria-label='Tooltips' className='flex flex-col py-4'>
 							<div>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
@@ -244,7 +260,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 							</div>
 							<div>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
@@ -269,7 +285,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 							</div>
 							<div>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
@@ -301,7 +317,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 							</div>
 							<div className='w-full'>
 								<Tooltip
-									placement='right'
+									placement={(window.innerWidth <= 768) ? 'top' : 'right'}
 									closeDelay={100}
 									content={
 										<div className='px-1 py-2'>
@@ -377,23 +393,25 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 								<AccordionItem key='2' title='Sample itinerary' className='text-black'>
 									<Itinerary itinerary={Package?.itinerary} />
 								</AccordionItem>
-								<AccordionItem key='3' title='Accessibility' className='text-black'>
-									<ul className='list-disc pl-5'>
-										<li>Wheelchair accessible</li>
-										<li>Stroller accessible</li>
-									</ul>
-								</AccordionItem>
-								<AccordionItem key='4' title='Help' className='text-black'>
+								<AccordionItem key='3' title='Help' className='text-black'>
 									If you have any questions or need assistance, feel free to reach out to our support team. We are here
 									to ensure that you have smooth and enjoyable experience. You may contact us at:
-									<div className='mt-4'>
-										{contactsData.map((contact) => (
-											<div className='flex items-center mb-2' key={contact.key}>
-												<div className='mr-4'>{getContactIcon(contact.key)}</div>
+								<div className='mt-4'>
+									{contactsData.map((contact) => (
+										<div className='flex items-center mb-2' key={contact.key}>
+											<div className='mr-4'>{getContactIcon(contact.key)}</div>
+											{contact.value === 'VTSCebuPH' ? (
+												<div>
+													<a href='https://m.facebook.com/profile.php/?id=100069180882389' target='_blank' rel='noopener noreferrer'>
+														{contact.value}
+													</a>
+												</div>
+											) : (
 												<div>{contact.value}</div>
-											</div>
-										))}
-									</div>
+											)}
+										</div>
+									))}
+								</div>
 								</AccordionItem>
 							</Accordion>
 							<Divider className='px-4' />
@@ -403,48 +421,48 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 					<div className='lg:w-4/6'>
 						<div className='flex flex-col gap-4'>
 							<div>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl w-36'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full w-36'>
 									<h1 className='text-lg'>.</h1>
 								</Skeleton>
 							</div>
 							<div className='flex flex-col gap-2 pb-2'>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'></p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl w-2/3'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full w-2/3'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>
 							<Divider />
 							<div className='flex flex-col w-48 gap-2 pb-2'>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'></p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl'>
+								<Skeleton isLoaded={isLoaded} className='rounded-full'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>
 							<Divider />
 							<div className=''>
-								<Skeleton isLoaded={isLoaded} className='rounded-xl h-64'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg h-64'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>
@@ -465,7 +483,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 					</h1>
 				) : (
 					<Skeleton className='w-2/5 rounded-xl my-8'>
-						<div className='h-8 w-full rounded-xl bg-default-200'></div>
+						<div className='h-8 w-full rounded-full bg-default-200'></div>
 					</Skeleton>
 				)}
 				<div className='flex flex-row'>
