@@ -4,7 +4,7 @@ import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { MdDeleteOutline } from 'react-icons/md';
 import { PiNotePencilLight } from 'react-icons/pi';
 import { AiOutlineStop } from 'react-icons/ai';
-import {IAddPackage} from '@/types/types';
+import { IAddPackage } from '@/types/types';
 
 interface Itinerary {
 	time: string;
@@ -295,6 +295,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 																		if (e.key === 'Tab') handleEditItinerary(dayIndex, timeIndex);
 																	}}
 																	onClick={() => handleEditItinerary(dayIndex, timeIndex)}
+																	type='button'
 																	isIconOnly
 																	size='sm'
 																	className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
@@ -305,6 +306,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 															<Button
 																onClick={() => handleCancelItinerary(dayIndex, timeIndex)}
 																isIconOnly
+																type='button'
 																size='sm'
 																className='bg-transparent text-gray-700 hover:text-gray-600 text-lg hover:bg-transparent'
 															>
@@ -313,6 +315,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 															<Button
 																onClick={() => removeItinerary(dayIndex, timeIndex)}
 																isIconOnly
+																type='button'
 																size='sm'
 																className='bg-transparent text-red-600 hover:text-red-400 text-xl hover-bg-transparent'
 															>
@@ -325,6 +328,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 																disabled={isEditingStates.some((isEditing) => isEditing)}
 																onClick={() => toggleEditItinerary(dayIndex, timeIndex)}
 																isIconOnly
+																type='button'
 																size='sm'
 																className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover-bg-transparent'
 															>
@@ -371,7 +375,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 											isIconOnly
 											className='text-chocolate hover:text-opacity-60 text-xl bg-transparent transition-all'
 											disabled={isEditingStates.some((isEditing) => isEditing)}
-											type='submit'
+											type='button'
 										>
 											<IoAddCircleOutline />
 										</Button>
@@ -383,7 +387,7 @@ export default function TableItinerary({ onChange, form }: TableItineraryProps) 
 					))}
 				</Accordion>
 			</div>
-			<Button onClick={addDay} size='sm' variant='shadow' color='secondary'>
+			<Button onClick={addDay} size='sm' variant='shadow' color='secondary' type='button'>
 				ADD DAY
 			</Button>
 		</div>

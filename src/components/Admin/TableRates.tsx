@@ -4,7 +4,7 @@ import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { MdDeleteOutline } from 'react-icons/md';
 import { PiNotePencilLight } from 'react-icons/pi';
 import { AiOutlineStop } from 'react-icons/ai';
-import {IAddPackage} from '@/types/types';
+import { IAddPackage } from '@/types/types';
 
 interface Pax {
 	numberOfPax: string;
@@ -199,6 +199,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 												disabled={isRepeating}
 												onClick={() => handleEdit(index)}
 												isIconOnly
+												type='button'
 												size='sm'
 												className='bg-transparent text-green-700 hover:text-green-600 text-xl hover:bg-transparent'
 											>
@@ -209,6 +210,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 											disabled={isRepeating}
 											onClick={() => handleCancel(index)}
 											isIconOnly
+											type='button'
 											size='sm'
 											className='bg-transparent text-gray-700 hover:text-gray-600 text-lg hover:bg-transparent'
 										>
@@ -218,6 +220,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 										<Button
 											onClick={() => removePaxRate(index)}
 											isIconOnly
+											type='button'
 											size='sm'
 											className='bg-transparent text-red-600 hover:text-red-400 text-xl hover:bg-transparent'
 										>
@@ -229,6 +232,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 										<Button
 											disabled={isEditingStates.some((isEditing) => isEditing)}
 											onClick={() => toggleEdit(index)}
+											type='button'
 											isIconOnly
 											size='sm'
 											className='bg-transparent text-blue-600 hover:text-blue-400 text-xl hover:bg-transparent'
@@ -278,7 +282,7 @@ export default function TableRates({ onChange, form }: TableRatesProps) {
 						isIconOnly
 						className='text-chocolate hover:text-opacity-60 text-2xl bg-transparent transition-all'
 						disabled={isEditingStates.some((isEditing) => isEditing) || isRepeating}
-						type='submit'
+						type='button'
 					>
 						<IoAddCircleOutline />
 					</Button>

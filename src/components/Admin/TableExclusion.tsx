@@ -4,7 +4,7 @@ import { IoAddCircleOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import { PiNotePencilLight } from 'react-icons/pi';
 import { AiOutlineStop } from 'react-icons/ai';
 import { MdDeleteOutline } from 'react-icons/md';
-import {IAddPackage} from '@/types/types';
+import { IAddPackage } from '@/types/types';
 
 interface TableExclusionsProps {
 	readonly onChange: (e: any) => void;
@@ -207,7 +207,7 @@ export default function TableExclusions({ onChange, form }: TableExclusionsProps
 						isIconOnly
 						className='text-chocolate hover-text-opacity-60 text-2xl bg-transparent transition-all'
 						disabled={isEditingStates.some((isEditing) => isEditing) || isRepeating}
-						type='submit'
+						type='button'
 					>
 						<IoAddCircleOutline />
 					</Button>
