@@ -16,13 +16,6 @@ type PropType = {
 	photos?: Photo[]
 };
 
-type PropType2 = {
-	slides: number[];
-	options?: EmblaOptionsType;
-	plugins?: EmblaPluginType;
-	photos: Photo[];
-};
-
 const CarouselShowcase: React.FC<PropType> = (props) => {
 	const { slides, options, plugins, packages } = props;
 	const [emblaRef, emblaApi] = useEmblaCarousel(options, plugins);
