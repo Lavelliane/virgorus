@@ -127,7 +127,7 @@ export default function NavbarGuest() {
 						style={{
 							objectFit: 'cover',
 							width: '100%',
-							height: '80px',
+							height: '60px',
 						}}
 						width={75}
 						height={75}
@@ -185,7 +185,7 @@ export default function NavbarGuest() {
 						<DropdownMenu
 							items={packageSections}
 							aria-label='Destinations'
-							className=''
+							className='text-black'
 							emptyContent={renderEmptyDropdown(4)}
 							itemClasses={{
 								base: 'gap-4',
@@ -215,7 +215,7 @@ export default function NavbarGuest() {
 						<DropdownMenu
 							items={contactsData}
 							aria-label='Contacts'
-							className=''
+							className='text-black'
 							emptyContent={renderEmptyDropdown(5)}
 							itemClasses={{
 								base: 'gap-4',

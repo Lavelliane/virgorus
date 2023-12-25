@@ -73,23 +73,23 @@ const DestinationPage = ({ params }: { params: { destination: string } }) => {
 
 	const PHOTO_COUNT = photos.length
 	const PHOTOS = Array.from(Array(PHOTO_COUNT).keys());
-	const OPTIONS_PHOTOS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: false, watchDrag: false};
+	const OPTIONS_PHOTOS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: false, watchDrag: true};
 	const PLUGINS: EmblaPluginType = OPTIONS_PHOTOS ? [AutoPlay(autoplayOptions)] : [];
 
 	return (
-		<main className='flex min-h-screen flex-col items-center justify-between bg-white'>
-			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-10 pb-10'>
-				<div className='w-full text-7xl font-semibold font-playfair my-8'>Discover {destination}</div>
-				<div className='bg-nude rounded-2xl'>
+		<main className='flex min-h-screen flex-col items-center justify-between bg-white text-black'>
+			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-0 sm:px-10 pb-10'>
+				<div className='w-full text-3xl md:text-7xl font-semibold font-playfair my-2 sm:my-8'>Discover {destination}</div>
+				<div className='bg-nude rounded-none sm:rounded-2xl'>
 					<div className='w-full'>
-					{packagesLoading && (
-						<Skeleton className="rounded-t-2xl h-[500px]"/>
-					)}
-					{PHOTOS.length > 0 && <CarouselImage slides={PHOTOS} photos={photos} options={OPTIONS_PHOTOS} plugins={PLUGINS}/>}
+						{packagesLoading && (
+							<Skeleton className="rounded-t-2xl h-[500px]"/>
+						)}
+   					  	{PHOTOS.length > 0 && <CarouselImage slides={PHOTOS} photos={photos} options={OPTIONS_PHOTOS} plugins={PLUGINS}/>}
 					</div>
-					<div className='p-24'>
-						<div className='w-full text-3xl font-semibold font-playfair mb-8'>About</div>
-						<p className='w-2/3'>{destinationDescription}</p>
+					<div className='p-6 sm:p-12 lg:p-24'>
+						<div className='w-full text-lg sm:text-3xl font-semibold font-playfair mb-8'>About</div>
+						<p className='w-full lg:w-2/3 text-justify text-xs'>{destinationDescription}</p>
 					</div>
 				</div>
 				<Spacer y={12} />

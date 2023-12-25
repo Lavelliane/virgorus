@@ -14,7 +14,7 @@ type Package = {
 
 const PackagePage = ({ params }: { params: { packageId: number } }) => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-white">
+    <main className="flex min-h-screen flex-col items-center justify-between bg-white text-black">
       <section className="flex flex-col h-fit items-center mx-6 max-w-7xl w-full">
         <PackageDetails id={params.packageId} />
       </section>

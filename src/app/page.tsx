@@ -12,7 +12,7 @@ export default function Home() {
 	return (
 		<main className='flex flex-col items-center justify-between bg-white min-h-screen w-full'>
 			<NavbarGuest />
-			<section className='flex flex-col w-full h-fit items-center justify-center mx-auto'>
+			<section className='flex flex-col w-full h-fit items-center justify-center mx-aut text-black'>
 				<Hero />
 				<Spacer y={20} />
 				<About />

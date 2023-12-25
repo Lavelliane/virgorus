@@ -85,7 +85,7 @@ export default function Tours() {
 	const OPTIONS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: true};
 
 	return (
-		<main className='flex min-h-screen flex-col items-center justify-between bg-white'>
+		<main className='flex min-h-screen flex-col items-center justify-between bg-white text-black'>
 			<div className="flex min-w-fit h-96 relative my-2 w-full items-center justify-center">
 				<Image
 					src={toursImage}
