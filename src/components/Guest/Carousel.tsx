@@ -279,7 +279,7 @@ const CarouselImage: React.FC<PropType> = (props) => {
 					<img
 					  className="carousel_image__slide__img"
 					  src={String(photos[index].src)}
-					  alt={String(photos[index])}
+					  alt='image'
 					/>
 				)}
 			  </div>

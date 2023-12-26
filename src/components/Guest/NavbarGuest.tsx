@@ -26,6 +26,7 @@ import { IoDocumentText, IoNavigate } from "react-icons/io5";
 import { fetchPackages } from '@/queries/fetchPackages';
 import { contactsData } from '@/utils/data';
 import { getContactIcon } from './ContactBar';
+import logoImage from '../../../public/virgorus-logo.png'
 
 type Package = {
 	id: number;
@@ -55,8 +56,6 @@ function getPackageSections(packages: Package[]): PackageSection[] {
 }
 
 export default function NavbarGuest() {
-	// ################### FETCH ALL PACKAGES
-
 	const [packages, setPackages] = useState<Package[]>([]);
 	const { data: packagesData, isLoading: packagesLoading } = useQuery({
 		queryKey: ['packages'],
@@ -77,7 +76,6 @@ export default function NavbarGuest() {
 	}, [packagesLoading, packagesData]);
 
 	const packageSections = getPackageSections(packages);
-
 	const renderDropdownItems = (packages: Package[]) => {
 		return packages.map((ipackage) => (
 			<DropdownItem
@@ -90,7 +88,6 @@ export default function NavbarGuest() {
 			</DropdownItem>
 		));
 	};
-
 	const renderEmptyDropdown = (count: number) => {
 		const widthOptions = [2, 3, 4, 5]; // Available width options (as fractions of 5)
 	  
@@ -105,10 +102,7 @@ export default function NavbarGuest() {
 		  </div>
 		);
 	  };
-	  
-
-	// ###################
-	
+	  	
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	const menuItems = [
 		{ text: 'Home', icon: <IoMdHome /> , link: '/'},
@@ -122,17 +116,11 @@ export default function NavbarGuest() {
 			<NavbarBrand>
 				<Link className='cursor-pointer' href='/'>
 					<Image
-						src='https://i.ibb.co/CBsp1wQ/virgorus-main-logo.png'
+						src={logoImage}
 						alt='virgorus-main-logo'
-						style={{
-							objectFit: 'cover',
-							width: '100%',
-							height: '60px',
-						}}
-						width={75}
-						height={75}
+						height={40}
 					/>
-					<span className='font-bold font-efco text-3xl text-black'>virgorus</span>
+					<span className='font-bold font-efco text-3xl text-black ml-3'>virgorus</span>
 				</Link>
 			</NavbarBrand>
 			<NavbarContent className='hidden md:flex gap-10 font-playfair pl-16' justify='center'>
