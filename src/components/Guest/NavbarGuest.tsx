@@ -118,16 +118,9 @@ export default function NavbarGuest() {
 					<Image
 						src={logoImage}
 						alt='virgorus-main-logo'
-						fill={false}
-						style={{
-							objectFit: 'contain',
-							width: '100%',
-							height: '100%',
-						}}
-						sizes='auto'
-						className='scale-75 p-2'
+						height={40}
 					/>
-					<span className='font-bold font-efco text-3xl text-black'>virgorus</span>
+					<span className='font-bold font-efco text-3xl text-black ml-3'>virgorus</span>
 				</Link>
 			</NavbarBrand>
 			<NavbarContent className='hidden md:flex gap-10 font-playfair pl-16' justify='center'>

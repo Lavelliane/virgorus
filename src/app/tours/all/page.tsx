@@ -134,7 +134,10 @@ export default function Tours() {
 					</>
 				) : (
 					<>
-						<div className='grid grid-cols-3 gap-10 w-full pb-10'>
+						<div className='hidden md:grid grid-cols-3 gap-10 w-full pb-10'>
+							<CatalogSuspense numberOfCards={9} />
+						</div>
+						<div className='grid md:hidden grid-cols-1 gap-10 w-full pb-10'>
 							<CatalogSuspense numberOfCards={9} />
 						</div>
 					</>

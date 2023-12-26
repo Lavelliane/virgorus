@@ -152,11 +152,10 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 
 	return (
 		<div className='flex flex-col w-full font-poppins'>
-			<div aria-label='Package Header' className='flex flex-col max-w-7xl xl:px-0 px-4'>
+			<div aria-label='Package Header' className='flex flex-col max-w-7xl xl:px-0 px-4 pb-4 md:pb-10'>
 				{isLoaded ? (
 					<div>
-						<p className='font-semibold font-playfair text-black text-3xl'>{Package?.name}</p>
-						<Spacer y={6} />
+						<p className='font-semibold font-playfair text-black text-lg md:text-xl lg:text-3xl pb-2 md:pb-4 lg:pb-6'>{Package?.name}</p>
 						<div className='w-full'>
 							{SLIDES.length > 0 && <CarouselGallery slides={SLIDES} photos={photos} options={OPTIONS} plugins={PLUGINS}/>}
 						</div>
@@ -164,7 +163,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 				) : (
 					<div>
 						<Spacer y={4} />
-						<Skeleton isLoaded={isLoaded} className={`rounded-full ${isLoaded === false ? 'w-1/2' : ''}`}>
+						<Skeleton isLoaded={isLoaded} className={`rounded-lg ${isLoaded === false ? 'w-1/2' : ''}`}>
 							<div className='text-3xl'>.</div>
 						</Skeleton>
 						<Spacer y={6} />
@@ -176,14 +175,13 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 					</div>
 				)}
 			</div>
-			<Spacer y={10} />
 			<div aria-label='Package Body' className='flex lg:flex-row flex-col max-w-7xl xl:px-0 px-4'>
 				{isLoaded ? (
 					<div aria-label='Package Info' className='lg:w-4/6'>
 						<div aria-label='About'>
 							<div className='w-full text-black text-sm'>
-								<h1 className='font-semibold pb-4 text-lg font-playfair'>About</h1>
-								<div className='w-full text-black text-sm'>
+								<h1 className='font-semibold pb-2 md:pb-3 lg:pb-4 text-base md:text-lg font-playfair'>About</h1>
+								<div className='w-full text-black text-xs md:text-sm'>
 									{showDescription ? (
 										<p className='text-justify whitespace-pre-wrap w-full overflow-hidden'>
 											{Package?.description && Package.description.replaceAll('\\n', '\n').replaceAll('\\', '')}
@@ -421,42 +419,42 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 					<div className='lg:w-4/6'>
 						<div className='flex flex-col gap-4'>
 							<div>
-								<Skeleton isLoaded={isLoaded} className='rounded-full w-36'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg w-36'>
 									<h1 className='text-lg'>.</h1>
 								</Skeleton>
 							</div>
 							<div className='flex flex-col gap-2 pb-2'>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'></p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full w-2/3'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg w-2/3'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>
 							<Divider />
 							<div className='flex flex-col w-48 gap-2 pb-2'>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'></p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'>.</p>
 								</Skeleton>
-								<Skeleton isLoaded={isLoaded} className='rounded-full'>
+								<Skeleton isLoaded={isLoaded} className='rounded-lg'>
 									<p className='text-md'>.</p>
 								</Skeleton>
 							</div>
@@ -482,8 +480,8 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 						Explore more of {Package?.location}
 					</h1>
 				) : (
-					<Skeleton className='w-2/5 rounded-xl my-8'>
-						<div className='h-8 w-full rounded-full bg-default-200'></div>
+					<Skeleton className='w-2/5 rounded-lg my-8'>
+						<div className='h-8 w-full rounded-lg bg-default-200'></div>
 					</Skeleton>
 				)}
 				<div className='flex flex-row'>

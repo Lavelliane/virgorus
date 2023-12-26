@@ -197,7 +197,7 @@ export default function TablePackage() {
 												</span>
 											}
 											aria-label='action-view'
-											href={`/tours/${Package.location}/${Package.id}`}
+											href={`/tours/${Package.id}`}
 										>
 											<Link href={`/tours/${Package.location}/${Package.id}`}>View</Link>
 										</DropdownItem>
@@ -440,7 +440,7 @@ export default function TablePackage() {
 			bottomContentPlacement='outside'
 			className='sm:w-[600px] md:w-full'
 			classNames={{
-				wrapper: 'max-h-[420px] p-2',
+				wrapper: 'max-h-[500px] p-2',
 			}}
 			selectedKeys={selectedKeys}
 			sortDescriptor={sortDescriptor}
