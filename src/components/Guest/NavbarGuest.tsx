@@ -20,9 +20,11 @@ import {
 	Skeleton,
 } from '@nextui-org/react';
 import Image from 'next/image';
-import { IoMdHome, IoMdPerson } from 'react-icons/io';
 import { RiArrowDownSLine } from 'react-icons/ri';
-import { IoDocumentText, IoNavigate } from "react-icons/io5";
+import { RiHomeLine } from "react-icons/ri";
+import { MdOutlineTour } from "react-icons/md";
+import { TbPlane } from "react-icons/tb";
+import { LuContact2 } from "react-icons/lu";
 import { fetchPackages } from '@/queries/fetchPackages';
 import { contactsData } from '@/utils/data';
 import { getContactIcon } from './ContactBar';
@@ -105,24 +107,39 @@ export default function NavbarGuest() {
 	  	
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 	const menuItems = [
-		{ text: 'Home', icon: <IoMdHome /> , link: '/'},
-		{ text: 'Packages', icon: <IoDocumentText />, link: '/tours/all'},
-		{ text: 'Destinations', icon: <IoNavigate />, link: '/tours' },
-		{ text: 'Contact Us', icon: <IoMdPerson />, link: '/about' },
+		{ text: 'Home', icon: <RiHomeLine /> , link: '/'},
+		{ text: 'Packages', icon: <MdOutlineTour />, link: '/tours/all'},
+		{ text: 'Destinations', icon: <TbPlane />, link: '/tours' },
+		{ text: 'Contact Us', icon: <LuContact2 />, link: '/about' },
 	];
 
 	return (
 		<Navbar isBlurred isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
-			<NavbarBrand>
-				<Link className='cursor-pointer' href='/'>
-					<Image
-						src={logoImage}
-						alt='virgorus-main-logo'
-						height={40}
-					/>
-					<span className='font-bold font-efco text-3xl text-black ml-3'>virgorus</span>
-				</Link>
-			</NavbarBrand>
+			<NavbarContent className='flex md:hidden' justify='start'> 
+				<NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className='absolute md:hidden text-black h-8 w-8' />
+				<NavbarBrand className='justify-center'>
+					<Link className='cursor-pointer' href='/'>
+						<Image
+							src={logoImage}
+							alt='virgorus-main-logo'
+							height={40}
+						/>
+						<span className='font-bold font-efco text-3xl text-black ml-3'>virgorus</span>
+					</Link>
+				</NavbarBrand>
+			</NavbarContent>
+			<NavbarContent className='hidden md:flex' justify='start'>
+				<NavbarBrand>
+					<Link className='cursor-pointer' href='/'>
+						<Image
+							src={logoImage}
+							alt='virgorus-main-logo'
+							height={40}
+						/>
+						<span className='font-bold font-efco text-3xl text-black ml-3'>virgorus</span>
+					</Link>
+				</NavbarBrand>
+			</NavbarContent>
 			<NavbarContent className='hidden md:flex gap-10 font-playfair pl-16' justify='center'>
 				<NavbarItem>
 					<Dropdown className='rounded-md'>
@@ -227,8 +244,7 @@ export default function NavbarGuest() {
 					</Link>
 				</NavbarItem>
 			</NavbarContent>
-			<NavbarMenuToggle aria-label={isMenuOpen ? 'Close menu' : 'Open menu'} className='md:hidden text-black h-8 w-8' />
-			<NavbarMenu className='items-end'>
+			<NavbarMenu className='items-start'>
 				{menuItems.map((item, index) => (
 					<NavbarMenuItem key={`${item}-${index}`}>
 						<Link
@@ -237,7 +253,7 @@ export default function NavbarGuest() {
 							href={item.link}
 							size='lg'
 						>
-							{item.text}&nbsp;{item.icon}
+							{item.icon}&nbsp;{item.text}
 						</Link>
 					</NavbarMenuItem>
 				))}
