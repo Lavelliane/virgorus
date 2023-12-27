@@ -203,10 +203,13 @@ const CarouselImage: React.FC<PropType> = (props) => {
 			  {slides.map((index) => (
 			    <div className="carousel_image__slide " key={index}>
 				  {photos && (
-					<img
+					<Image
 					  className="carousel_image__slide__img"
 					  src={String(photos[index].src)}
-					  alt={String(photos[index])}
+					  alt="Picture of the tour"
+					  sizes='auto'
+					  placeholder='blur'
+					  blurDataURL='../../../public/placeholder.png'
 					/>
 				  )}
 			    </div>
@@ -276,10 +279,13 @@ const CarouselImage: React.FC<PropType> = (props) => {
 			{slides.map((index) => (
 			  <div className="carousel_image__slide" key={index}>
 				{photos && (
-					<img
+					<Image
 					  className="carousel_image__slide__img"
 					  src={String(photos[index].src)}
-					  alt='image'
+					  alt="Picture of the tour"
+					  sizes='auto'
+					  placeholder='blur'
+					  blurDataURL='../../../public/placeholder.png'
 					/>
 				)}
 			  </div>

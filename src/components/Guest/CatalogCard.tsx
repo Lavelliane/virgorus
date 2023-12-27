@@ -46,6 +46,8 @@ export const CatalogCard = ({ catPackage }: { catPackage: IAddPackage }) => {
 						height: '100%',
 					}}
 					sizes='auto'
+					placeholder='blur'
+					blurDataURL='../../../public/placeholder.png'
 				/>
 			</CardBody>
 			<CardFooter className='flex justify-between gap-2 my-2 p-4'>
