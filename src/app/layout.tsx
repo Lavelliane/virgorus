@@ -2,12 +2,21 @@ import type { Metadata } from 'next'
 import {Providers} from "./providers";
 import Loading from "@/components/Loading";
 
-import {Inter, Playfair_Display,Poppins } from 'next/font/google';
+import {Inter, Playfair_Display,Poppins, Roboto } from 'next/font/google';
 import localFont from 'next/font/local';
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'],
-variable: '--font-inter' })
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter' 
+})
+
+const roboto = Roboto({
+  subsets: ['latin'],
+  variable: '--font-roboto',
+	weight: ['100', '300', '400', '500', '700', '900'],
+	style: ['italic', 'normal']
+})
 
 const efco = localFont({
   src: '../assets/fonts/EFCO_Brookshire_Regular.ttf',
@@ -40,7 +49,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${efco.variable} ${inter.className} ${playfairDisplay.variable} ${poppins.variable} bg-white`}>
+      <body className={`${efco.variable} ${inter.className} ${roboto.variable} ${playfairDisplay.variable} ${poppins.variable} bg-white`}>
         <Providers>
           {children}
           <Loading />

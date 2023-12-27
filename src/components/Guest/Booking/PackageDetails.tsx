@@ -169,7 +169,7 @@ export default function PackageDetails({ id }: Readonly<{ id: number }>) {
 						<Spacer y={6} />
 						<div>
 							<Skeleton isLoaded={isLoaded} className='rounded-lg'>
-								<div className='h-96'>.</div>
+								<div className='h-[300px] md:h-[400px] lg:h-[500px]'>.</div>
 							</Skeleton>
 						</div>
 					</div>

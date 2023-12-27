@@ -193,7 +193,7 @@ const CarouselImage: React.FC<PropType> = (props) => {
   
 	return (
 	  <>
-		<div className="carousel_image">
+		<div className="carousel_image-nospace">
 		  <div className="carousel_image__viewport rounded-none sm:rounded-t-2xl relative" 
 		  	  ref={emblaRef}
 			  onMouseEnter={() => setButtonsVisible(true)}
@@ -203,13 +203,10 @@ const CarouselImage: React.FC<PropType> = (props) => {
 			  {slides.map((index) => (
 			    <div className="carousel_image__slide " key={index}>
 				  {photos && (
-					<Image
+					<img
 					  className="carousel_image__slide__img"
 					  src={String(photos[index].src)}
-					  alt="Picture of the tour"
-					  sizes='auto'
-					  placeholder='blur'
-					  blurDataURL='../../../public/placeholder.png'
+					  alt='Image loading...'
 					/>
 				  )}
 			    </div>
@@ -279,13 +276,10 @@ const CarouselImage: React.FC<PropType> = (props) => {
 			{slides.map((index) => (
 			  <div className="carousel_image__slide" key={index}>
 				{photos && (
-					<Image
+					<img
 					  className="carousel_image__slide__img"
 					  src={String(photos[index].src)}
-					  alt="Picture of the tour"
-					  sizes='auto'
-					  placeholder='blur'
-					  blurDataURL='../../../public/placeholder.png'
+					  alt=''
 					/>
 				)}
 			  </div>

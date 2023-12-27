@@ -50,7 +50,7 @@ body {
   background: linear-gradient(to bottom, #776B5D 70%, #ffffff 30%);
 }
 
-/* Image Clipping */
+/* Image */
 .clip-path-div {
   clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 20% 0%, 0% 100%);
   top: 0;
@@ -70,6 +70,18 @@ body {
   overflow: hidden;
   padding: 0;
   width: calc(100% + 500px);
+}
+
+.destination-overlay {
+  position: absolute;
+  inset: 0px;
+  background-color: rgb(0 0 0 / 0.2);
+  color: white;
+  transition: opacity 0.3s;
+}
+
+.destination-overlay:hover {
+  opacity: 0;
 }
 
 /* Carousel */
@@ -213,8 +225,8 @@ body {
   align-items: center;
 }
 .carousel__dot {
-  width: 0.45rem;
-  height: 0.45rem;
+  width: 0.40rem;
+  height: 0.40rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,12 +243,17 @@ body {
 }
 .carousel__dot--selected {
   background-color: #432F2B;
-  width: 0.60rem;
-  height: 0.60rem;
+  width: 0.50rem;
+  height: 0.50rem;
 }
 
 .carousel_image {
-  --slide-spacing: 1rem;
+  --slide-spacing: 0.3rem;
+  --slide-size: 100%;
+  --slide-height: 14rem;
+}
+.carousel_image-nospace {
+  --slide-spacing: 0rem;
   --slide-size: 100%;
   --slide-height: 14rem;
 }
@@ -247,7 +264,12 @@ body {
 }
 @media (min-width: 768px) {
   .carousel_image {
-    --slide-spacing: 1rem;
+    --slide-spacing: 0.3rem;
+    --slide-size: 100%;
+    --slide-height: 24rem;
+  }
+  .carousel_image-nospace {
+    --slide-spacing: 0rem;
     --slide-size: 100%;
     --slide-height: 24rem;
   }
@@ -259,7 +281,12 @@ body {
 }
 @media (min-width: 992px) {
   .carousel_image {
-    --slide-spacing: 1rem;
+    --slide-spacing: 0.3rem;
+    --slide-size: 100%;
+    --slide-height: 34rem;
+  }
+  .carousel_image-nospace {
+    --slide-spacing: 0rem;
     --slide-size: 100%;
     --slide-height: 34rem;
   }
