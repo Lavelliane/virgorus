@@ -67,9 +67,28 @@ const DestinationPage = ({ params }: { params: { destination: string } }) => {
 		}
 	}, [packagesLoading, packagesData, destination]);
 
+
+	const [slidesToScroll, setSlidesToScroll] = useState<number>(0);
+	useEffect(() => {
+		const handleResize = () => {
+		  if (window.innerWidth < 600) {
+			setSlidesToScroll(1);
+		  } else if (window.innerWidth >= 600 && window.innerWidth < 1200) {
+			setSlidesToScroll(2);
+		  } else {
+			setSlidesToScroll(4);
+		  }
+		};
+	
+		window.addEventListener('resize', handleResize);
+		return () => {
+		  window.removeEventListener('resize', handleResize);
+		};
+	  }, []);
+
 	const SLIDE_COUNT = packages.length;
 	const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
-	const OPTIONS: EmblaOptionsType = { loop: false, slidesToScroll: 1};
+	const OPTIONS: EmblaOptionsType = { loop: false, slidesToScroll: slidesToScroll};
 
 	const PHOTO_COUNT = photos.length
 	const PHOTOS = Array.from(Array(PHOTO_COUNT).keys());
@@ -79,27 +98,35 @@ const DestinationPage = ({ params }: { params: { destination: string } }) => {
 	return (
 		<main className='flex min-h-screen flex-col items-center justify-between bg-white text-black'>
 			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full px-0 sm:px-10 pb-10'>
-				<div className='w-full text-3xl md:text-7xl font-semibold font-playfair my-2 sm:my-8'>Discover {destination}</div>
+				<div className='w-full text-3xl sm:text-5xl md:text-7xl font-semibold font-playfair my-2 sm:my-8 px-2 sm:px-0'>Discover {destination}</div>
 				<div className='bg-nude rounded-none sm:rounded-2xl'>
 					<div className='w-full'>
 						{packagesLoading && (
-							<Skeleton className="rounded-t-2xl h-[500px]"/>
+							<Skeleton className="rounded-t-2xl h-[200px] md:h-[350px] lg:h-[500px]"/>
 						)}
    					  	{PHOTOS.length > 0 && <CarouselImage slides={PHOTOS} photos={photos} options={OPTIONS_PHOTOS} plugins={PLUGINS}/>}
 					</div>
 					<div className='p-6 sm:p-12 lg:p-24'>
-						<div className='w-full text-lg sm:text-3xl font-semibold font-playfair mb-8'>About</div>
-						<p className='w-full lg:w-2/3 text-justify text-xs'>{destinationDescription}</p>
+						<div className='w-full text-lg md:text-3xl font-semibold font-playfair mb-4 md:mb-8'>About</div>
+						<p className='w-full lg:w-2/3 text-justify text-xs md:text-sm'>{destinationDescription}</p>
 					</div>
 				</div>
 				<Spacer y={12} />
 				<>
-					<div className='visible w-full'>
+					<div className='visible w-full px-2 sm:px-0'>
 						<CarouselList slides={SLIDES} options={OPTIONS} packages={packages} />
 					</div>
 					{packagesLoading && (
-						<div className='grid grid-cols-3 gap-10 w-full'>
-							<CatalogSuspense numberOfCards={3} />
+						<div className='flex w-full px-4'>
+							<div className='hidden md:grid grid-cols-3 gap-10 w-full pb-10'>
+								<CatalogSuspense numberOfCards={9} />
+							</div>
+							<div className='hidden sm:grid md:hidden grid-cols-2 gap-10 w-full pb-10'>
+								<CatalogSuspense numberOfCards={9} />
+							</div>
+							<div className='grid sm:hidden grid-cols-1 gap-10 w-full pb-10'>
+								<CatalogSuspense numberOfCards={9} />
+							</div>
 						</div>
 					)}
 				</>

@@ -63,9 +63,27 @@ export const ToursList = ({ location }: { location: string | null | undefined}) 
 		}
 	}, [packagesLoading, packagesData, location]);
 
+	const [slidesToScroll, setSlidesToScroll] = useState<number>(0);
+	useEffect(() => {
+		const handleResize = () => {
+		  if (window.innerWidth < 600) {
+			setSlidesToScroll(1);
+		  } else if (window.innerWidth >= 600 && window.innerWidth < 1200) {
+			setSlidesToScroll(2);
+		  } else {
+			setSlidesToScroll(4);
+		  }
+		};
+	
+		window.addEventListener('resize', handleResize);
+		return () => {
+		  window.removeEventListener('resize', handleResize);
+		};
+	  }, []);
+
 	const SLIDE_COUNT = packages.length;
 	const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
-	const OPTIONS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: false, slidesToScroll: 1};
+	const OPTIONS: EmblaOptionsType = { loop: false, containScroll: 'trimSnaps', dragFree: false, slidesToScroll: slidesToScroll};
 
 	return (
 		<main className='flex flex-col items-center justify-between bg-white'>

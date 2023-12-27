@@ -105,15 +105,16 @@ export default function Tours() {
 					</div>
 				</div>
 			</div>		
-			<section className='flex flex-col h-fit items-center mx-6 mb-32 max-w-3xl w-full'>
-				<h1 className='text-md font-extralight my-12'>The Absolute Best Places to Get Lost In</h1>
-				<p className='font-playfair mb-16'>Ignite your wanderlust with Virgorus Travel & Tours! Explore our curated collection of breathtaking destinations, from sun-kissed beaches in exotic locales to historic cities steeped in ancient charm. Dive into the vibrant culture of bustling metropolises, trek through awe-inspiring landscapes, or unwind on pristine shores - the possibilities are endless. Let us craft your dream itinerary, whether you seek adrenaline-pumping adventures or serene escapes, and embark on unforgettable journeys that will leave you with memories to cherish forever. So, pack your bags, grab your sense of adventure, and discover the world with Virgorus Travel & Tours!</p>
+			<section className='flex flex-col h-fit items-center px-4 mx-6 mb-32 max-w-3xl w-full'>
+				<h1 className='text-2xl md:text-3xl lg:text-5xl font-bold font-playfair my-12'>The Absolute Best Places to Get Lost In</h1>
+				<p className='font-playfair text-sm md:text-base text-justify mb-4'>Ignite your wanderlust with Virgorus Travel & Tours! Explore our curated collection of breathtaking destinations, from sun-kissed beaches in exotic locales to historic cities steeped in ancient charm. Dive into the vibrant culture of bustling metropolises, trek through awe-inspiring landscapes, or unwind on pristine shores - the possibilities are endless. Let us craft your dream itinerary, whether you seek adrenaline-pumping adventures or serene escapes, and embark on unforgettable journeys that will leave you with memories to cherish forever.</p>
+				<p className='font-playfair text-sm md:text-base text-justify mb-16'>What are you waiting for? Pack your bags, grab your sense of adventure, and discover the Visayan islands with Virgorus Travel & Tours! </p>
 				<div>
 					{locationData.map((location) => (
 						<Link href={`/tours/${location.value}`}>
-							<div className='flex flex-col relative w-full h-[20rem] items-center mb-6' key={location.label}>
-								<div className='destination-overlay flex text-7xl font-inter font-black items-end align-end'>
-									<div className='m-5'>{location.value}</div>
+							<div className='flex flex-col relative w-full h-[10rem] md:h-[15rem] lg:h-[20rem] items-center mb-6' key={location.label}>
+								<div className='destination-overlay flex items-end align-end'>
+									<div className='m-5 text-4xl md:text-6xl lg:text-7xl font-inter font-black'>{location.value}</div>
 								</div>
 								<img
 									className="block object-cover w-full overflow-hidden"
