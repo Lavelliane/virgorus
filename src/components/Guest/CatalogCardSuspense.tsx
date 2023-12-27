@@ -19,9 +19,12 @@ export const CatalogCardSuspense = () => {
 				<Skeleton className='w-2/5 rounded-lg'>
 					<div className='h-3 w-2/5 rounded-lg bg-default-300'></div>
 				</Skeleton>
+				<Skeleton className='w-3/5 rounded-lg'>
+					<div className='h-3 w-2/5 rounded-lg bg-default-300'></div>
+				</Skeleton>
 			</div>
 			<Skeleton className='rounded-none'>
-				<div className='h-72 rounded-lg bg-default-300'></div>
+				<div className='h-48 rounded-lg bg-default-300'></div>
 			</Skeleton>
 			<div className='space-y-3 p-4'>
 				<Skeleton className='w-1/6 rounded-lg'>

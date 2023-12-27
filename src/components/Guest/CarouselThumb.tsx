@@ -24,7 +24,7 @@ export const CarouselThumb: React.FC<PropType> = (props) => {
         <img
           className="carousel_image-thumbs__slide__img"
           src={imgSrc}
-          alt="Your alt text"
+          alt=""
         />
       </button>
     </div>

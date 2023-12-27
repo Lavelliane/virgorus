@@ -43,6 +43,7 @@ module.exports = {
 				efco: ['var(--font-efco)'],
 				playfair: ['var(--font-playfair)'],
 				poppins: ['var(--font-poppins)'],
+				roboto: ['var(--font-roboto)']
 			},
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

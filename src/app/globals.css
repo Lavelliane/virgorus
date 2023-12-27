@@ -50,7 +50,7 @@ body {
   background: linear-gradient(to bottom, #776B5D 70%, #ffffff 30%);
 }
 
-/* Image Clipping */
+/* Image */
 .clip-path-div {
   clip-path: polygon(0% 100%, 100% 100%, 100% 0%, 20% 0%, 0% 100%);
   top: 0;
@@ -70,6 +70,18 @@ body {
   overflow: hidden;
   padding: 0;
   width: calc(100% + 500px);
+}
+
+.destination-overlay {
+  position: absolute;
+  inset: 0px;
+  background-color: rgb(0 0 0 / 0.2);
+  color: white;
+  transition: opacity 0.3s;
+}
+
+.destination-overlay:hover {
+  opacity: 0;
 }
 
 /* Carousel */

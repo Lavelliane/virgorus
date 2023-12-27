@@ -6,10 +6,11 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchPackages } from '@/queries/fetchPackages';
 import { IAddPackage } from '@/types/types';
 import { ToursList } from '@/components/Guest/ToursList';
-import { Spacer } from '@nextui-org/react';
+import { Link, Spacer } from '@nextui-org/react';
 import { EmblaOptionsType, EmblaPluginType } from 'embla-carousel-react';
 import Image from 'next/image';
-import toursImage from '@/assets/images/palawan.jpg';
+import toursImage from '@/assets/images/all-destinations.jpg';
+import { locationData } from '@/utils/data';
 
 type Package = {
 	id: number;
@@ -94,22 +95,33 @@ export default function Tours() {
 				/>
 				<div className="absolute inset-0 text-white z-10 w-full flex h-full items-center justify-center bg-black/30">
 					<div className='flex flex-col max-w-6xl h-full w-full justify-end mx-16 '>
-						<h1 className='text-center xl:text-start text-xl sm:text-3xl md:text-5xl xl:text-6xl font-bold mt-10 font-poppins'>
+						<h1 className='text-center text-xl sm:text-3xl md:text-5xl xl:text-6xl font-bold mt-10 font-poppins'>
 							Explore, Discover, Wander
 						</h1>
 						<span className='bg-white h-[2px] rounded-full my-3'></span>
-						<div className='text-center xl:text-start text-lg sm:text-xl md:text-3xl xl:text-4xl font-regular mb-10 font-poppins'>
+						<div className='text-center text-lg sm:text-xl md:text-3xl xl:text-4xl font-regular mb-10 font-poppins'>
 							All Destinations
 						</div>
 					</div>
 				</div>
 			</div>		
-			<section className='flex flex-col h-fit items-center mx-6 max-w-7xl w-full'>
-				<div className='w-full text-4xl font-semibold font-playfair my-2'>All Destinations</div>
-				<Spacer y={5} />
-				<div className='w-full'>
-					{locations.map((location: Location) => (
-						<ToursList key={location.key} location={location.name} />
+			<section className='flex flex-col h-fit items-center mx-6 mb-32 max-w-3xl w-full'>
+				<h1 className='text-md font-extralight my-12'>The Absolute Best Places to Get Lost In</h1>
+				<p className='font-playfair mb-16'>Ignite your wanderlust with Virgorus Travel & Tours! Explore our curated collection of breathtaking destinations, from sun-kissed beaches in exotic locales to historic cities steeped in ancient charm. Dive into the vibrant culture of bustling metropolises, trek through awe-inspiring landscapes, or unwind on pristine shores - the possibilities are endless. Let us craft your dream itinerary, whether you seek adrenaline-pumping adventures or serene escapes, and embark on unforgettable journeys that will leave you with memories to cherish forever. So, pack your bags, grab your sense of adventure, and discover the world with Virgorus Travel & Tours!</p>
+				<div>
+					{locationData.map((location) => (
+						<Link href={`/tours/${location.value}`}>
+							<div className='flex flex-col relative w-full h-[20rem] items-center mb-6' key={location.label}>
+								<div className='destination-overlay flex text-7xl font-inter font-black items-end align-end'>
+									<div className='m-5'>{location.value}</div>
+								</div>
+								<img
+									className="block object-cover w-full overflow-hidden"
+									src={location.photo}
+									alt={`Image of ${location.value}`}
+								/>
+							</div>
+						</Link>
 					))}
 				</div>
 			</section>

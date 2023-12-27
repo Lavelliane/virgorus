@@ -41,7 +41,7 @@ const config: Config = {
         efco: ['var(--font-efco)', ...fontFamily.serif],
         playfair: ['var(--font-playfair)', ...fontFamily.serif],
         poppins: ['var(--font-poppins)', ...fontFamily.sans],
-
+        roboto: ['var(--font-roboto)', ...fontFamily.serif]
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
